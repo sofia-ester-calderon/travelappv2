@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">TravelAppV2</string>
+    <string name="navigation_home">home</string>
+    <string name="navigation_trip">trip</string>
+    <string name="navigation_trip_tripId">tripId</string>
+    <string name="navigation_settings">settings</string>
+
+    <string name="menu">Menu</string>
+    <string name="title_new_trip">New Trip</string>
+    <string name="title_edit_trip">New Trip</string>
+    <string name="title_home">Home</string>
+    <string name="title_settings">Settings</string>
+</resources>
