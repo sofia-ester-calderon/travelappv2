@@ -35,7 +35,7 @@ class TripViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.value = _uiState.value.copy(fromLatitudeText = latitude, isFromLatLongDbError = false)
     }
 
-    fun updateLongitude(longitude: String) {
+    fun updateFromLongitude(longitude: String) {
         _uiState.value = _uiState.value.copy(fromLongitudeText = longitude, isFromLatLongDbError = false)
     }
 
@@ -57,6 +57,43 @@ class TripViewModel(application: Application) : AndroidViewModel(application) {
             )
         } catch (e: java.lang.Exception) {
             _uiState.value = uiState.value.copy(isFromLatLongDbError = true)
+        }
+    }
+
+    fun updateToCountry(country: String) {
+        _uiState.value = _uiState.value.copy(toCountry = country)
+    }
+
+    fun updateToCity(city: String) {
+        _uiState.value = _uiState.value.copy(toCity = city)
+    }
+
+    fun updateToLatitude(latitude: String) {
+        _uiState.value = _uiState.value.copy(toLatitudeText = latitude, isToLatLongDbError = false)
+    }
+
+    fun updateToLongitude(longitude: String) {
+        _uiState.value = _uiState.value.copy(toLongitudeText = longitude, isToLatLongDbError = false)
+    }
+
+    fun onToCalculateLatLong() {
+        _uiState.value = _uiState.value.copy(
+            isToLatLongDbError = false,
+            toLongitudeText = "",
+            toLatitudeText = "",
+        )
+        val country = uiState.value.toCountry
+        val city = uiState.value.toCity
+        try {
+            val cityLocation: CityLocation = myDb.getLocationOfCity(country, city)
+            _uiState.value = _uiState.value.copy(
+                toLatitudeText = formatLatLong(cityLocation.latitude)
+            )
+            _uiState.value = _uiState.value.copy(
+                toLongitudeText = formatLatLong(cityLocation.longitude)
+            )
+        } catch (e: java.lang.Exception) {
+            _uiState.value = uiState.value.copy(isToLatLongDbError = true)
         }
     }
 

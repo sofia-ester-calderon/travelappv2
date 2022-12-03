@@ -44,8 +44,13 @@ fun TripScreen(
                 onChangeFromCountry = { tripViewModel.updateFromCountry(it) },
                 onChangeFromCity = { tripViewModel.updateFromCity(it) },
                 onChangeFromLatitude = { tripViewModel.updateFromLatitude(it) },
-                onChangeFromLongitude = { tripViewModel.updateLongitude(it) },
-                onCalculateLatLong = { tripViewModel.onFromCalculateLatLong() },
+                onChangeFromLongitude = { tripViewModel.updateFromLongitude(it) },
+                onCalculateFromLatLong = { tripViewModel.onFromCalculateLatLong() },
+                onChangeToCountry = { tripViewModel.updateToCountry(it) },
+                onChangeToCity = { tripViewModel.updateToCity(it) },
+                onChangeToLatitude = { tripViewModel.updateToLatitude(it) },
+                onChangeToLongitude = { tripViewModel.updateToLongitude(it) },
+                onCalculateToLatLong = { tripViewModel.onToCalculateLatLong() },
             )
         }
     }
@@ -59,28 +64,55 @@ fun TripContent(
     onChangeFromCity: (String) -> Unit,
     onChangeFromLatitude: (String) -> Unit,
     onChangeFromLongitude: (String) -> Unit,
-    onCalculateLatLong: () -> Unit,
+    onCalculateFromLatLong: () -> Unit,
+    onChangeToCountry: (String) -> Unit,
+    onChangeToCity: (String) -> Unit,
+    onChangeToLatitude: (String) -> Unit,
+    onChangeToLongitude: (String) -> Unit,
+    onCalculateToLatLong: () -> Unit,
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
         TripOptions(
             tripType = tripUiState.tripType,
             onChangeTripType = onChangeTripType,
         )
-        Text(
-            text = stringResource(id = R.string.trip_label_from),
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-        )
-        Spacer(modifier = Modifier.height(8.dp))
+        BigLabel(text = stringResource(id = R.string.trip_label_from))
         CountryCity(
-            tripUiState = tripUiState,
-            onChangeFromCountry = onChangeFromCountry,
-            onChangeFromCity = onChangeFromCity,
-            onChangeFromLatitude = onChangeFromLatitude,
-            onChangeFromLongitude = onChangeFromLongitude,
-            onCalculateLatLong = onCalculateLatLong,
+            country = tripUiState.fromCountry,
+            city = tripUiState.fromCity,
+            latitude = tripUiState.fromLatitudeText,
+            longitude = tripUiState.fromLongitudeText,
+            latLongDbError = tripUiState.isFromLatLongDbError,
+            onChangeCountry = onChangeFromCountry,
+            onChangeCity = onChangeFromCity,
+            onChangeLatitude = onChangeFromLatitude,
+            onChangeLongitude = onChangeFromLongitude,
+            onCalculateLatLong = onCalculateFromLatLong,
+        )
+        BigLabel(text = stringResource(id = R.string.trip_label_to))
+        CountryCity(
+            country = tripUiState.toCountry,
+            city = tripUiState.toCity,
+            latitude = tripUiState.toLatitudeText,
+            longitude = tripUiState.toLongitudeText,
+            latLongDbError = tripUiState.isToLatLongDbError,
+            onChangeCountry = onChangeToCountry,
+            onChangeCity = onChangeToCity,
+            onChangeLatitude = onChangeToLatitude,
+            onChangeLongitude = onChangeToLongitude,
+            onCalculateLatLong = onCalculateToLatLong,
         )
     }
+}
+
+@Composable
+private fun BigLabel(text: String) {
+    Text(
+        text = text,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+    )
+    Spacer(modifier = Modifier.height(8.dp))
 }
 
 @Preview
@@ -88,11 +120,6 @@ fun TripContent(
 fun NewTripPreview() {
     TripContent(
         tripUiState = TripUiState(),
-        onChangeTripType = {},
-        onCalculateLatLong = {},
-        onChangeFromLongitude = {},
-        onChangeFromLatitude = {},
-        onChangeFromCity = {},
-        onChangeFromCountry = {},
+        {},{},{},{},{},{},{},{},{},{},{},
     )
 }

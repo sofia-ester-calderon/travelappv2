@@ -9,4 +9,9 @@ data class TripUiState(
     val fromLatitudeText: String = "",
     val fromLongitudeText: String = "",
     val isFromLatLongDbError:Boolean = false,
+    val toCountry: String = "",
+    val toCity: String = "",
+    val toLatitudeText: String = "",
+    val toLongitudeText: String = "",
+    val isToLatLongDbError:Boolean = false,
 )

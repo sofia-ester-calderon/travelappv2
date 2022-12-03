@@ -15,23 +15,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sucaldo.travelappv2.R
-import com.sucaldo.travelappv2.ui.trip.TripUiState
 
 @Composable
 fun CountryCity(
-    tripUiState: TripUiState,
-    onChangeFromCountry: (String) -> Unit,
-    onChangeFromCity: (String) -> Unit,
-    onChangeFromLatitude: (String) -> Unit,
-    onChangeFromLongitude: (String) -> Unit,
+    country: String,
+    city: String,
+    latitude: String,
+    longitude: String,
+    latLongDbError: Boolean,
+    onChangeCountry: (String) -> Unit,
+    onChangeCity: (String) -> Unit,
+    onChangeLatitude: (String) -> Unit,
+    onChangeLongitude: (String) -> Unit,
     onCalculateLatLong: () -> Unit,
 ) {
-    Country(country = tripUiState.fromCountry, onChangeFromCountry = onChangeFromCountry)
+    Country(country = country, onChangeCountry = onChangeCountry)
     Spacer(modifier = Modifier.height(8.dp))
     TextField(
         modifier = Modifier.fillMaxWidth(),
-        value = tripUiState.fromCity,
-        onValueChange = { onChangeFromCity(it) },
+        value = city,
+        onValueChange = { onChangeCity(it) },
         singleLine = true,
         label = { Text(stringResource(id = R.string.trip_label_city)) },
     )
@@ -42,9 +45,9 @@ fun CountryCity(
         ) {
             LongitudeLatitude(
                 label = stringResource(id = R.string.trip_label_latitude),
-                value = tripUiState.fromLatitudeText,
-                isError = tripUiState.isFromLatLongDbError,
-                onValueChange = { onChangeFromLatitude(it) },
+                value = latitude,
+                isError = latLongDbError,
+                onValueChange = { onChangeLatitude(it) },
                 onCalculateLatLong = onCalculateLatLong,
             )
         }
@@ -52,9 +55,9 @@ fun CountryCity(
         Column {
             LongitudeLatitude(
                 label = stringResource(id = R.string.trip_label_longitude),
-                value = tripUiState.fromLongitudeText,
-                isError = tripUiState.isFromLatLongDbError,
-                onValueChange = { onChangeFromLongitude(it) },
+                value = longitude,
+                isError = latLongDbError,
+                onValueChange = { onChangeLongitude(it) },
                 onCalculateLatLong = onCalculateLatLong,
             )
         }
@@ -67,7 +70,7 @@ fun CountryCity(
 @Composable
 private fun Country(
     country: String,
-    onChangeFromCountry: (String) -> Unit,
+    onChangeCountry: (String) -> Unit,
 ) {
     // TODO: actual countries
     val options = listOf("Australia", "Germany", "El Salvador", "Namibia", "Switzerland")
@@ -76,7 +79,7 @@ private fun Country(
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = country,
-            onValueChange = { onChangeFromCountry(it) },
+            onValueChange = { onChangeCountry(it) },
             label = { Text(stringResource(id = R.string.trip_label_country)) },
             singleLine = true,
             trailingIcon = {
@@ -92,7 +95,7 @@ private fun Country(
                     DropdownMenuItem(
                         onClick = {
                             exp = false
-                            onChangeFromCountry(option)
+                            onChangeCountry(option)
                         }
                     ) {
                         Text(text = option)
@@ -143,12 +146,16 @@ private fun LongitudeLatitude(
 fun CountryCityPreview() {
     Column(modifier = Modifier.padding(16.dp)) {
         CountryCity(
-            tripUiState = TripUiState(fromCity = "Sydney", fromCountry = "Australia"),
-            onChangeFromCountry = {},
+            city = "Sydney",
+            country = "Australia",
+            latitude = "123.2",
+            longitude = "123.45",
+            latLongDbError = false,
+            onChangeCountry = {},
             onCalculateLatLong = {},
-            onChangeFromCity = {},
-            onChangeFromLatitude = {},
-            onChangeFromLongitude = {},
+            onChangeCity = {},
+            onChangeLatitude = {},
+            onChangeLongitude = {},
         )
     }
 }
