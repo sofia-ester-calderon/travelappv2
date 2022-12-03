@@ -18,6 +18,9 @@
     <string name="trip_label_from">From</string>
     <string name="trip_label_country">Country</string>
     <string name="trip_label_city">City or place</string>
+    <string name="trip_label_latitude">Latitude</string>
+    <string name="trip_label_longitude">Longitude</string>
+    <string name="trip_icon_refresh">Refresh</string>
 
 
 </resources>

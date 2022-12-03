@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sucaldo.travelappv2.R
 import com.sucaldo.travelappv2.ui.trip.TripUiState
@@ -35,20 +36,25 @@ fun CountryCity(
             modifier = Modifier.requiredWidth(LocalConfiguration.current.screenWidthDp.dp / 2f),
         ) {
             LongitudeLatitude(
-                label = "Latitude",
-                isError = tripUiState.latitudeLongitudeError,
-                tripViewModel = tripViewModel,
+                label = stringResource(id = R.string.trip_label_latitude),
+                value = tripUiState.fromLatitudeText,
+                isError = tripUiState.isLatLongDbError,
+                onValueChange = { tripViewModel.onChangeLatitude(it) },
+                onCalculateLatLong = { tripViewModel.onCalculateLatLong() }
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             LongitudeLatitude(
-                label = "Longitude",
-                isError = tripUiState.latitudeLongitudeError,
-                tripViewModel = tripViewModel,
+                label = stringResource(id = R.string.trip_label_longitude),
+                value = tripUiState.fromLongitudeText,
+                isError = tripUiState.isLatLongDbError,
+                onValueChange = { tripViewModel.onChangeLongitude(it) },
+                onCalculateLatLong = { tripViewModel.onCalculateLatLong() }
             )
         }
     }
+
 }
 
 
@@ -91,26 +97,34 @@ private fun Country(country: String, tripViewModel: TripViewModel) {
 @Composable
 private fun LongitudeLatitude(
     label: String,
+    value: String,
     isError: Boolean,
-    tripViewModel: TripViewModel,
+    onValueChange: (String) -> Unit,
+    onCalculateLatLong: () -> Unit,
 ) {
-    TextField(
-        value = "",
-        onValueChange = { tripViewModel.onCalculateLatLong() },
-        label = { Text(label) },
-        isError = isError,
-        trailingIcon = {
-            IconButton(
-                onClick = {},
-            ) {
-                Icon(
-                    Icons.Default.Refresh,
-                    contentDescription = "Refresh",
-                    tint = Color.Black
-                )
+    Column {
+        TextField(
+            value = value,
+            onValueChange = { onValueChange(it) },
+            label = { Text(label) },
+            isError = isError,
+            trailingIcon = {
+                IconButton(
+                    onClick = { onCalculateLatLong() },
+                ) {
+                    Icon(
+                        Icons.Default.Refresh,
+                        contentDescription = stringResource(id = R.string.trip_icon_refresh),
+                        tint = Color.Black
+                    )
+                }
             }
+        )
+        if (isError) {
+            Text(text = "Not in DB. Add manually!", fontSize = 12.sp, color = Color.Red)
         }
-    )
+    }
+
 }
 
 @Preview
