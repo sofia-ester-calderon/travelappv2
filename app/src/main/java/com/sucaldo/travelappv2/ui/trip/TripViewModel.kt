@@ -19,29 +19,29 @@ class TripViewModel(application: Application) : AndroidViewModel(application) {
         myDb = DatabaseHelper(application.applicationContext)
     }
 
-    fun changeTripType(tripType: TripType) {
+    fun updateTripType(tripType: TripType) {
         _uiState.value = _uiState.value.copy(tripType = tripType)
     }
 
-    fun changeFromCountry(country: String) {
+    fun updateFromCountry(country: String) {
         _uiState.value = _uiState.value.copy(fromCountry = country)
     }
 
-    fun changeFromCity(city: String) {
+    fun updateFromCity(city: String) {
         _uiState.value = _uiState.value.copy(fromCity = city)
     }
 
-    fun onChangeLatitude(latitude: String) {
-        _uiState.value = _uiState.value.copy(fromLatitudeText = latitude, isLatLongDbError = false)
+    fun updateFromLatitude(latitude: String) {
+        _uiState.value = _uiState.value.copy(fromLatitudeText = latitude, isFromLatLongDbError = false)
     }
 
-    fun onChangeLongitude(longitude: String) {
-        _uiState.value = _uiState.value.copy(fromLongitudeText = longitude, isLatLongDbError = false)
+    fun updateLongitude(longitude: String) {
+        _uiState.value = _uiState.value.copy(fromLongitudeText = longitude, isFromLatLongDbError = false)
     }
 
-    fun onCalculateLatLong() {
+    fun onFromCalculateLatLong() {
         _uiState.value = _uiState.value.copy(
-            isLatLongDbError = false,
+            isFromLatLongDbError = false,
             fromLongitudeText = "",
             fromLatitudeText = "",
         )
@@ -56,7 +56,7 @@ class TripViewModel(application: Application) : AndroidViewModel(application) {
                 fromLongitudeText = formatLatLong(cityLocation.longitude)
             )
         } catch (e: java.lang.Exception) {
-            _uiState.value = uiState.value.copy(isLatLongDbError = true)
+            _uiState.value = uiState.value.copy(isFromLatLongDbError = true)
         }
     }
 

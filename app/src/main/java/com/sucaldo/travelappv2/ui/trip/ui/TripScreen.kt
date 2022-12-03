@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.R
+import com.sucaldo.travelappv2.data.TripType
 import com.sucaldo.travelappv2.ui.common.TopBar
 import com.sucaldo.travelappv2.ui.trip.TripUiState
 import com.sucaldo.travelappv2.ui.trip.TripViewModel
@@ -39,7 +40,12 @@ fun TripScreen(
         Box(modifier = Modifier.padding(it)) {
             TripContent(
                 tripUiState = tripUiState,
-                tripViewModel = tripViewModel,
+                onChangeTripType = { tripViewModel.updateTripType(it) },
+                onChangeFromCountry = { tripViewModel.updateFromCountry(it) },
+                onChangeFromCity = { tripViewModel.updateFromCity(it) },
+                onChangeFromLatitude = { tripViewModel.updateFromLatitude(it) },
+                onChangeFromLongitude = { tripViewModel.updateLongitude(it) },
+                onCalculateLatLong = { tripViewModel.onFromCalculateLatLong() },
             )
         }
     }
@@ -48,12 +54,17 @@ fun TripScreen(
 @Composable
 fun TripContent(
     tripUiState: TripUiState,
-    tripViewModel: TripViewModel,
+    onChangeTripType: (TripType) -> Unit,
+    onChangeFromCountry: (String) -> Unit,
+    onChangeFromCity: (String) -> Unit,
+    onChangeFromLatitude: (String) -> Unit,
+    onChangeFromLongitude: (String) -> Unit,
+    onCalculateLatLong: () -> Unit,
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
         TripOptions(
             tripType = tripUiState.tripType,
-            tripViewModel = tripViewModel,
+            onChangeTripType = onChangeTripType,
         )
         Text(
             text = stringResource(id = R.string.trip_label_from),
@@ -63,7 +74,11 @@ fun TripContent(
         Spacer(modifier = Modifier.height(8.dp))
         CountryCity(
             tripUiState = tripUiState,
-            tripViewModel = tripViewModel,
+            onChangeFromCountry = onChangeFromCountry,
+            onChangeFromCity = onChangeFromCity,
+            onChangeFromLatitude = onChangeFromLatitude,
+            onChangeFromLongitude = onChangeFromLongitude,
+            onCalculateLatLong = onCalculateLatLong,
         )
     }
 }
@@ -71,5 +86,13 @@ fun TripContent(
 @Preview
 @Composable
 fun NewTripPreview() {
-    TripContent(tripUiState = TripUiState(), tripViewModel = viewModel())
+    TripContent(
+        tripUiState = TripUiState(),
+        onChangeTripType = {},
+        onCalculateLatLong = {},
+        onChangeFromLongitude = {},
+        onChangeFromLatitude = {},
+        onChangeFromCity = {},
+        onChangeFromCountry = {},
+    )
 }

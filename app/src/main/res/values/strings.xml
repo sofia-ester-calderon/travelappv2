@@ -20,7 +20,7 @@
     <string name="trip_label_city">City or place</string>
     <string name="trip_label_latitude">Latitude</string>
     <string name="trip_label_longitude">Longitude</string>
-    <string name="trip_icon_refresh">Refresh</string>
+    <string name="trip_icon_refresh">Calculate</string>
 
 
 </resources>

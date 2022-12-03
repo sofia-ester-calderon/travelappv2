@@ -13,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sucaldo.travelappv2.R
 import com.sucaldo.travelappv2.data.TripType
-import com.sucaldo.travelappv2.ui.trip.TripViewModel
 
 
 data class TripOptionsUi(
@@ -24,7 +23,7 @@ data class TripOptionsUi(
 @Composable
 fun TripOptions(
     tripType: TripType,
-    tripViewModel: TripViewModel
+    onChangeTripType: (TripType) -> Unit,
 ) {
     val tripOptions = listOf(
         TripOptionsUi(
@@ -47,13 +46,13 @@ fun TripOptions(
                 Modifier
                     .selectable(
                         selected = (it.tripType == tripType),
-                        onClick = { tripViewModel.changeTripType(it.tripType) }
+                        onClick = { onChangeTripType(it.tripType) }
                     ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 RadioButton(
                     selected = (it.tripType == tripType),
-                    onClick = { tripViewModel.changeTripType(it.tripType) },
+                    onClick = { onChangeTripType(it.tripType) },
                 )
                 Text(
                     text = it.label,

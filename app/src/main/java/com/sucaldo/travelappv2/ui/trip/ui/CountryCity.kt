@@ -1,6 +1,7 @@
 package com.sucaldo.travelappv2.ui.trip.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -9,25 +10,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sucaldo.travelappv2.R
 import com.sucaldo.travelappv2.ui.trip.TripUiState
-import com.sucaldo.travelappv2.ui.trip.TripViewModel
 
 @Composable
 fun CountryCity(
     tripUiState: TripUiState,
-    tripViewModel: TripViewModel,
+    onChangeFromCountry: (String) -> Unit,
+    onChangeFromCity: (String) -> Unit,
+    onChangeFromLatitude: (String) -> Unit,
+    onChangeFromLongitude: (String) -> Unit,
+    onCalculateLatLong: () -> Unit,
 ) {
-    Country(country = tripUiState.fromCountry, tripViewModel = tripViewModel)
+    Country(country = tripUiState.fromCountry, onChangeFromCountry = onChangeFromCountry)
     Spacer(modifier = Modifier.height(8.dp))
     TextField(
         modifier = Modifier.fillMaxWidth(),
         value = tripUiState.fromCity,
-        onValueChange = { tripViewModel.changeFromCity(it) },
+        onValueChange = { onChangeFromCity(it) },
+        singleLine = true,
         label = { Text(stringResource(id = R.string.trip_label_city)) },
     )
     Spacer(modifier = Modifier.height(8.dp))
@@ -38,9 +43,9 @@ fun CountryCity(
             LongitudeLatitude(
                 label = stringResource(id = R.string.trip_label_latitude),
                 value = tripUiState.fromLatitudeText,
-                isError = tripUiState.isLatLongDbError,
-                onValueChange = { tripViewModel.onChangeLatitude(it) },
-                onCalculateLatLong = { tripViewModel.onCalculateLatLong() }
+                isError = tripUiState.isFromLatLongDbError,
+                onValueChange = { onChangeFromLatitude(it) },
+                onCalculateLatLong = onCalculateLatLong,
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
@@ -48,9 +53,9 @@ fun CountryCity(
             LongitudeLatitude(
                 label = stringResource(id = R.string.trip_label_longitude),
                 value = tripUiState.fromLongitudeText,
-                isError = tripUiState.isLatLongDbError,
-                onValueChange = { tripViewModel.onChangeLongitude(it) },
-                onCalculateLatLong = { tripViewModel.onCalculateLatLong() }
+                isError = tripUiState.isFromLatLongDbError,
+                onValueChange = { onChangeFromLongitude(it) },
+                onCalculateLatLong = onCalculateLatLong,
             )
         }
     }
@@ -60,7 +65,10 @@ fun CountryCity(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun Country(country: String, tripViewModel: TripViewModel) {
+private fun Country(
+    country: String,
+    onChangeFromCountry: (String) -> Unit,
+) {
     // TODO: actual countries
     val options = listOf("Australia", "Germany", "El Salvador", "Namibia", "Switzerland")
     var exp by remember { mutableStateOf(false) }
@@ -68,8 +76,9 @@ private fun Country(country: String, tripViewModel: TripViewModel) {
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = country,
-            onValueChange = { tripViewModel.changeFromCountry(it) },
+            onValueChange = { onChangeFromCountry(it) },
             label = { Text(stringResource(id = R.string.trip_label_country)) },
+            singleLine = true,
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = exp)
             },
@@ -83,7 +92,7 @@ private fun Country(country: String, tripViewModel: TripViewModel) {
                     DropdownMenuItem(
                         onClick = {
                             exp = false
-                            tripViewModel.changeFromCountry(option)
+                            onChangeFromCountry(option)
                         }
                     ) {
                         Text(text = option)
@@ -106,8 +115,10 @@ private fun LongitudeLatitude(
         TextField(
             value = value,
             onValueChange = { onValueChange(it) },
+            singleLine = true,
             label = { Text(label) },
             isError = isError,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             trailingIcon = {
                 IconButton(
                     onClick = { onCalculateLatLong() },
@@ -133,7 +144,11 @@ fun CountryCityPreview() {
     Column(modifier = Modifier.padding(16.dp)) {
         CountryCity(
             tripUiState = TripUiState(fromCity = "Sydney", fromCountry = "Australia"),
-            tripViewModel = viewModel()
+            onChangeFromCountry = {},
+            onCalculateLatLong = {},
+            onChangeFromCity = {},
+            onChangeFromLatitude = {},
+            onChangeFromLongitude = {},
         )
     }
 }
