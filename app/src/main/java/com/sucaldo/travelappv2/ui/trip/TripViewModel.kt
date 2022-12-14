@@ -97,6 +97,14 @@ class TripViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun updateStartDate(startDate: String) {
+        _uiState.value = _uiState.value.copy(startDate = startDate)
+    }
+
+    fun updateEndDate(endDate: String) {
+        _uiState.value = _uiState.value.copy(endDate = endDate)
+    }
+
     private fun formatLatLong(value: Float): String {
         return "%.4f".format(
             locale = Locale.getDefault(),
