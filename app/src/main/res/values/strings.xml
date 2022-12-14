@@ -22,6 +22,7 @@
     <string name="trip_label_latitude">Latitude</string>
     <string name="trip_label_longitude">Longitude</string>
     <string name="trip_icon_refresh">Calculate</string>
+    <string name="trip_db_error">Not in DB. Add manually!</string>
 
 
 </resources>

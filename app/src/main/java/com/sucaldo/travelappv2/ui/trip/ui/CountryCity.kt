@@ -7,13 +7,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.sucaldo.travelappv2.R
 
 @Composable
@@ -115,28 +113,16 @@ private fun LongitudeLatitude(
     onCalculateLatLong: () -> Unit,
 ) {
     Column {
-        TextField(
+        TravelAppTextField(
             value = value,
-            onValueChange = { onValueChange(it) },
-            singleLine = true,
-            label = { Text(label) },
-            isError = isError,
+            onValueChange = onValueChange,
+            label = label,
+            icon = Icons.Default.Refresh,
+            iconDescription = stringResource(id = R.string.trip_icon_refresh),
+            onClickIcon = onCalculateLatLong,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            trailingIcon = {
-                IconButton(
-                    onClick = { onCalculateLatLong() },
-                ) {
-                    Icon(
-                        Icons.Default.Refresh,
-                        contentDescription = stringResource(id = R.string.trip_icon_refresh),
-                        tint = Color.Black
-                    )
-                }
-            }
+            errorText = if (isError) stringResource(id = R.string.trip_db_error) else null
         )
-        if (isError) {
-            Text(text = "Not in DB. Add manually!", fontSize = 12.sp, color = Color.Red)
-        }
     }
 
 }
