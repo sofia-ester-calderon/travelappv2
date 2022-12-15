@@ -16,4 +16,5 @@ data class TripUiState(
     val isToLatLongDbError:Boolean = false,
     val startDate: String = "",
     val endDate: String = "",
+    val description: String = "",
 )

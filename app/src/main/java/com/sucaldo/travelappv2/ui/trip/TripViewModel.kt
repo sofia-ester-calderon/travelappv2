@@ -105,6 +105,10 @@ class TripViewModel(application: Application) : AndroidViewModel(application) {
         _uiState.value = _uiState.value.copy(endDate = endDate)
     }
 
+    fun updateDescription(description: String) {
+        _uiState.value = _uiState.value.copy(description = description)
+    }
+
     private fun formatLatLong(value: Float): String {
         return "%.4f".format(
             locale = Locale.getDefault(),

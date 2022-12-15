@@ -86,12 +86,20 @@ fun TripContent(
             onChangeLongitude = { tripViewModel.updateToLongitude(it) },
             onCalculateLatLong = { tripViewModel.onToCalculateLatLong() },
         )
-        BigLabel(text = stringResource(id = R.string.trip_label_dates))
+        Spacer(modifier = Modifier.height(32.dp))
         TripDate(
             startDate = tripUiState.startDate,
             endDate = tripUiState.endDate,
             onChangeStartDate =  { tripViewModel.updateStartDate(it) },
             onChangeEndDate =  { tripViewModel.updateEndDate(it) },
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = tripUiState.description,
+            onValueChange = { tripViewModel.updateDescription(it) },
+            singleLine = true,
+            label = { Text(stringResource(id = R.string.trip_label_description)) },
         )
     }
 }

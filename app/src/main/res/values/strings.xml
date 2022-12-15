@@ -23,9 +23,9 @@
     <string name="trip_label_longitude">Longitude</string>
     <string name="trip_icon_refresh">Calculate</string>
     <string name="trip_db_error">Not in DB. Add manually!</string>
-    <string name="trip_label_dates">Dates</string>
     <string name="trip_label_start">Start</string>
     <string name="trip_label_end">End</string>
+    <string name="trip_label_description">Description</string>
 
 
 </resources>
