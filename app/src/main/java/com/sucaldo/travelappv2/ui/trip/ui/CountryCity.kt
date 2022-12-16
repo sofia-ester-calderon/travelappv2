@@ -21,13 +21,14 @@ fun CountryCity(
     latitude: String,
     longitude: String,
     latLongDbError: Boolean,
+    countries: List<String>,
     onChangeCountry: (String) -> Unit,
     onChangeCity: (String) -> Unit,
     onChangeLatitude: (String) -> Unit,
     onChangeLongitude: (String) -> Unit,
     onCalculateLatLong: () -> Unit,
 ) {
-    Country(country = country, onChangeCountry = onChangeCountry)
+    Country(country = country, onChangeCountry = onChangeCountry, countries = countries)
     Spacer(modifier = Modifier.height(8.dp))
     TextField(
         modifier = Modifier.fillMaxWidth(),
@@ -69,9 +70,9 @@ fun CountryCity(
 private fun Country(
     country: String,
     onChangeCountry: (String) -> Unit,
+    countries: List<String>,
 ) {
-    // TODO: actual countries
-    val options = listOf("Australia", "Germany", "El Salvador", "Namibia", "Switzerland")
+    val options = countries
     var exp by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(expanded = exp, onExpandedChange = { exp = !exp }) {
         TextField(
@@ -137,6 +138,7 @@ fun CountryCityPreview() {
             latitude = "123.2",
             longitude = "123.45",
             latLongDbError = false,
+            countries = listOf(),
             onChangeCountry = {},
             onCalculateLatLong = {},
             onChangeCity = {},

@@ -32,6 +32,7 @@ class TripViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
         }
+        _uiState.value = _uiState.value.copy(countries = myDb.countries)
     }
 
     fun updateTripType(tripType: TripType) {
@@ -47,11 +48,13 @@ class TripViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateFromLatitude(latitude: String) {
-        _uiState.value = _uiState.value.copy(fromLatitudeText = latitude, isFromLatLongDbError = false)
+        _uiState.value =
+            _uiState.value.copy(fromLatitudeText = latitude, isFromLatLongDbError = false)
     }
 
     fun updateFromLongitude(longitude: String) {
-        _uiState.value = _uiState.value.copy(fromLongitudeText = longitude, isFromLatLongDbError = false)
+        _uiState.value =
+            _uiState.value.copy(fromLongitudeText = longitude, isFromLatLongDbError = false)
     }
 
     fun onFromCalculateLatLong() {
@@ -88,7 +91,8 @@ class TripViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateToLongitude(longitude: String) {
-        _uiState.value = _uiState.value.copy(toLongitudeText = longitude, isToLatLongDbError = false)
+        _uiState.value =
+            _uiState.value.copy(toLongitudeText = longitude, isToLatLongDbError = false)
     }
 
     fun onToCalculateLatLong() {

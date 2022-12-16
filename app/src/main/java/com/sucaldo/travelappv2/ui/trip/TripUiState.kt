@@ -17,4 +17,5 @@ data class TripUiState(
     val startDate: String = "",
     val endDate: String = "",
     val description: String = "",
+    val countries: List<String> = listOf(),
 )
