@@ -20,6 +20,7 @@ fun TravelAppTextField(
     iconDescription: String? = null,
     onClickIcon: (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    enabled: Boolean = true,
 ) {
     TextField(
         value = value,
@@ -28,6 +29,7 @@ fun TravelAppTextField(
         label = { Text(label) },
         isError = errorText != null,
         keyboardOptions = keyboardOptions,
+        enabled = enabled,
         trailingIcon = {
             if (icon != null) {
                 IconButton(
@@ -36,7 +38,7 @@ fun TravelAppTextField(
                     Icon(
                         icon,
                         contentDescription = iconDescription,
-                        tint = Color.Black
+                        tint = if(enabled) Color.Black else Color.Gray
                     )
                 }
             }

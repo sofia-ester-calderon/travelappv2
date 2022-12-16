@@ -21,6 +21,7 @@ import java.util.*
 fun TripDate(
     startDate: String,
     endDate: String,
+    isEndDateEnabled: Boolean,
     onChangeStartDate: (String) -> Unit,
     onChangeEndDate: (String) -> Unit,
 ) {
@@ -44,6 +45,7 @@ fun TripDate(
                 DateField(
                     label = stringResource(id = R.string.trip_label_end),
                     date = endDate,
+                    enabled = isEndDateEnabled,
                     onChangeDate = onChangeEndDate,
                 )
             }
@@ -55,6 +57,7 @@ fun TripDate(
 private fun DateField(
     label: String,
     date: String,
+    enabled: Boolean = true,
     onChangeDate: (String) -> Unit,
 ) {
     val mCalendar = Calendar.getInstance()
@@ -76,7 +79,8 @@ private fun DateField(
         onValueChange = { onChangeDate(it) },
         icon = Icons.Default.DateRange,
         onClickIcon = { mDatePickerDialog.show() },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        enabled = enabled,
     )
 }
 

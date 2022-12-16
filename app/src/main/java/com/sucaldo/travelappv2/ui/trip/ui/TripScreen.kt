@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.R
+import com.sucaldo.travelappv2.data.TripType
 import com.sucaldo.travelappv2.ui.common.TopBar
 import com.sucaldo.travelappv2.ui.trip.TripUiState
 import com.sucaldo.travelappv2.ui.trip.TripViewModel
@@ -92,6 +93,7 @@ fun TripContent(
         TripDate(
             startDate = tripUiState.startDate,
             endDate = tripUiState.endDate,
+            isEndDateEnabled = tripUiState.tripType != TripType.ONE_WAY,
             onChangeStartDate =  { tripViewModel.updateStartDate(it) },
             onChangeEndDate =  { tripViewModel.updateEndDate(it) },
         )
