@@ -3,8 +3,8 @@ package com.sucaldo.travelappv2.data
 import android.database.Cursor
 
 data class CityLocation(
-    var city: String? = null,
-    val country: String? = null,
+    var city: String,
+    val country: String,
     val latitude: Float = 0f,
     val longitude: Float = 0f,
     val id: Int = 0,

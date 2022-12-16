@@ -2,21 +2,36 @@ package com.sucaldo.travelappv2.ui.trip
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import com.sucaldo.travelappv2.data.AppPreferences
 import com.sucaldo.travelappv2.data.CityLocation
 import com.sucaldo.travelappv2.data.TripType
 import com.sucaldo.travelappv2.db.DatabaseHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class TripViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(TripUiState())
     val uiState: StateFlow<TripUiState> = _uiState.asStateFlow()
     private val myDb: DatabaseHelper
+    private val appPreferences: AppPreferences
 
     init {
         myDb = DatabaseHelper(application.applicationContext)
+        appPreferences = AppPreferences(application.applicationContext, myDb)
+        runBlocking {
+            val storedHomeLocation = appPreferences.getSavedHomeLocation()
+            if (storedHomeLocation != null) {
+                _uiState.value = _uiState.value.copy(
+                    fromCity = storedHomeLocation.city,
+                    fromCountry = storedHomeLocation.country,
+                    fromLatitudeText = storedHomeLocation.latitude.toString(),
+                    fromLongitudeText = storedHomeLocation.longitude.toString(),
+                )
+            }
+        }
     }
 
     fun updateTripType(tripType: TripType) {
