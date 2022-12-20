@@ -2,6 +2,7 @@ package com.sucaldo.travelappv2.ui.trip
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.SavedStateHandle
 import com.sucaldo.travelappv2.data.AppPreferences
 import com.sucaldo.travelappv2.data.CityLocation
 import com.sucaldo.travelappv2.data.TripType
@@ -12,27 +13,54 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
-class TripViewModel(application: Application) : AndroidViewModel(application) {
+class TripViewModel(
+    application: Application,
+    savedStateHandle: SavedStateHandle,
+    ) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(TripUiState())
     val uiState: StateFlow<TripUiState> = _uiState.asStateFlow()
     private val myDb: DatabaseHelper
     private val appPreferences: AppPreferences
+    private val tripId: String? = savedStateHandle["tripId"]
 
     init {
         myDb = DatabaseHelper(application.applicationContext)
         appPreferences = AppPreferences(application.applicationContext, myDb)
-        runBlocking {
-            val storedHomeLocation = appPreferences.getSavedHomeLocation()
-            if (storedHomeLocation != null) {
-                _uiState.value = _uiState.value.copy(
-                    fromCity = storedHomeLocation.city,
-                    fromCountry = storedHomeLocation.country,
-                    fromLatitudeText = storedHomeLocation.latitude.toString(),
-                    fromLongitudeText = storedHomeLocation.longitude.toString(),
-                )
+        if (tripId != null) {
+            loadTrip(tripId)
+        } else {
+            runBlocking {
+                val storedHomeLocation = appPreferences.getSavedHomeLocation()
+                if (storedHomeLocation != null) {
+                    _uiState.value = _uiState.value.copy(
+                        fromCity = storedHomeLocation.city,
+                        fromCountry = storedHomeLocation.country,
+                        fromLatitudeText = storedHomeLocation.latitude.toString(),
+                        fromLongitudeText = storedHomeLocation.longitude.toString(),
+                    )
+                }
             }
         }
-        _uiState.value = _uiState.value.copy(countries = myDb.countries)
+    }
+
+    private fun loadTrip(tripId: String) {
+        val trip = myDb.getTripById(tripId.toInt())
+        val fromLocation = myDb.getLocationOfCity(trip.fromCountry, trip.fromCity)
+        val toLocation = myDb.getLocationOfCity(trip.toCountry, trip.toCity)
+        _uiState.value = _uiState.value.copy(
+            tripType = trip.type,
+            fromCountry = trip.fromCountry,
+            fromCity = trip.fromCity,
+            fromLatitudeText = fromLocation.latitude.toString(),
+            fromLongitudeText = fromLocation.longitude.toString(),
+            toCountry = trip.toCountry,
+            toCity = trip.toCity,
+            toLatitudeText = toLocation.latitude.toString(),
+            toLongitudeText = toLocation.longitude.toString(),
+            startDate = trip.getPickerFormattedStartDate(),
+            endDate = trip.getPickerFormattedEndDate(),
+            description = trip.description,
+        )
     }
 
     fun updateTripType(tripType: TripType) {

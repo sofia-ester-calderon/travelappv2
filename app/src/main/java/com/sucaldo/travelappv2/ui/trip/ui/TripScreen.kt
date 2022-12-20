@@ -28,7 +28,7 @@ fun TripScreen(
     val title = if (tripId == null) {
         stringResource(id = R.string.title_new_trip)
     } else {
-        stringResource(id = R.string.title_edit_trip) //TODO edit trip
+        stringResource(id = R.string.title_edit_trip)
     }
     Scaffold(
         topBar = {

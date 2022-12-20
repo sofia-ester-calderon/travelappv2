@@ -10,6 +10,7 @@ import com.anychart.chart.common.dataentry.CategoryValueDataEntry;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.sucaldo.travelappv2.data.CityLocation;
+import com.sucaldo.travelappv2.data.Trip;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -167,16 +168,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-//    public Trip getTripById(int id) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        Cursor data = db.rawQuery("SELECT * FROM " + TABLE_TRIPS +
-//                " WHERE " + COL_TRIPS_ID + " = '" + id + "'", null);
-//
-//        if (data.moveToNext()) {
-//            return new Trip(data);
-//        }
-//        return null;
-//    }
+    public Trip getTripById(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor data = db.rawQuery("SELECT * FROM " + TABLE_TRIPS +
+                " WHERE " + COL_TRIPS_ID + " = '" + id + "'", null);
+
+        if (data.moveToNext()) {
+            return new Trip(data);
+        }
+        return null;
+    }
 
 //    public void updateTrip(Trip trip) {
 //        SQLiteDatabase db = this.getWritableDatabase();
