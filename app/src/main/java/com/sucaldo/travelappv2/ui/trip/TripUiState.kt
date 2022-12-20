@@ -8,14 +8,18 @@ data class TripUiState(
     val fromCity: String = "",
     val fromLatitudeText: String = "",
     val fromLongitudeText: String = "",
-    val isFromLatLongDbError:Boolean = false,
+    val fromLatLongErrorType:TripErrorType = TripErrorType.NONE,
     val toCountry: String = "",
     val toCity: String = "",
     val toLatitudeText: String = "",
     val toLongitudeText: String = "",
-    val isToLatLongDbError:Boolean = false,
+    val toLatLongDbErrorType:TripErrorType = TripErrorType.NONE,
     val startDate: String = "",
     val endDate: String = "",
     val description: String = "",
     val countries: List<String> = listOf(),
 )
+
+enum class TripErrorType {
+    NONE, LAT_LONG_DB, EMPTY, INVALID_CHARS,
+}

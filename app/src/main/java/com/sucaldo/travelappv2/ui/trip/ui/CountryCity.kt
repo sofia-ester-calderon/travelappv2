@@ -13,6 +13,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sucaldo.travelappv2.R
+import com.sucaldo.travelappv2.ui.trip.TripErrorType
 
 @Composable
 fun CountryCity(
@@ -20,7 +21,7 @@ fun CountryCity(
     city: String,
     latitude: String,
     longitude: String,
-    latLongDbError: Boolean,
+    latLongError: TripErrorType,
     countries: List<String>,
     onChangeCountry: (String) -> Unit,
     onChangeCity: (String) -> Unit,
@@ -45,7 +46,7 @@ fun CountryCity(
             LongitudeLatitude(
                 label = stringResource(id = R.string.trip_label_latitude),
                 value = latitude,
-                isError = latLongDbError,
+                errorType = latLongError,
                 onValueChange = { onChangeLatitude(it) },
                 onCalculateLatLong = onCalculateLatLong,
             )
@@ -55,7 +56,7 @@ fun CountryCity(
             LongitudeLatitude(
                 label = stringResource(id = R.string.trip_label_longitude),
                 value = longitude,
-                isError = latLongDbError,
+                errorType = latLongError,
                 onValueChange = { onChangeLongitude(it) },
                 onCalculateLatLong = onCalculateLatLong,
             )
@@ -109,7 +110,7 @@ private fun Country(
 private fun LongitudeLatitude(
     label: String,
     value: String,
-    isError: Boolean,
+    errorType: TripErrorType,
     onValueChange: (String) -> Unit,
     onCalculateLatLong: () -> Unit,
 ) {
@@ -122,10 +123,20 @@ private fun LongitudeLatitude(
             iconDescription = stringResource(id = R.string.trip_icon_refresh),
             onClickIcon = onCalculateLatLong,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            errorText = if (isError) stringResource(id = R.string.trip_db_error) else null
+            errorText = getErrorText(errorType = errorType)
         )
     }
 
+}
+
+@Composable
+private fun getErrorText(errorType: TripErrorType): String? {
+    return when(errorType) {
+        TripErrorType.NONE -> null
+        TripErrorType.LAT_LONG_DB -> stringResource(id = R.string.trip_error_db)
+        TripErrorType.EMPTY -> stringResource(id = R.string.trip_error_empty)
+        TripErrorType.INVALID_CHARS -> stringResource(id = R.string.trip_error_invalid_chars)
+    }
 }
 
 @Preview
@@ -137,7 +148,7 @@ fun CountryCityPreview() {
             country = "Australia",
             latitude = "123.2",
             longitude = "123.45",
-            latLongDbError = false,
+            latLongError = TripErrorType.NONE,
             countries = listOf(),
             onChangeCountry = {},
             onCalculateLatLong = {},

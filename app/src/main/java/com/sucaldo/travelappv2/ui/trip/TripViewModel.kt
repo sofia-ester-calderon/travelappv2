@@ -77,17 +77,17 @@ class TripViewModel(
 
     fun updateFromLatitude(latitude: String) {
         _uiState.value =
-            _uiState.value.copy(fromLatitudeText = latitude, isFromLatLongDbError = false)
+            _uiState.value.copy(fromLatitudeText = latitude, fromLatLongErrorType = TripErrorType.NONE)
     }
 
     fun updateFromLongitude(longitude: String) {
         _uiState.value =
-            _uiState.value.copy(fromLongitudeText = longitude, isFromLatLongDbError = false)
+            _uiState.value.copy(fromLongitudeText = longitude, fromLatLongErrorType = TripErrorType.NONE)
     }
 
     fun onFromCalculateLatLong() {
         _uiState.value = _uiState.value.copy(
-            isFromLatLongDbError = false,
+            fromLatLongErrorType = TripErrorType.NONE,
             fromLongitudeText = "",
             fromLatitudeText = "",
         )
@@ -102,7 +102,7 @@ class TripViewModel(
                 fromLongitudeText = formatLatLong(cityLocation.longitude)
             )
         } catch (e: java.lang.Exception) {
-            _uiState.value = uiState.value.copy(isFromLatLongDbError = true)
+            _uiState.value = uiState.value.copy(fromLatLongErrorType = TripErrorType.LAT_LONG_DB)
         }
     }
 
@@ -115,17 +115,17 @@ class TripViewModel(
     }
 
     fun updateToLatitude(latitude: String) {
-        _uiState.value = _uiState.value.copy(toLatitudeText = latitude, isToLatLongDbError = false)
+        _uiState.value = _uiState.value.copy(toLatitudeText = latitude, toLatLongDbErrorType = TripErrorType.NONE)
     }
 
     fun updateToLongitude(longitude: String) {
         _uiState.value =
-            _uiState.value.copy(toLongitudeText = longitude, isToLatLongDbError = false)
+            _uiState.value.copy(toLongitudeText = longitude, toLatLongDbErrorType = TripErrorType.NONE)
     }
 
     fun onToCalculateLatLong() {
         _uiState.value = _uiState.value.copy(
-            isToLatLongDbError = false,
+            toLatLongDbErrorType = TripErrorType.NONE,
             toLongitudeText = "",
             toLatitudeText = "",
         )
@@ -140,7 +140,7 @@ class TripViewModel(
                 toLongitudeText = formatLatLong(cityLocation.longitude)
             )
         } catch (e: java.lang.Exception) {
-            _uiState.value = uiState.value.copy(isToLatLongDbError = true)
+            _uiState.value = uiState.value.copy(toLatLongDbErrorType = TripErrorType.LAT_LONG_DB)
         }
     }
 
@@ -162,4 +162,16 @@ class TripViewModel(
             value,
         )
     }
+
+    fun saveTrip() {
+
+    }
+
+//    private fun isTripValid(): Boolean {
+//        when {
+//            _uiState.value.fromCountry.isBlank() -> {
+//
+//            }
+//        }
+//    }
 }

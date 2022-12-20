@@ -67,7 +67,7 @@ fun TripContent(
             city = tripUiState.fromCity,
             latitude = tripUiState.fromLatitudeText,
             longitude = tripUiState.fromLongitudeText,
-            latLongDbError = tripUiState.isFromLatLongDbError,
+            latLongError = tripUiState.fromLatLongErrorType,
             countries = tripUiState.countries,
             onChangeCountry = { tripViewModel.updateFromCountry(it) },
             onChangeCity = { tripViewModel.updateFromCity(it) },
@@ -81,7 +81,7 @@ fun TripContent(
             city = tripUiState.toCity,
             latitude = tripUiState.toLatitudeText,
             longitude = tripUiState.toLongitudeText,
-            latLongDbError = tripUiState.isToLatLongDbError,
+            latLongError = tripUiState.toLatLongDbErrorType,
             countries = tripUiState.countries,
             onChangeCountry = { tripViewModel.updateToCountry(it) },
             onChangeCity = { tripViewModel.updateToCity(it) },
@@ -105,6 +105,13 @@ fun TripContent(
             singleLine = true,
             label = { Text(stringResource(id = R.string.trip_label_description)) },
         )
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            Button(onClick = { tripViewModel.saveTrip() }) {
+                Text(text = "Save")
+            }
+        }
+
     }
 }
 
