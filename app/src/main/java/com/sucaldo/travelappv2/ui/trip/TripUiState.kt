@@ -3,6 +3,7 @@ package com.sucaldo.travelappv2.ui.trip
 import com.sucaldo.travelappv2.data.TripType
 
 data class TripUiState(
+    val tripUiType: TripUiType = TripUiType.NEW,
     val tripType: TripType = TripType.RETURN,
     val fromCountry: String = "",
     val fromCountryErrorType: TripErrorType = TripErrorType.NONE,
@@ -29,4 +30,8 @@ data class TripUiState(
 
 enum class TripErrorType {
     NONE, LAT_LONG_DB, EMPTY, INVALID_CHARS, INVALID_DATE_FORMAT, INVALID_END_DATE, INVALID_START_DATE,
+}
+
+enum class TripUiType {
+    NEW, EDIT,
 }

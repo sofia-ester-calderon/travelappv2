@@ -95,31 +95,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      ********* TABLE TRIPS **********************
      */
 
-//    public Boolean addTrip(Trip trip) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put(COL_TRIPS_FROM_COUNTRY, trip.getFromCountry());
-//        contentValues.put(COL_TRIPS_FROM_CITY, trip.getFromCity());
-//        contentValues.put(COL_TRIPS_TO_COUNTRY, trip.getToCountry());
-//        contentValues.put(COL_TRIPS_TO_CITY, trip.getToCity());
-//        contentValues.put(COL_TRIPS_DESCRIPTION, trip.getDescription());
-//        contentValues.put(COL_TRIPS_START_DATE, trip.getStartDate().toString());
-//        contentValues.put(COL_TRIPS_TYPE, trip.getType().toString());
-//        if (trip.getEndDate() != null) {
-//            contentValues.put(COL_TRIPS_END_DATE, trip.getEndDate().toString());
-//        }
-//        contentValues.put(COL_TRIPS_DISTANCE, trip.getDistance());
-//        contentValues.put(COL_TRIPS_CONTINENT, trip.getToContinent());
-//        if (trip.getGroupId() == -1) {
-//            contentValues.put(COL_TRIPS_GRP_ID, getNextAvailableGroupId());
-//        } else {
-//            contentValues.put(COL_TRIPS_GRP_ID, trip.getGroupId());
-//        }
-//
-//        // return = -1 if error
-//        long result = db.insert(TABLE_TRIPS, null, contentValues);
-//        return result != -1;
-//    }
+    public Boolean addTrip(Trip trip) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_TRIPS_FROM_COUNTRY, trip.getFromCountry());
+        contentValues.put(COL_TRIPS_FROM_CITY, trip.getFromCity());
+        contentValues.put(COL_TRIPS_TO_COUNTRY, trip.getToCountry());
+        contentValues.put(COL_TRIPS_TO_CITY, trip.getToCity());
+        contentValues.put(COL_TRIPS_DESCRIPTION, trip.getDescription());
+        contentValues.put(COL_TRIPS_START_DATE, trip.getStartDate().toString());
+        contentValues.put(COL_TRIPS_TYPE, trip.getType().toString());
+        if (trip.getEndDate() != null) {
+            contentValues.put(COL_TRIPS_END_DATE, trip.getEndDate().toString());
+        }
+        contentValues.put(COL_TRIPS_DISTANCE, trip.getDistance());
+        contentValues.put(COL_TRIPS_CONTINENT, trip.getToContinent());
+        if (trip.getGroupId() == null) {
+            contentValues.put(COL_TRIPS_GRP_ID, getNextAvailableGroupId());
+        } else {
+            contentValues.put(COL_TRIPS_GRP_ID, trip.getGroupId());
+        }
+
+        // return = -1 if error
+        long result = db.insert(TABLE_TRIPS, null, contentValues);
+        return result != -1;
+    }
 
     // Group Ids are used for differentiation of trips
     private int getNextAvailableGroupId() {
@@ -179,22 +179,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-//    public void updateTrip(Trip trip) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        db.execSQL("UPDATE " + TABLE_TRIPS + " SET " +
-//                COL_TRIPS_FROM_COUNTRY + " = '" + trip.getFromCountry() + "'," +
-//                COL_TRIPS_FROM_CITY + " = '" + trip.getFromCity() + "'," +
-//                COL_TRIPS_TO_COUNTRY + " = '" + trip.getToCountry() + "'," +
-//                COL_TRIPS_TO_CITY + " = '" + trip.getToCity() + "'," +
-//                COL_TRIPS_DESCRIPTION + " = '" + trip.getDescription() + "'," +
-//                COL_TRIPS_START_DATE + " = '" + trip.getStartDate() + "'," +
-//                COL_TRIPS_END_DATE + " = '" + trip.getEndDate() + "'," +
-//                COL_TRIPS_GRP_ID + " = '" + trip.getGroupId() + "'," +
-//                COL_TRIPS_DISTANCE + " = '" + trip.getDistance() + "', " +
-//                COL_TRIPS_CONTINENT + " = '" + trip.getToContinent() + "', " +
-//                COL_TRIPS_TYPE + " = '" + trip.getType() + "' " +
-//                " WHERE " + COL_TRIPS_ID + " = " + trip.getId());
-//    }
+    public void updateTrip(Trip trip) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_TRIPS + " SET " +
+                COL_TRIPS_FROM_COUNTRY + " = '" + trip.getFromCountry() + "'," +
+                COL_TRIPS_FROM_CITY + " = '" + trip.getFromCity() + "'," +
+                COL_TRIPS_TO_COUNTRY + " = '" + trip.getToCountry() + "'," +
+                COL_TRIPS_TO_CITY + " = '" + trip.getToCity() + "'," +
+                COL_TRIPS_DESCRIPTION + " = '" + trip.getDescription() + "'," +
+                COL_TRIPS_START_DATE + " = '" + trip.getStartDate() + "'," +
+                COL_TRIPS_END_DATE + " = '" + trip.getEndDate() + "'," +
+                COL_TRIPS_GRP_ID + " = '" + trip.getGroupId() + "'," +
+                COL_TRIPS_DISTANCE + " = '" + trip.getDistance() + "', " +
+                COL_TRIPS_CONTINENT + " = '" + trip.getToContinent() + "', " +
+                COL_TRIPS_TYPE + " = '" + trip.getType() + "' " +
+                " WHERE " + COL_TRIPS_ID + " = " + trip.getId());
+    }
 
     public void deleteTrip(int id) {
         SQLiteDatabase db = this.getWritableDatabase();

@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import com.sucaldo.travelappv2.data.*
 import com.sucaldo.travelappv2.db.DatabaseHelper
+import com.sucaldo.travelappv2.util.DistanceCalculator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,6 +28,7 @@ class TripViewModel(
         myDb = DatabaseHelper(application.applicationContext)
         appPreferences = AppPreferences(application.applicationContext, myDb)
         if (tripId != null) {
+            _uiState.value = _uiState.value.copy(tripUiType = TripUiType.EDIT)
             loadTrip(tripId)
         } else {
             runBlocking {
@@ -141,7 +143,7 @@ class TripViewModel(
         if (longitude.isNotBlank()) {
             _uiState.value = _uiState.value.copy(toLatLongDbErrorType = TripErrorType.NONE)
         }
-        _uiState.value = _uiState.value.copy( toLongitudeText = longitude)
+        _uiState.value = _uiState.value.copy(toLongitudeText = longitude)
     }
 
     fun onToCalculateLatLong() {
@@ -192,8 +194,57 @@ class TripViewModel(
 
     fun saveTrip() {
         if (!isTripValid()) return
+        val continent = myDb.getContinentOfCountry(_uiState.value.toCountry)
+        val trip = Trip(
+            fromCountry = _uiState.value.fromCountry,
+            fromCity = _uiState.value.toCity,
+            toCountry = _uiState.value.toCountry,
+            toCity = _uiState.value.toCity,
+            description = _uiState.value.description,
+            startDate = _uiState.value.startDate,
+            endDate = _uiState.value.endDate,
+            type = _uiState.value.tripType,
+            toContinent = continent
+        )
+        val fromCityLocation = CityLocation(
+            country = trip.fromCountry,
+            city = trip.fromCity,
+            latitude = _uiState.value.fromLatitudeText.toFloat(),
+            longitude = _uiState.value.fromLongitudeText.toFloat(),
+        )
+        val toCityLocation = CityLocation(
+            country = trip.toCountry,
+            city = trip.toCity,
+            latitude = _uiState.value.toLatitudeText.toFloat(),
+            longitude = _uiState.value.toLongitudeText.toFloat(),
+        )
+        myDb.saveCityLocationIfNotInDb(fromCityLocation)
+        myDb.saveCityLocationIfNotInDb(toCityLocation)
+        val distance = DistanceCalculator.getDistanceFromLatLongInKms(
+            lat1 = fromCityLocation.latitude,
+            long1 = fromCityLocation.longitude,
+            lat2 = toCityLocation.latitude,
+            long2 = toCityLocation.longitude,
+            isDoubleDistance = trip.type == TripType.RETURN,
+        )
 
+//        if (_uiState.value.tripUiType == TripUiType.EDIT) {
+//            updateTrip(trip, distance)
+//        } else {
+//            when(trip.type) {
+//                TripType.RETURN -> saveNewTrip()
+//            }
+//        }
     }
+
+//    private fun saveNewTrip(trip: Trip) {
+//
+//    }
+//
+//    private fun updateTrip(trip: Trip, distance: Long) {
+//        myDb.updateTrip(trip)
+//        // TODO: navidate to correct screen + show dialog
+//    }
 
     private fun isTripValid(): Boolean {
         val areFieldsEmpty = !areFieldsFilled()
