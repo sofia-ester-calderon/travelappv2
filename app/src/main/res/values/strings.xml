@@ -28,6 +28,9 @@
     <string name="trip_error_empty">Field cannot be empty</string>
     <string name="trip_error_db">Not in DB. Add manually</string>
     <string name="trip_error_invalid_chars">Remove commas and apostrophes</string>
+    <string name="trip_error_invalid_date_format">Date format is invalid</string>
+    <string name="trip_error_invalid_start_date">Start date must be after and date of previous stop</string>
+    <string name="trip_error_invalid_end_date">End date is before start date</string>
 
 
 </resources>

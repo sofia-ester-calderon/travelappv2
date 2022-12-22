@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.sucaldo.travelappv2.R
+import com.sucaldo.travelappv2.ui.trip.TripErrorType
 import java.util.*
 
 @Composable
@@ -22,6 +23,8 @@ fun TripDate(
     startDate: String,
     endDate: String,
     isEndDateEnabled: Boolean,
+    startDateError: TripErrorType,
+    endDateError: TripErrorType,
     onChangeStartDate: (String) -> Unit,
     onChangeEndDate: (String) -> Unit,
 ) {
@@ -37,6 +40,7 @@ fun TripDate(
                 DateField(
                     label = stringResource(id = R.string.trip_label_start),
                     date = startDate,
+                    errorType = startDateError,
                     onChangeDate = onChangeStartDate,
                 )
             }
@@ -46,6 +50,7 @@ fun TripDate(
                     label = stringResource(id = R.string.trip_label_end),
                     date = endDate,
                     enabled = isEndDateEnabled,
+                    errorType = endDateError,
                     onChangeDate = onChangeEndDate,
                 )
             }
@@ -58,6 +63,7 @@ private fun DateField(
     label: String,
     date: String,
     enabled: Boolean = true,
+    errorType: TripErrorType,
     onChangeDate: (String) -> Unit,
 ) {
     val mCalendar = Calendar.getInstance()
@@ -81,6 +87,18 @@ private fun DateField(
         onClickIcon = { mDatePickerDialog.show() },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         enabled = enabled,
+        errorText = getDateErrorText(tripErrorType = errorType)
     )
+}
+
+@Composable
+fun getDateErrorText(tripErrorType: TripErrorType): String? {
+    return when(tripErrorType) {
+        TripErrorType.EMPTY -> stringResource(id = R.string.trip_error_empty)
+        TripErrorType.INVALID_DATE_FORMAT -> stringResource(id = R.string.trip_error_invalid_date_format)
+        TripErrorType.INVALID_END_DATE -> stringResource(id = R.string.trip_error_invalid_end_date)
+        TripErrorType.INVALID_START_DATE -> stringResource(id = R.string.trip_error_invalid_start_date)
+        else -> null
+    }
 }
 

@@ -22,6 +22,8 @@ fun CountryCity(
     latitude: String,
     longitude: String,
     latLongError: TripErrorType,
+    countryError: TripErrorType,
+    cityError: TripErrorType,
     countries: List<String>,
     onChangeCountry: (String) -> Unit,
     onChangeCity: (String) -> Unit,
@@ -29,14 +31,19 @@ fun CountryCity(
     onChangeLongitude: (String) -> Unit,
     onCalculateLatLong: () -> Unit,
 ) {
-    Country(country = country, onChangeCountry = onChangeCountry, countries = countries)
+    Country(
+        country = country,
+        onChangeCountry = onChangeCountry,
+        countries = countries,
+        errorType = countryError,
+    )
     Spacer(modifier = Modifier.height(8.dp))
-    TextField(
+    TravelAppTextField(
         modifier = Modifier.fillMaxWidth(),
         value = city,
         onValueChange = { onChangeCity(it) },
-        singleLine = true,
-        label = { Text(stringResource(id = R.string.trip_label_city)) },
+        label = (stringResource(id = R.string.trip_label_city)),
+        errorText = getErrorText(errorType = cityError)
     )
     Spacer(modifier = Modifier.height(8.dp))
     Row {
@@ -72,6 +79,7 @@ private fun Country(
     country: String,
     onChangeCountry: (String) -> Unit,
     countries: List<String>,
+    errorType: TripErrorType,
 ) {
     val options = countries
     var exp by remember { mutableStateOf(false) }
@@ -104,6 +112,11 @@ private fun Country(
             }
         }
     }
+
+    val errorText = getErrorText(errorType)
+    if (errorText != null) {
+        ErrorText(text = errorText)
+    }
 }
 
 @Composable
@@ -132,10 +145,10 @@ private fun LongitudeLatitude(
 @Composable
 private fun getErrorText(errorType: TripErrorType): String? {
     return when(errorType) {
-        TripErrorType.NONE -> null
         TripErrorType.LAT_LONG_DB -> stringResource(id = R.string.trip_error_db)
         TripErrorType.EMPTY -> stringResource(id = R.string.trip_error_empty)
         TripErrorType.INVALID_CHARS -> stringResource(id = R.string.trip_error_invalid_chars)
+        else -> null
     }
 }
 
@@ -149,6 +162,8 @@ fun CountryCityPreview() {
             latitude = "123.2",
             longitude = "123.45",
             latLongError = TripErrorType.NONE,
+            countryError = TripErrorType.EMPTY,
+            cityError = TripErrorType.NONE,
             countries = listOf(),
             onChangeCountry = {},
             onCalculateLatLong = {},

@@ -68,6 +68,8 @@ fun TripContent(
             latitude = tripUiState.fromLatitudeText,
             longitude = tripUiState.fromLongitudeText,
             latLongError = tripUiState.fromLatLongErrorType,
+            countryError = tripUiState.fromCountryErrorType,
+            cityError = tripUiState.fromCityErrorType,
             countries = tripUiState.countries,
             onChangeCountry = { tripViewModel.updateFromCountry(it) },
             onChangeCity = { tripViewModel.updateFromCity(it) },
@@ -82,6 +84,8 @@ fun TripContent(
             latitude = tripUiState.toLatitudeText,
             longitude = tripUiState.toLongitudeText,
             latLongError = tripUiState.toLatLongDbErrorType,
+            countryError = tripUiState.toCountryErrorType,
+            cityError = tripUiState.toCityErrorType,
             countries = tripUiState.countries,
             onChangeCountry = { tripViewModel.updateToCountry(it) },
             onChangeCity = { tripViewModel.updateToCity(it) },
@@ -94,6 +98,8 @@ fun TripContent(
             startDate = tripUiState.startDate,
             endDate = tripUiState.endDate,
             isEndDateEnabled = tripUiState.tripType != TripType.ONE_WAY,
+            startDateError = tripUiState.startDateErrorType,
+            endDateError = tripUiState.endDateErrorType,
             onChangeStartDate =  { tripViewModel.updateStartDate(it) },
             onChangeEndDate =  { tripViewModel.updateEndDate(it) },
         )
@@ -111,7 +117,6 @@ fun TripContent(
                 Text(text = "Save")
             }
         }
-
     }
 }
 

@@ -47,6 +47,7 @@ fun DropdownMenu(navController: NavController) {
             Divider()
             DropdownMenuItem(onClick = {
                 navController.navigate(tripRoute)
+//                navController.navigate("$tripRoute?tripId=1234")
             }) {
                 Row {
                     Icon(
