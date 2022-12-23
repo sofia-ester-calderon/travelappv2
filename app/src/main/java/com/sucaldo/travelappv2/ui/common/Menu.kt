@@ -18,8 +18,8 @@ import com.sucaldo.travelappv2.R
 @Composable
 fun DropdownMenu(navController: NavController) {
     var expanded by remember { mutableStateOf(false) }
-    val tripRoute = getRoute(routeType = RouteType.TRIP)
-    val homeRoute = getRoute(routeType = RouteType.HOME)
+    val tripRoute = Routes.TRIP
+    val homeRoute = Routes.HOME
     Box(
         modifier = Modifier
             .fillMaxSize()

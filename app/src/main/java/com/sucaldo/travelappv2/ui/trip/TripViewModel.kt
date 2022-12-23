@@ -3,8 +3,10 @@ package com.sucaldo.travelappv2.ui.trip
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.NavController
 import com.sucaldo.travelappv2.data.*
 import com.sucaldo.travelappv2.db.DatabaseHelper
+import com.sucaldo.travelappv2.ui.common.Routes
 import com.sucaldo.travelappv2.util.DistanceCalculator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +24,8 @@ class TripViewModel(
     val uiState: StateFlow<TripUiState> = _uiState.asStateFlow()
     private val myDb: DatabaseHelper
     private val appPreferences: AppPreferences
-    private val tripId: String? = savedStateHandle["tripId"]
+    private val tripId: Int? = savedStateHandle["tripId"]
+    private var groupId: Int? = null
 
     init {
         myDb = DatabaseHelper(application.applicationContext)
@@ -45,10 +48,11 @@ class TripViewModel(
         }
     }
 
-    private fun loadTrip(tripId: String) {
-        val trip = myDb.getTripById(tripId.toInt())
+    private fun loadTrip(tripId: Int) {
+        val trip = myDb.getTripById(tripId)
         val fromLocation = myDb.getLocationOfCity(trip.fromCountry, trip.fromCity)
         val toLocation = myDb.getLocationOfCity(trip.toCountry, trip.toCity)
+        groupId = trip.groupId
         _uiState.value = _uiState.value.copy(
             tripType = trip.type,
             fromCountry = trip.fromCountry,
@@ -192,10 +196,12 @@ class TripViewModel(
         )
     }
 
-    fun saveTrip() {
+    fun saveTrip(navController: NavController) {
         if (!isTripValid()) return
         val continent = myDb.getContinentOfCountry(_uiState.value.toCountry)
         val trip = Trip(
+            id = tripId,
+            groupId = groupId,
             fromCountry = _uiState.value.fromCountry,
             fromCity = _uiState.value.toCity,
             toCountry = _uiState.value.toCountry,
@@ -227,24 +233,29 @@ class TripViewModel(
             long2 = toCityLocation.longitude,
             isDoubleDistance = trip.type == TripType.RETURN,
         )
-
-//        if (_uiState.value.tripUiType == TripUiType.EDIT) {
-//            updateTrip(trip, distance)
-//        } else {
-//            when(trip.type) {
-//                TripType.RETURN -> saveNewTrip()
-//            }
-//        }
+        trip.distance = distance
+        when(_uiState.value.tripUiType) {
+            TripUiType.NEW -> saveNewTrip(trip)
+            TripUiType.EDIT -> updateTrip(trip, navController)
+        }
     }
 
-//    private fun saveNewTrip(trip: Trip) {
-//
-//    }
-//
-//    private fun updateTrip(trip: Trip, distance: Long) {
-//        myDb.updateTrip(trip)
-//        // TODO: navidate to correct screen + show dialog
-//    }
+    private fun saveNewTrip(trip: Trip) {
+        if (myDb.addTrip(trip)) {
+            when(trip.type) {
+                TripType.RETURN, TripType.ONE_WAY -> {} // TODO: show popup message
+                TripType.MULTI -> {} // TODO: show popup message
+            }
+        } else {
+            // TODO show error message
+        }
+    }
+
+    private fun updateTrip(trip: Trip, navController: NavController) {
+        myDb.updateTrip(trip)
+        _uiState.value = _uiState.value.copy(tripDialogState = TripDialogState.EDIT_SUCCESS)
+        navController.navigate(Routes.HOME) //TODO: change to my trips
+    }
 
     private fun isTripValid(): Boolean {
         val areFieldsEmpty = !areFieldsFilled()

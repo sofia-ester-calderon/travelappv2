@@ -4,6 +4,7 @@ import com.sucaldo.travelappv2.data.TripType
 
 data class TripUiState(
     val tripUiType: TripUiType = TripUiType.NEW,
+    val tripDialogState: TripDialogState = TripDialogState.NONE,
     val tripType: TripType = TripType.RETURN,
     val fromCountry: String = "",
     val fromCountryErrorType: TripErrorType = TripErrorType.NONE,
@@ -34,4 +35,8 @@ enum class TripErrorType {
 
 enum class TripUiType {
     NEW, EDIT,
+}
+
+enum class TripDialogState {
+    NONE, EDIT_SUCCESS,
 }

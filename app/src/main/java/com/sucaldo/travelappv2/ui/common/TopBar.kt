@@ -13,7 +13,7 @@ fun TopBar(
     navController: NavController,
     title: String,
 ) {
-    val settingsRoute = getRoute(routeType = RouteType.SETTINGS)
+    val settingsRoute = Routes.SETTINGS
     Column {
         TopAppBar(
             elevation = 4.dp,

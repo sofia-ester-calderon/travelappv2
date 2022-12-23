@@ -25,6 +25,8 @@ fun TripScreen(
     tripViewModel: TripViewModel = viewModel(),
 ) {
     val tripUiState by tripViewModel.uiState.collectAsState()
+
+    TripDialog(tripUiState.tripDialogState)
     val title = if (tripId == null) {
         stringResource(id = R.string.title_new_trip)
     } else {
@@ -42,6 +44,7 @@ fun TripScreen(
             TripContent(
                 tripUiState = tripUiState,
                 tripViewModel = tripViewModel,
+                navController = navController,
             )
         }
     }
@@ -51,7 +54,8 @@ fun TripScreen(
 fun TripContent(
     tripUiState: TripUiState,
     tripViewModel: TripViewModel,
-) {
+    navController: NavController,
+    ) {
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -113,7 +117,7 @@ fun TripContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            Button(onClick = { tripViewModel.saveTrip() }) {
+            Button(onClick = { tripViewModel.saveTrip(navController) }) {
                 Text(text = "Save")
             }
         }

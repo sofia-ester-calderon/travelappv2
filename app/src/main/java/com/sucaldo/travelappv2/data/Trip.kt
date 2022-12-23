@@ -20,6 +20,8 @@ class Trip {
     var type: TripType
 
     constructor(
+        id: Int?,
+        groupId: Int?,
         fromCountry: String,
         fromCity: String,
         toCountry: String,
@@ -30,6 +32,8 @@ class Trip {
         toContinent: String,
         type: TripType,
     ) {
+        this.id = id
+        this.groupId = groupId
         this.fromCountry = fromCountry
         this.fromCity = fromCity
         this.toCountry = toCountry
