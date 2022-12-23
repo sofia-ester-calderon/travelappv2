@@ -194,29 +194,58 @@ class TripViewModel(
     }
 
     fun onAddAnotherTrip() {
+        removeAllUiErrors()
         _uiState.value = _uiState.value.copy(
             tripUiType = TripUiType.NEW,
             tripDialogState = TripDialogState.NONE,
             tripType = TripType.RETURN,
             fromCity = "",
-            fromCountryErrorType = TripErrorType.NONE,
             fromCountry = "",
-            fromCityErrorType = TripErrorType.NONE,
             fromLatitudeText = "",
             fromLongitudeText = "",
-            fromLatLongErrorType = TripErrorType.NONE,
             toCountry = "",
-            toCountryErrorType = TripErrorType.NONE,
             toCity = "",
-            toCityErrorType = TripErrorType.NONE,
             toLatitudeText = "",
             toLongitudeText = "",
-            toLatLongDbErrorType = TripErrorType.NONE,
             startDate = "",
-            startDateErrorType = TripErrorType.NONE,
             endDate = "",
-            endDateErrorType = TripErrorType.NONE,
             description = "",
+        )
+    }
+
+    fun onAddNextStop() {
+        removeAllUiErrors()
+        val previousTrip = myDb.getTripById(myDb.lastTripId)
+        groupId = previousTrip.groupId
+        _uiState.value = _uiState.value.copy(
+            tripUiType = TripUiType.NEW_STOP,
+            tripDialogState = TripDialogState.NONE,
+            tripType = TripType.MULTI,
+            fromCity = previousTrip.fromCity,
+            fromCountry = previousTrip.fromCountry,
+            fromLatitudeText = "",
+            fromLongitudeText = "",
+            toCountry = "",
+            toCity = "",
+            toLatitudeText = "",
+            toLongitudeText = "",
+            startDate = previousTrip.getPickerFormattedStartDate(),
+            endDate = "",
+            description = previousTrip.description,
+        )
+        onFromCalculateLatLong()
+    }
+
+    fun removeAllUiErrors() {
+        _uiState.value = _uiState.value.copy(
+            fromCountryErrorType = TripErrorType.NONE,
+            fromCityErrorType = TripErrorType.NONE,
+            fromLatLongErrorType = TripErrorType.NONE,
+            toCountryErrorType = TripErrorType.NONE,
+            toCityErrorType = TripErrorType.NONE,
+            toLatLongDbErrorType = TripErrorType.NONE,
+            startDateErrorType = TripErrorType.NONE,
+            endDateErrorType = TripErrorType.NONE,
             descriptionErrorType = TripErrorType.NONE,
         )
     }
@@ -267,7 +296,7 @@ class TripViewModel(
         )
         trip.distance = distance
         when(_uiState.value.tripUiType) {
-            TripUiType.NEW -> saveNewTrip(trip, navController)
+            TripUiType.NEW, TripUiType.NEW_STOP -> saveNewTrip(trip, navController)
             TripUiType.EDIT -> updateTrip(trip, navController)
         }
     }
@@ -277,7 +306,8 @@ class TripViewModel(
             when(trip.type) {
                 TripType.RETURN, TripType.ONE_WAY ->
                     _uiState.value = _uiState.value.copy(tripDialogState = TripDialogState.SIMPLE_TRIP)
-                TripType.MULTI -> {} // TODO: show popup message
+                TripType.MULTI ->
+                    _uiState.value = _uiState.value.copy(tripDialogState = TripDialogState.MULTI_TRIP)
             }
         } else {
             _uiState.value = _uiState.value.copy(tripDialogState = TripDialogState.SAVE_ERROR)

@@ -19,18 +19,31 @@ import com.sucaldo.travelappv2.R
 import com.sucaldo.travelappv2.ui.trip.TripDialogState
 
 @Composable
-fun TripDialog(tripDialogState: TripDialogState, onGoToMyTrips: (NavController) -> Unit, onAddAnotherTrip: () -> Unit, navController: NavController) {
+fun TripDialog(
+    tripDialogState: TripDialogState,
+    onGoToMyTrips: (NavController) -> Unit,
+    onAddAnotherTrip: () -> Unit,
+    onAddNextStop: () -> Unit,
+    onCompleteTrip: () -> Unit,
+    navController: NavController
+) {
     when (tripDialogState) {
         TripDialogState.NONE -> {}
         TripDialogState.EDIT_SUCCESS -> TripToastContent(stringResource(id = R.string.trip_dialog_edit_success))
         TripDialogState.SAVE_ERROR -> TripToastContent(stringResource(id = R.string.trip_dialog_save_error))
         TripDialogState.SIMPLE_TRIP -> TripDialogContent(
             title = stringResource(id = R.string.trip_dialog_simple_title),
-            content = stringResource(id = R.string.trip_dialog_simple_content),
             option1Text = stringResource(id = R.string.trip_dialog_simple_option1),
             option2Text = stringResource(id = R.string.trip_dialog_simple_option2),
             onSelectOption1 = { onGoToMyTrips(navController) },
             onSelectOption2 = onAddAnotherTrip,
+        )
+        TripDialogState.MULTI_TRIP -> TripDialogContent(
+            title = stringResource(id = R.string.trip_dialog_multi_title),
+            option1Text = stringResource(id = R.string.trip_dialog_multi_option1),
+            option2Text = stringResource(id = R.string.trip_dialog_multi_option2),
+            onSelectOption1 = onAddNextStop,
+            onSelectOption2 = onCompleteTrip,
         )
     }
 }
@@ -38,7 +51,6 @@ fun TripDialog(tripDialogState: TripDialogState, onGoToMyTrips: (NavController) 
 @Composable
 private fun TripDialogContent(
     title: String,
-    content: String,
     option1Text: String,
     option2Text: String,
     onSelectOption1: () -> Unit,
@@ -55,7 +67,7 @@ private fun TripDialogContent(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = content)
+            Text(text = stringResource(id = R.string.trip_dialog_saved_content))
             Spacer(modifier = Modifier.height(8.dp))
             Row {
                 Button(onClick = onSelectOption1) {
@@ -81,9 +93,8 @@ private fun TripToastContent(message: String) {
 fun TripDialogContentPreview() {
     TripDialogContent(
         title = stringResource(id = R.string.trip_dialog_simple_title),
-        content = stringResource(id = R.string.trip_dialog_simple_content),
         option1Text = stringResource(id = R.string.trip_dialog_simple_option1),
         option2Text = stringResource(id = R.string.trip_dialog_simple_option2),
-        {},{}
+        {}, {}
     )
 }

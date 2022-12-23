@@ -17,6 +17,7 @@ import com.sucaldo.travelappv2.data.TripType
 import com.sucaldo.travelappv2.ui.common.TopBar
 import com.sucaldo.travelappv2.ui.trip.TripErrorType
 import com.sucaldo.travelappv2.ui.trip.TripUiState
+import com.sucaldo.travelappv2.ui.trip.TripUiType
 import com.sucaldo.travelappv2.ui.trip.TripViewModel
 
 @Composable
@@ -31,12 +32,14 @@ fun TripScreen(
         tripDialogState = tripUiState.tripDialogState,
         onGoToMyTrips = { tripViewModel.onGoToMyTrips(navController) },
         onAddAnotherTrip = { tripViewModel.onAddAnotherTrip() },
+        onAddNextStop = { tripViewModel.onAddNextStop() },
+        onCompleteTrip = {},
         navController = navController,
     )
-    val title = if (tripId == null) {
-        stringResource(id = R.string.title_new_trip)
-    } else {
-        stringResource(id = R.string.title_edit_trip)
+    val title = when(tripUiState.tripUiType) {
+        TripUiType.NEW ->  stringResource(id = R.string.title_new_trip)
+        TripUiType.EDIT -> stringResource(id = R.string.title_edit_trip)
+        TripUiType.NEW_STOP -> stringResource(id = R.string.title_new_stop)
     }
     Scaffold(
         topBar = {
@@ -67,10 +70,12 @@ fun TripContent(
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        TripOptions(
-            tripType = tripUiState.tripType,
-            onChangeTripType = { tripViewModel.updateTripType(it) },
-        )
+        if (tripUiState.tripUiType != TripUiType.NEW_STOP) {
+            TripOptions(
+                tripType = tripUiState.tripType,
+                onChangeTripType = { tripViewModel.updateTripType(it) },
+            )
+        }
         BigLabel(text = stringResource(id = R.string.trip_label_from))
         CountryCity(
             country = tripUiState.fromCountry,

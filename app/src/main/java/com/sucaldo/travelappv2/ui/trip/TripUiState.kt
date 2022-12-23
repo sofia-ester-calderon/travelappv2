@@ -34,9 +34,9 @@ enum class TripErrorType {
 }
 
 enum class TripUiType {
-    NEW, EDIT,
+    NEW, EDIT, NEW_STOP,
 }
 
 enum class TripDialogState {
-    NONE, EDIT_SUCCESS, SAVE_ERROR, SIMPLE_TRIP,
+    NONE, EDIT_SUCCESS, SAVE_ERROR, SIMPLE_TRIP, MULTI_TRIP,
 }

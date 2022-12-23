@@ -4,6 +4,7 @@
     <string name="menu">Menu</string>
     <string name="title_new_trip">New Trip</string>
     <string name="title_edit_trip">Edit Trip</string>
+    <string name="title_new_stop">Next Stop</string>
     <string name="title_home">Home</string>
     <string name="title_settings">Settings</string>
 
@@ -32,8 +33,11 @@
     <string name="trip_dialog_edit_success">Trip was updated</string>
     <string name="trip_dialog_save_error">Oops… Error saving trip</string>
     <string name="trip_dialog_simple_title">Trip saved</string>
-    <string name="trip_dialog_simple_content">What do you want to do next?</string>
+    <string name="trip_dialog_saved_content">What do you want to do next?</string>
     <string name="trip_dialog_simple_option1">Go to my trips</string>
     <string name="trip_dialog_simple_option2">Add trip</string>
+    <string name="trip_dialog_multi_title">Stop saved</string>
+    <string name="trip_dialog_multi_option1">Add next stop</string>
+    <string name="trip_dialog_multi_option2">Complete trip</string>
 
 </resources>
