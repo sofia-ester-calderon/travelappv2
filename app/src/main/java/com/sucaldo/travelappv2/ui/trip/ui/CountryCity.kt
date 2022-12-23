@@ -43,7 +43,7 @@ fun CountryCity(
         value = city,
         onValueChange = { onChangeCity(it) },
         label = (stringResource(id = R.string.trip_label_city)),
-        errorText = getErrorText(errorType = cityError)
+        errorText = getErrorText(cityError)
     )
     Spacer(modifier = Modifier.height(8.dp))
     Row {
@@ -136,20 +136,10 @@ private fun LongitudeLatitude(
             iconDescription = stringResource(id = R.string.trip_icon_refresh),
             onClickIcon = onCalculateLatLong,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            errorText = getErrorText(errorType = errorType)
+            errorText = getErrorText(tripErrorType = errorType)
         )
     }
 
-}
-
-@Composable
-private fun getErrorText(errorType: TripErrorType): String? {
-    return when(errorType) {
-        TripErrorType.LAT_LONG_DB -> stringResource(id = R.string.trip_error_db)
-        TripErrorType.EMPTY -> stringResource(id = R.string.trip_error_empty)
-        TripErrorType.INVALID_CHARS -> stringResource(id = R.string.trip_error_invalid_chars)
-        else -> null
-    }
 }
 
 @Preview

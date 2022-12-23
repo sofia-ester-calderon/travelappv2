@@ -30,5 +30,10 @@
     <string name="trip_error_invalid_end_date">End date is before start date</string>
 
     <string name="trip_dialog_edit_success">Trip was updated</string>
+    <string name="trip_dialog_save_error">Oops… Error saving trip</string>
+    <string name="trip_dialog_simple_title">Trip saved</string>
+    <string name="trip_dialog_simple_content">What do you want to do next?</string>
+    <string name="trip_dialog_simple_option1">Go to my trips</string>
+    <string name="trip_dialog_simple_option2">Add trip</string>
 
 </resources>

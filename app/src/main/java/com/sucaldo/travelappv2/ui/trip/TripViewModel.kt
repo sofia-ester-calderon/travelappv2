@@ -189,6 +189,38 @@ class TripViewModel(
         _uiState.value = _uiState.value.copy(description = description)
     }
 
+    fun onGoToMyTrips(navController: NavController) {
+        navigateToMyTrips(navController)
+    }
+
+    fun onAddAnotherTrip() {
+        _uiState.value = _uiState.value.copy(
+            tripUiType = TripUiType.NEW,
+            tripDialogState = TripDialogState.NONE,
+            tripType = TripType.RETURN,
+            fromCity = "",
+            fromCountryErrorType = TripErrorType.NONE,
+            fromCountry = "",
+            fromCityErrorType = TripErrorType.NONE,
+            fromLatitudeText = "",
+            fromLongitudeText = "",
+            fromLatLongErrorType = TripErrorType.NONE,
+            toCountry = "",
+            toCountryErrorType = TripErrorType.NONE,
+            toCity = "",
+            toCityErrorType = TripErrorType.NONE,
+            toLatitudeText = "",
+            toLongitudeText = "",
+            toLatLongDbErrorType = TripErrorType.NONE,
+            startDate = "",
+            startDateErrorType = TripErrorType.NONE,
+            endDate = "",
+            endDateErrorType = TripErrorType.NONE,
+            description = "",
+            descriptionErrorType = TripErrorType.NONE,
+        )
+    }
+
     private fun formatLatLong(value: Float): String {
         return "%.4f".format(
             locale = Locale.getDefault(),
@@ -235,25 +267,31 @@ class TripViewModel(
         )
         trip.distance = distance
         when(_uiState.value.tripUiType) {
-            TripUiType.NEW -> saveNewTrip(trip)
+            TripUiType.NEW -> saveNewTrip(trip, navController)
             TripUiType.EDIT -> updateTrip(trip, navController)
         }
     }
 
-    private fun saveNewTrip(trip: Trip) {
+    private fun saveNewTrip(trip: Trip, navController: NavController) {
         if (myDb.addTrip(trip)) {
             when(trip.type) {
-                TripType.RETURN, TripType.ONE_WAY -> {} // TODO: show popup message
+                TripType.RETURN, TripType.ONE_WAY ->
+                    _uiState.value = _uiState.value.copy(tripDialogState = TripDialogState.SIMPLE_TRIP)
                 TripType.MULTI -> {} // TODO: show popup message
             }
         } else {
-            // TODO show error message
+            _uiState.value = _uiState.value.copy(tripDialogState = TripDialogState.SAVE_ERROR)
+            navigateToMyTrips(navController)
         }
     }
 
     private fun updateTrip(trip: Trip, navController: NavController) {
         myDb.updateTrip(trip)
         _uiState.value = _uiState.value.copy(tripDialogState = TripDialogState.EDIT_SUCCESS)
+        navigateToMyTrips(navController)
+    }
+
+    private fun navigateToMyTrips(navController: NavController) {
         navController.navigate(Routes.HOME) //TODO: change to my trips
     }
 

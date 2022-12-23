@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import com.sucaldo.travelappv2.R
 import com.sucaldo.travelappv2.data.TripType
 import com.sucaldo.travelappv2.ui.common.TopBar
+import com.sucaldo.travelappv2.ui.trip.TripErrorType
 import com.sucaldo.travelappv2.ui.trip.TripUiState
 import com.sucaldo.travelappv2.ui.trip.TripViewModel
 
@@ -26,7 +27,12 @@ fun TripScreen(
 ) {
     val tripUiState by tripViewModel.uiState.collectAsState()
 
-    TripDialog(tripUiState.tripDialogState)
+    TripDialog(
+        tripDialogState = tripUiState.tripDialogState,
+        onGoToMyTrips = { tripViewModel.onGoToMyTrips(navController) },
+        onAddAnotherTrip = { tripViewModel.onAddAnotherTrip() },
+        navController = navController,
+    )
     val title = if (tripId == null) {
         stringResource(id = R.string.title_new_trip)
     } else {
@@ -108,12 +114,12 @@ fun TripContent(
             onChangeEndDate =  { tripViewModel.updateEndDate(it) },
         )
         Spacer(modifier = Modifier.height(8.dp))
-        TextField(
+        TravelAppTextField(
             modifier = Modifier.fillMaxWidth(),
             value = tripUiState.description,
             onValueChange = { tripViewModel.updateDescription(it) },
-            singleLine = true,
-            label = { Text(stringResource(id = R.string.trip_label_description)) },
+            label = (stringResource(id = R.string.trip_label_description)),
+            errorText = getErrorText(tripErrorType = tripUiState.descriptionErrorType)
         )
         Spacer(modifier = Modifier.height(8.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -134,3 +140,19 @@ private fun BigLabel(text: String) {
     )
     Spacer(modifier = Modifier.height(8.dp))
 }
+
+
+
+@Composable
+fun getErrorText(tripErrorType: TripErrorType): String? {
+    return when(tripErrorType) {
+        TripErrorType.EMPTY -> stringResource(id = R.string.trip_error_empty)
+        TripErrorType.INVALID_DATE_FORMAT -> stringResource(id = R.string.trip_error_invalid_date_format)
+        TripErrorType.INVALID_END_DATE -> stringResource(id = R.string.trip_error_invalid_end_date)
+        TripErrorType.INVALID_START_DATE -> stringResource(id = R.string.trip_error_invalid_start_date)
+        TripErrorType.LAT_LONG_DB -> stringResource(id = R.string.trip_error_db)
+        TripErrorType.INVALID_CHARS -> stringResource(id = R.string.trip_error_invalid_chars)
+        TripErrorType.NONE -> null
+    }
+}
+

@@ -38,5 +38,5 @@ enum class TripUiType {
 }
 
 enum class TripDialogState {
-    NONE, EDIT_SUCCESS,
+    NONE, EDIT_SUCCESS, SAVE_ERROR, SIMPLE_TRIP,
 }
