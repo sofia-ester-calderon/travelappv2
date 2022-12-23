@@ -24,7 +24,7 @@ fun TripDialog(
     onGoToMyTrips: (NavController) -> Unit,
     onAddAnotherTrip: () -> Unit,
     onAddNextStop: () -> Unit,
-    onCompleteTrip: () -> Unit,
+    onCompleteTrip: (NavController) -> Unit,
     navController: NavController
 ) {
     when (tripDialogState) {
@@ -43,7 +43,7 @@ fun TripDialog(
             option1Text = stringResource(id = R.string.trip_dialog_multi_option1),
             option2Text = stringResource(id = R.string.trip_dialog_multi_option2),
             onSelectOption1 = onAddNextStop,
-            onSelectOption2 = onCompleteTrip,
+            onSelectOption2 = { onCompleteTrip(navController) },
         )
     }
 }

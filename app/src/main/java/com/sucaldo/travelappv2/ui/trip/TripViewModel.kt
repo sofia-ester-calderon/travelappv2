@@ -236,7 +236,15 @@ class TripViewModel(
         onFromCalculateLatLong()
     }
 
-    fun removeAllUiErrors() {
+    fun onCompleteStop(navController: NavController) {
+        val trip = myDb.getTripById(myDb.lastTripId)
+        trip.type = TripType.MULTI_LAST
+        trip.toContinent = myDb.getContinentOfCountry(trip.fromCountry)
+        myDb.updateTrip(trip)
+        navigateToMyTrips(navController)
+    }
+
+    private fun removeAllUiErrors() {
         _uiState.value = _uiState.value.copy(
             fromCountryErrorType = TripErrorType.NONE,
             fromCityErrorType = TripErrorType.NONE,
@@ -306,7 +314,7 @@ class TripViewModel(
             when(trip.type) {
                 TripType.RETURN, TripType.ONE_WAY ->
                     _uiState.value = _uiState.value.copy(tripDialogState = TripDialogState.SIMPLE_TRIP)
-                TripType.MULTI ->
+                TripType.MULTI, TripType.MULTI_LAST ->
                     _uiState.value = _uiState.value.copy(tripDialogState = TripDialogState.MULTI_TRIP)
             }
         } else {

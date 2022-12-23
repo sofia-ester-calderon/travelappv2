@@ -33,7 +33,7 @@ fun TripScreen(
         onGoToMyTrips = { tripViewModel.onGoToMyTrips(navController) },
         onAddAnotherTrip = { tripViewModel.onAddAnotherTrip() },
         onAddNextStop = { tripViewModel.onAddNextStop() },
-        onCompleteTrip = {},
+        onCompleteTrip = { tripViewModel.onCompleteStop(navController) },
         navController = navController,
     )
     val title = when(tripUiState.tripUiType) {

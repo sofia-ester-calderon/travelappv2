@@ -88,5 +88,5 @@ class Trip {
 }
 
 enum class TripType {
-    RETURN, ONE_WAY, MULTI
+    RETURN, MULTI, ONE_WAY, MULTI_LAST,
 }
