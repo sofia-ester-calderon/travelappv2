@@ -26,6 +26,7 @@ class TripViewModel(
     private val appPreferences: AppPreferences
     private val tripId: Int? = savedStateHandle["tripId"]
     private var groupId: Int? = null
+    private var previousTrip: Trip? = null
 
     init {
         myDb = DatabaseHelper(application.applicationContext)
@@ -216,23 +217,23 @@ class TripViewModel(
 
     fun onAddNextStop() {
         removeAllUiErrors()
-        val previousTrip = myDb.getTripById(myDb.lastTripId)
-        groupId = previousTrip.groupId
+        previousTrip = myDb.getTripById(myDb.lastTripId)
+        groupId = previousTrip!!.groupId
         _uiState.value = _uiState.value.copy(
             tripUiType = TripUiType.NEW_STOP,
             tripDialogState = TripDialogState.NONE,
             tripType = TripType.MULTI,
-            fromCity = previousTrip.fromCity,
-            fromCountry = previousTrip.fromCountry,
+            fromCity = previousTrip!!.fromCity,
+            fromCountry = previousTrip!!.fromCountry,
             fromLatitudeText = "",
             fromLongitudeText = "",
             toCountry = "",
             toCity = "",
             toLatitudeText = "",
             toLongitudeText = "",
-            startDate = previousTrip.getPickerFormattedEndDate(),
+            startDate = previousTrip!!.getPickerFormattedEndDate(),
             endDate = "",
-            description = previousTrip.description,
+            description = previousTrip!!.description,
         )
         onCalculateFromLatLong()
     }
@@ -427,8 +428,7 @@ class TripViewModel(
             }
         }
         if (_uiState.value.tripType == TripType.MULTI) {
-            val previousTrip: Trip = myDb.getTripById(myDb.lastTripId)
-            val endDatePreviousStop: Date? = previousTrip.endDate
+            val endDatePreviousStop: Date? = previousTrip?.endDate
             if (endDatePreviousStop == null || endDatePreviousStop.after(startDate)) {
                 _uiState.value =
                     _uiState.value.copy(startDateErrorType = TripErrorType.INVALID_START_DATE)
@@ -437,5 +437,4 @@ class TripViewModel(
         }
         return true
     }
-
 }
