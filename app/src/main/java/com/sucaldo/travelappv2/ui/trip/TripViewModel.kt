@@ -101,7 +101,7 @@ class TripViewModel(
         _uiState.value = _uiState.value.copy(fromLongitudeText = longitude)
     }
 
-    fun onFromCalculateLatLong() {
+    fun onCalculateFromLatLong() {
         _uiState.value = _uiState.value.copy(
             fromLatLongErrorType = TripErrorType.NONE,
             fromLongitudeText = "",
@@ -150,7 +150,7 @@ class TripViewModel(
         _uiState.value = _uiState.value.copy(toLongitudeText = longitude)
     }
 
-    fun onToCalculateLatLong() {
+    fun onCalculateToLatLong() {
         _uiState.value = _uiState.value.copy(
             toLatLongDbErrorType = TripErrorType.NONE,
             toLongitudeText = "",
@@ -195,6 +195,7 @@ class TripViewModel(
 
     fun onAddAnotherTrip() {
         removeAllUiErrors()
+        groupId = null
         _uiState.value = _uiState.value.copy(
             tripUiType = TripUiType.NEW,
             tripDialogState = TripDialogState.NONE,
@@ -229,11 +230,11 @@ class TripViewModel(
             toCity = "",
             toLatitudeText = "",
             toLongitudeText = "",
-            startDate = previousTrip.getPickerFormattedStartDate(),
+            startDate = previousTrip.getPickerFormattedEndDate(),
             endDate = "",
             description = previousTrip.description,
         )
-        onFromCalculateLatLong()
+        onCalculateFromLatLong()
     }
 
     fun onCompleteStop(navController: NavController) {

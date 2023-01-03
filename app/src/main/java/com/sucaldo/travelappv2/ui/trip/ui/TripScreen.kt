@@ -90,7 +90,7 @@ fun TripContent(
             onChangeCity = { tripViewModel.updateFromCity(it) },
             onChangeLatitude = { tripViewModel.updateFromLatitude(it) },
             onChangeLongitude = { tripViewModel.updateFromLongitude(it) },
-            onCalculateLatLong = { tripViewModel.onFromCalculateLatLong() },
+            onCalculateLatLong = { tripViewModel.onCalculateFromLatLong() },
         )
         BigLabel(text = stringResource(id = R.string.trip_label_to))
         CountryCity(
@@ -106,7 +106,7 @@ fun TripContent(
             onChangeCity = { tripViewModel.updateToCity(it) },
             onChangeLatitude = { tripViewModel.updateToLatitude(it) },
             onChangeLongitude = { tripViewModel.updateToLongitude(it) },
-            onCalculateLatLong = { tripViewModel.onToCalculateLatLong() },
+            onCalculateLatLong = { tripViewModel.onCalculateToLatLong() },
         )
         Spacer(modifier = Modifier.height(32.dp))
         TripDate(

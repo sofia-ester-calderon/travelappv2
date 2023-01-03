@@ -1,5 +1,8 @@
 package com.sucaldo.travelappv2.util
 
+import kotlin.math.atan2
+import kotlin.math.sqrt
+
 object DistanceCalculator {
     fun getDistanceFromLatLongInKms(lat1: Float, long1: Float, lat2: Float, long2: Float, isDoubleDistance: Boolean = false): Long {
         val radiusEarth = 6371
@@ -8,7 +11,7 @@ object DistanceCalculator {
         val a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                 Math.cos(degToRadius(lat1)) * Math.cos(degToRadius(lat2)) *
                 Math.sin(dLong / 2) * Math.sin(dLong / 2)
-        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+        val c = 2 * atan2(Math.sqrt(a), sqrt(1 - a))
         var d = radiusEarth * c
         if (isDoubleDistance) {
             d *= 2
