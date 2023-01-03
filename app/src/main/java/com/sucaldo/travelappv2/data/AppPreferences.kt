@@ -12,13 +12,18 @@ import kotlinx.coroutines.flow.map
 class AppPreferences(private val context: Context, databaseHelper: DatabaseHelper) {
     private val myDB: DatabaseHelper = databaseHelper
 
-    suspend fun storeCountrySelection(country: String) {
+    suspend fun storeHomeLocation(country: String, city: String) {
+        storeCountrySelection(country)
+        storeCitySelection(city)
+    }
+
+    private suspend fun storeCountrySelection(country: String) {
         context.dataStore.edit { settings ->
             settings[COUNTRY_KEY] = country
         }
     }
 
-    suspend fun storeCitySelection(city: String) {
+    private suspend fun storeCitySelection(city: String) {
         context.dataStore.edit { preferences ->
             preferences[CITY_KEY] = city
         }

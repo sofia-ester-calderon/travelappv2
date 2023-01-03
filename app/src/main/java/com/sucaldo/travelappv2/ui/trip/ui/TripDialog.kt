@@ -1,6 +1,5 @@
 package com.sucaldo.travelappv2.ui.trip.ui
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -8,7 +7,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.R
+import com.sucaldo.travelappv2.ui.common.TravelAppToast
 import com.sucaldo.travelappv2.ui.trip.TripDialogState
 
 @Composable
@@ -29,8 +28,8 @@ fun TripDialog(
 ) {
     when (tripDialogState) {
         TripDialogState.NONE -> {}
-        TripDialogState.EDIT_SUCCESS -> TripToastContent(stringResource(id = R.string.trip_dialog_edit_success))
-        TripDialogState.SAVE_ERROR -> TripToastContent(stringResource(id = R.string.trip_dialog_save_error))
+        TripDialogState.EDIT_SUCCESS -> TravelAppToast(stringResource(id = R.string.trip_dialog_edit_success))
+        TripDialogState.SAVE_ERROR -> TravelAppToast(stringResource(id = R.string.trip_dialog_save_error))
         TripDialogState.SIMPLE_TRIP -> TripDialogContent(
             title = stringResource(id = R.string.trip_dialog_simple_title),
             option1Text = stringResource(id = R.string.trip_dialog_simple_option1),
@@ -80,12 +79,6 @@ private fun TripDialogContent(
             }
         }
     }
-}
-
-@Composable
-private fun TripToastContent(message: String) {
-    val context = LocalContext.current
-    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
 @Preview

@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.sucaldo.travelappv2.R
-import com.sucaldo.travelappv2.ui.trip.TripErrorType
+import com.sucaldo.travelappv2.data.FieldErrorType
 import java.util.*
 
 @Composable
@@ -23,8 +23,8 @@ fun TripDate(
     startDate: String,
     endDate: String,
     isEndDateEnabled: Boolean,
-    startDateError: TripErrorType,
-    endDateError: TripErrorType,
+    startDateError: FieldErrorType,
+    endDateError: FieldErrorType,
     onChangeStartDate: (String) -> Unit,
     onChangeEndDate: (String) -> Unit,
 ) {
@@ -63,7 +63,7 @@ private fun DateField(
     label: String,
     date: String,
     enabled: Boolean = true,
-    errorType: TripErrorType,
+    errorType: FieldErrorType,
     onChangeDate: (String) -> Unit,
 ) {
     val mCalendar = Calendar.getInstance()
@@ -87,6 +87,6 @@ private fun DateField(
         onClickIcon = { mDatePickerDialog.show() },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         enabled = enabled,
-        errorText = getErrorText(tripErrorType = errorType)
+        errorText = getErrorText(fieldErrorType = errorType)
     )
 }

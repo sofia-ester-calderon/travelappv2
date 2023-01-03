@@ -31,6 +31,7 @@ class TripViewModel(
     init {
         myDb = DatabaseHelper(application.applicationContext)
         appPreferences = AppPreferences(application.applicationContext, myDb)
+        _uiState.value = _uiState.value.copy(countries = myDb.countries)
         if (tripId != null) {
             _uiState.value = _uiState.value.copy(tripUiType = TripUiType.EDIT)
             loadTrip(tripId)
@@ -76,35 +77,35 @@ class TripViewModel(
 
     fun updateFromCountry(country: String) {
         if (country.isNotBlank()) {
-            _uiState.value = _uiState.value.copy(fromCountryErrorType = TripErrorType.NONE)
+            _uiState.value = _uiState.value.copy(fromCountryErrorType = FieldErrorType.NONE)
         }
         _uiState.value = _uiState.value.copy(fromCountry = country)
     }
 
     fun updateFromCity(city: String) {
         if (city.isNotBlank()) {
-            _uiState.value = _uiState.value.copy(fromCityErrorType = TripErrorType.NONE)
+            _uiState.value = _uiState.value.copy(fromCityErrorType = FieldErrorType.NONE)
         }
         _uiState.value = _uiState.value.copy(fromCity = city)
     }
 
     fun updateFromLatitude(latitude: String) {
         if (latitude.isNotBlank()) {
-            _uiState.value = _uiState.value.copy(fromLatLongErrorType = TripErrorType.NONE)
+            _uiState.value = _uiState.value.copy(fromLatLongErrorType = FieldErrorType.NONE)
         }
         _uiState.value = _uiState.value.copy(fromLatitudeText = latitude)
     }
 
     fun updateFromLongitude(longitude: String) {
         if (longitude.isNotBlank()) {
-            _uiState.value = _uiState.value.copy(fromLatLongErrorType = TripErrorType.NONE)
+            _uiState.value = _uiState.value.copy(fromLatLongErrorType = FieldErrorType.NONE)
         }
         _uiState.value = _uiState.value.copy(fromLongitudeText = longitude)
     }
 
     fun onCalculateFromLatLong() {
         _uiState.value = _uiState.value.copy(
-            fromLatLongErrorType = TripErrorType.NONE,
+            fromLatLongErrorType = FieldErrorType.NONE,
             fromLongitudeText = "",
             fromLatitudeText = "",
         )
@@ -119,41 +120,41 @@ class TripViewModel(
                 fromLongitudeText = formatLatLong(cityLocation.longitude)
             )
         } catch (e: java.lang.Exception) {
-            _uiState.value = uiState.value.copy(fromLatLongErrorType = TripErrorType.LAT_LONG_DB)
+            _uiState.value = uiState.value.copy(fromLatLongErrorType = FieldErrorType.LAT_LONG_DB)
         }
     }
 
     fun updateToCountry(country: String) {
         if (country.isNotBlank()) {
-            _uiState.value = _uiState.value.copy(toCountryErrorType = TripErrorType.NONE)
+            _uiState.value = _uiState.value.copy(toCountryErrorType = FieldErrorType.NONE)
         }
         _uiState.value = _uiState.value.copy(toCountry = country)
     }
 
     fun updateToCity(city: String) {
         if (city.isNotBlank()) {
-            _uiState.value = _uiState.value.copy(toCityErrorType = TripErrorType.NONE)
+            _uiState.value = _uiState.value.copy(toCityErrorType = FieldErrorType.NONE)
         }
         _uiState.value = _uiState.value.copy(toCity = city)
     }
 
     fun updateToLatitude(latitude: String) {
         if (latitude.isNotBlank()) {
-            _uiState.value = _uiState.value.copy(toLatLongDbErrorType = TripErrorType.NONE)
+            _uiState.value = _uiState.value.copy(toLatLongDbErrorType = FieldErrorType.NONE)
         }
         _uiState.value = _uiState.value.copy(toLatitudeText = latitude)
     }
 
     fun updateToLongitude(longitude: String) {
         if (longitude.isNotBlank()) {
-            _uiState.value = _uiState.value.copy(toLatLongDbErrorType = TripErrorType.NONE)
+            _uiState.value = _uiState.value.copy(toLatLongDbErrorType = FieldErrorType.NONE)
         }
         _uiState.value = _uiState.value.copy(toLongitudeText = longitude)
     }
 
     fun onCalculateToLatLong() {
         _uiState.value = _uiState.value.copy(
-            toLatLongDbErrorType = TripErrorType.NONE,
+            toLatLongDbErrorType = FieldErrorType.NONE,
             toLongitudeText = "",
             toLatitudeText = "",
         )
@@ -168,20 +169,20 @@ class TripViewModel(
                 toLongitudeText = formatLatLong(cityLocation.longitude)
             )
         } catch (e: java.lang.Exception) {
-            _uiState.value = uiState.value.copy(toLatLongDbErrorType = TripErrorType.LAT_LONG_DB)
+            _uiState.value = uiState.value.copy(toLatLongDbErrorType = FieldErrorType.LAT_LONG_DB)
         }
     }
 
     fun updateStartDate(startDate: String) {
         if (startDate.isNotBlank()) {
-            _uiState.value = _uiState.value.copy(startDateErrorType = TripErrorType.NONE)
+            _uiState.value = _uiState.value.copy(startDateErrorType = FieldErrorType.NONE)
         }
         _uiState.value = _uiState.value.copy(startDate = startDate)
     }
 
     fun updateEndDate(endDate: String) {
         if (endDate.isNotBlank()) {
-            _uiState.value = _uiState.value.copy(endDateErrorType = TripErrorType.NONE)
+            _uiState.value = _uiState.value.copy(endDateErrorType = FieldErrorType.NONE)
         }
         _uiState.value = _uiState.value.copy(endDate = endDate)
     }
@@ -248,15 +249,15 @@ class TripViewModel(
 
     private fun removeAllUiErrors() {
         _uiState.value = _uiState.value.copy(
-            fromCountryErrorType = TripErrorType.NONE,
-            fromCityErrorType = TripErrorType.NONE,
-            fromLatLongErrorType = TripErrorType.NONE,
-            toCountryErrorType = TripErrorType.NONE,
-            toCityErrorType = TripErrorType.NONE,
-            toLatLongDbErrorType = TripErrorType.NONE,
-            startDateErrorType = TripErrorType.NONE,
-            endDateErrorType = TripErrorType.NONE,
-            descriptionErrorType = TripErrorType.NONE,
+            fromCountryErrorType = FieldErrorType.NONE,
+            fromCityErrorType = FieldErrorType.NONE,
+            fromLatLongErrorType = FieldErrorType.NONE,
+            toCountryErrorType = FieldErrorType.NONE,
+            toCityErrorType = FieldErrorType.NONE,
+            toLatLongDbErrorType = FieldErrorType.NONE,
+            startDateErrorType = FieldErrorType.NONE,
+            endDateErrorType = FieldErrorType.NONE,
+            descriptionErrorType = FieldErrorType.NONE,
         )
     }
 
@@ -345,35 +346,35 @@ class TripViewModel(
     private fun areFieldsFilled(): Boolean {
         var areFieldsEmpty = true
         if (_uiState.value.fromCountry.isBlank()) {
-            _uiState.value = _uiState.value.copy(fromCountryErrorType = TripErrorType.EMPTY)
+            _uiState.value = _uiState.value.copy(fromCountryErrorType = FieldErrorType.EMPTY)
             areFieldsEmpty = false
         }
         if (_uiState.value.fromCity.isBlank()) {
-            _uiState.value = _uiState.value.copy(fromCityErrorType = TripErrorType.EMPTY)
+            _uiState.value = _uiState.value.copy(fromCityErrorType = FieldErrorType.EMPTY)
             areFieldsEmpty = false
         }
         if (_uiState.value.fromLatitudeText.isBlank() || _uiState.value.fromLongitudeText.isBlank()) {
-            _uiState.value = _uiState.value.copy(fromLatLongErrorType = TripErrorType.EMPTY)
+            _uiState.value = _uiState.value.copy(fromLatLongErrorType = FieldErrorType.EMPTY)
             areFieldsEmpty = false
         }
         if (_uiState.value.toCountry.isBlank()) {
-            _uiState.value = _uiState.value.copy(toCountryErrorType = TripErrorType.EMPTY)
+            _uiState.value = _uiState.value.copy(toCountryErrorType = FieldErrorType.EMPTY)
             areFieldsEmpty = false
         }
         if (_uiState.value.toCity.isBlank()) {
-            _uiState.value = _uiState.value.copy(toCityErrorType = TripErrorType.EMPTY)
+            _uiState.value = _uiState.value.copy(toCityErrorType = FieldErrorType.EMPTY)
             areFieldsEmpty = false
         }
         if (_uiState.value.toLatitudeText.isBlank() || _uiState.value.toLongitudeText.isBlank()) {
-            _uiState.value = _uiState.value.copy(toLatLongDbErrorType = TripErrorType.EMPTY)
+            _uiState.value = _uiState.value.copy(toLatLongDbErrorType = FieldErrorType.EMPTY)
             areFieldsEmpty = false
         }
         if (_uiState.value.startDate.isBlank()) {
-            _uiState.value = _uiState.value.copy(startDateErrorType = TripErrorType.EMPTY)
+            _uiState.value = _uiState.value.copy(startDateErrorType = FieldErrorType.EMPTY)
             areFieldsEmpty = false
         }
         if (_uiState.value.tripType != TripType.ONE_WAY && _uiState.value.endDate.isBlank()) {
-            _uiState.value = _uiState.value.copy(endDateErrorType = TripErrorType.EMPTY)
+            _uiState.value = _uiState.value.copy(endDateErrorType = FieldErrorType.EMPTY)
             areFieldsEmpty = false
         }
         return areFieldsEmpty
@@ -382,15 +383,15 @@ class TripViewModel(
     private fun areFieldsValid(): Boolean {
         var hasOnlyValidChars = true
         if (hasInvalidCharacters(_uiState.value.fromCity)) {
-            _uiState.value = _uiState.value.copy(fromCityErrorType = TripErrorType.INVALID_CHARS)
+            _uiState.value = _uiState.value.copy(fromCityErrorType = FieldErrorType.INVALID_CHARS)
             hasOnlyValidChars = false
         }
         if (hasInvalidCharacters(_uiState.value.toCity)) {
-            _uiState.value = _uiState.value.copy(toCityErrorType = TripErrorType.INVALID_CHARS)
+            _uiState.value = _uiState.value.copy(toCityErrorType = FieldErrorType.INVALID_CHARS)
             hasOnlyValidChars = false
         }
         if (hasInvalidCharacters(_uiState.value.description)) {
-            _uiState.value = _uiState.value.copy(descriptionErrorType = TripErrorType.INVALID_CHARS)
+            _uiState.value = _uiState.value.copy(descriptionErrorType = FieldErrorType.INVALID_CHARS)
             hasOnlyValidChars = false
         }
         return hasOnlyValidChars
@@ -408,7 +409,7 @@ class TripViewModel(
             startDate = formatter.parse(_uiState.value.startDate)
         } catch (e: ParseException) {
             _uiState.value =
-                _uiState.value.copy(startDateErrorType = TripErrorType.INVALID_DATE_FORMAT)
+                _uiState.value.copy(startDateErrorType = FieldErrorType.INVALID_DATE_FORMAT)
             e.printStackTrace()
             return false
         }
@@ -417,13 +418,13 @@ class TripViewModel(
                 endDate = formatter.parse(_uiState.value.endDate)
             } catch (e: ParseException) {
                 _uiState.value =
-                    _uiState.value.copy(endDateErrorType = TripErrorType.INVALID_DATE_FORMAT)
+                    _uiState.value.copy(endDateErrorType = FieldErrorType.INVALID_DATE_FORMAT)
                 e.printStackTrace()
                 return false
             }
             if (endDate.after(startDate)) {
                 _uiState.value =
-                    _uiState.value.copy(endDateErrorType = TripErrorType.INVALID_END_DATE)
+                    _uiState.value.copy(endDateErrorType = FieldErrorType.INVALID_END_DATE)
                 return false
             }
         }
@@ -431,7 +432,7 @@ class TripViewModel(
             val endDatePreviousStop: Date? = previousTrip?.endDate
             if (endDatePreviousStop == null || endDatePreviousStop.after(startDate)) {
                 _uiState.value =
-                    _uiState.value.copy(startDateErrorType = TripErrorType.INVALID_START_DATE)
+                    _uiState.value.copy(startDateErrorType = FieldErrorType.INVALID_START_DATE)
                 return false
             }
         }

@@ -23,13 +23,6 @@
     <string name="trip_label_end">End</string>
     <string name="trip_label_description">Description</string>
 
-    <string name="trip_error_empty">Field cannot be empty</string>
-    <string name="trip_error_db">Not in DB. Add manually</string>
-    <string name="trip_error_invalid_chars">Remove commas and apostrophes</string>
-    <string name="trip_error_invalid_date_format">Date format is invalid</string>
-    <string name="trip_error_invalid_start_date">Start date must be after and date of previous stop</string>
-    <string name="trip_error_invalid_end_date">End date is before start date</string>
-
     <string name="trip_dialog_edit_success">Trip was updated</string>
     <string name="trip_dialog_save_error">Oops… Error saving trip</string>
     <string name="trip_dialog_simple_title">Trip saved</string>
@@ -39,5 +32,16 @@
     <string name="trip_dialog_multi_title">Stop saved</string>
     <string name="trip_dialog_multi_option1">Add next stop</string>
     <string name="trip_dialog_multi_option2">Complete trip</string>
+
+    <string name="field_error_empty">Field cannot be empty</string>
+    <string name="field_error_db">Not in DB. Add manually</string>
+    <string name="field_error_invalid_chars">Remove commas and apostrophes</string>
+    <string name="field_error_invalid_date_format">Date format is invalid</string>
+    <string name="field_error_invalid_start_date">Start date must be after and date of previous stop</string>
+    <string name="field_error_invalid_end_date">End date is before start date</string>
+    <string name="field_error_location_db">Location does not exist in DB</string>
+
+    <string name="settings_home_loc_title">Set Home Location</string>
+    <string name="settings_home_loc_success">Home location saved</string>
 
 </resources>

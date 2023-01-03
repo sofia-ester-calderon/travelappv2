@@ -1,4 +1,4 @@
-package com.sucaldo.travelappv2.ui.trip.ui
+package com.sucaldo.travelappv2.ui.common
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,24 +13,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sucaldo.travelappv2.R
-import com.sucaldo.travelappv2.ui.trip.TripErrorType
+import com.sucaldo.travelappv2.data.FieldErrorType
+import com.sucaldo.travelappv2.ui.trip.ui.ErrorText
+import com.sucaldo.travelappv2.ui.trip.ui.TravelAppTextField
+import com.sucaldo.travelappv2.ui.trip.ui.getErrorText
 
 @Composable
 fun CountryCity(
     country: String,
     city: String,
-    latitude: String,
-    longitude: String,
-    latLongError: TripErrorType,
-    countryError: TripErrorType,
-    cityError: TripErrorType,
+    countryError: FieldErrorType,
+    cityError: FieldErrorType,
     countries: List<String>,
     onChangeCountry: (String) -> Unit,
     onChangeCity: (String) -> Unit,
-    onChangeLatitude: (String) -> Unit,
-    onChangeLongitude: (String) -> Unit,
-    onCalculateLatLong: () -> Unit,
-) {
+    ) {
     Country(
         country = country,
         onChangeCountry = onChangeCountry,
@@ -44,6 +41,33 @@ fun CountryCity(
         onValueChange = { onChangeCity(it) },
         label = (stringResource(id = R.string.trip_label_city)),
         errorText = getErrorText(cityError)
+    )
+}
+
+@Composable
+fun CountryCityLatLong(
+    country: String,
+    city: String,
+    latitude: String,
+    longitude: String,
+    latLongError: FieldErrorType,
+    countryError: FieldErrorType,
+    cityError: FieldErrorType,
+    countries: List<String>,
+    onChangeCountry: (String) -> Unit,
+    onChangeCity: (String) -> Unit,
+    onChangeLatitude: (String) -> Unit,
+    onChangeLongitude: (String) -> Unit,
+    onCalculateLatLong: () -> Unit,
+) {
+    CountryCity(
+        country = country,
+        city = city,
+        countryError = countryError,
+        cityError = cityError,
+        countries = countries,
+        onChangeCountry = onChangeCountry,
+        onChangeCity = onChangeCity,
     )
     Spacer(modifier = Modifier.height(8.dp))
     Row {
@@ -69,7 +93,6 @@ fun CountryCity(
             )
         }
     }
-
 }
 
 
@@ -79,7 +102,7 @@ private fun Country(
     country: String,
     onChangeCountry: (String) -> Unit,
     countries: List<String>,
-    errorType: TripErrorType,
+    errorType: FieldErrorType,
 ) {
     val options = countries
     var exp by remember { mutableStateOf(false) }
@@ -123,7 +146,7 @@ private fun Country(
 private fun LongitudeLatitude(
     label: String,
     value: String,
-    errorType: TripErrorType,
+    errorType: FieldErrorType,
     onValueChange: (String) -> Unit,
     onCalculateLatLong: () -> Unit,
 ) {
@@ -136,7 +159,7 @@ private fun LongitudeLatitude(
             iconDescription = stringResource(id = R.string.trip_icon_refresh),
             onClickIcon = onCalculateLatLong,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            errorText = getErrorText(tripErrorType = errorType)
+            errorText = getErrorText(fieldErrorType = errorType)
         )
     }
 
@@ -146,14 +169,14 @@ private fun LongitudeLatitude(
 @Composable
 fun CountryCityPreview() {
     Column(modifier = Modifier.padding(16.dp)) {
-        CountryCity(
+        CountryCityLatLong(
             city = "Sydney",
             country = "Australia",
             latitude = "123.2",
             longitude = "123.45",
-            latLongError = TripErrorType.NONE,
-            countryError = TripErrorType.EMPTY,
-            cityError = TripErrorType.NONE,
+            latLongError = FieldErrorType.NONE,
+            countryError = FieldErrorType.EMPTY,
+            cityError = FieldErrorType.NONE,
             countries = listOf(),
             onChangeCountry = {},
             onCalculateLatLong = {},
