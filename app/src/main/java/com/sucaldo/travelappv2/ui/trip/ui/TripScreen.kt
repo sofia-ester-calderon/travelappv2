@@ -3,19 +3,23 @@ package com.sucaldo.travelappv2.ui.trip.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Button
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.R
-import com.sucaldo.travelappv2.data.FieldErrorType
 import com.sucaldo.travelappv2.data.TripType
 import com.sucaldo.travelappv2.ui.common.BigLabel
 import com.sucaldo.travelappv2.ui.common.CountryCityLatLong
 import com.sucaldo.travelappv2.ui.common.TopBar
+import com.sucaldo.travelappv2.ui.common.getErrorText
 import com.sucaldo.travelappv2.ui.trip.TripUiState
 import com.sucaldo.travelappv2.ui.trip.TripUiType
 import com.sucaldo.travelappv2.ui.trip.TripViewModel
@@ -85,7 +89,6 @@ fun TripContent(
             latLongError = tripUiState.fromLatLongErrorType,
             countryError = tripUiState.fromCountryErrorType,
             cityError = tripUiState.fromCityErrorType,
-            countries = tripUiState.countries,
             onChangeCountry = { tripViewModel.updateFromCountry(it) },
             onChangeCity = { tripViewModel.updateFromCity(it) },
             onChangeLatitude = { tripViewModel.updateFromLatitude(it) },
@@ -101,7 +104,6 @@ fun TripContent(
             latLongError = tripUiState.toLatLongDbErrorType,
             countryError = tripUiState.toCountryErrorType,
             cityError = tripUiState.toCityErrorType,
-            countries = tripUiState.countries,
             onChangeCountry = { tripViewModel.updateToCountry(it) },
             onChangeCity = { tripViewModel.updateToCity(it) },
             onChangeLatitude = { tripViewModel.updateToLatitude(it) },
@@ -129,23 +131,10 @@ fun TripContent(
         Spacer(modifier = Modifier.height(8.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             Button(onClick = { tripViewModel.saveTrip(navController) }) {
-                Text(text = "Save")
+                Text(text = stringResource(id = R.string.trip_button_save))
             }
         }
     }
 }
 
-@Composable
-fun getErrorText(fieldErrorType: FieldErrorType): String? {
-    return when(fieldErrorType) {
-        FieldErrorType.EMPTY -> stringResource(id = R.string.field_error_empty)
-        FieldErrorType.INVALID_DATE_FORMAT -> stringResource(id = R.string.field_error_invalid_date_format)
-        FieldErrorType.INVALID_END_DATE -> stringResource(id = R.string.field_error_invalid_end_date)
-        FieldErrorType.INVALID_START_DATE -> stringResource(id = R.string.field_error_invalid_start_date)
-        FieldErrorType.LAT_LONG_DB -> stringResource(id = R.string.field_error_db)
-        FieldErrorType.INVALID_CHARS -> stringResource(id = R.string.field_error_invalid_chars)
-        FieldErrorType.LOCATION_DB -> stringResource(id = R.string.field_error_location_db)
-        FieldErrorType.NONE -> null
-    }
-}
 

@@ -14,9 +14,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sucaldo.travelappv2.R
 import com.sucaldo.travelappv2.data.FieldErrorType
+import com.sucaldo.travelappv2.data.countries
 import com.sucaldo.travelappv2.ui.trip.ui.ErrorText
 import com.sucaldo.travelappv2.ui.trip.ui.TravelAppTextField
-import com.sucaldo.travelappv2.ui.trip.ui.getErrorText
 
 @Composable
 fun CountryCity(
@@ -24,14 +24,12 @@ fun CountryCity(
     city: String,
     countryError: FieldErrorType,
     cityError: FieldErrorType,
-    countries: List<String>,
     onChangeCountry: (String) -> Unit,
     onChangeCity: (String) -> Unit,
     ) {
     Country(
         country = country,
         onChangeCountry = onChangeCountry,
-        countries = countries,
         errorType = countryError,
     )
     Spacer(modifier = Modifier.height(8.dp))
@@ -53,7 +51,6 @@ fun CountryCityLatLong(
     latLongError: FieldErrorType,
     countryError: FieldErrorType,
     cityError: FieldErrorType,
-    countries: List<String>,
     onChangeCountry: (String) -> Unit,
     onChangeCity: (String) -> Unit,
     onChangeLatitude: (String) -> Unit,
@@ -65,7 +62,6 @@ fun CountryCityLatLong(
         city = city,
         countryError = countryError,
         cityError = cityError,
-        countries = countries,
         onChangeCountry = onChangeCountry,
         onChangeCity = onChangeCity,
     )
@@ -101,7 +97,6 @@ fun CountryCityLatLong(
 private fun Country(
     country: String,
     onChangeCountry: (String) -> Unit,
-    countries: List<String>,
     errorType: FieldErrorType,
 ) {
     val options = countries
@@ -177,7 +172,6 @@ fun CountryCityPreview() {
             latLongError = FieldErrorType.NONE,
             countryError = FieldErrorType.EMPTY,
             cityError = FieldErrorType.NONE,
-            countries = listOf(),
             onChangeCountry = {},
             onCalculateLatLong = {},
             onChangeCity = {},

@@ -16,6 +16,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.sucaldo.travelappv2.R
 import com.sucaldo.travelappv2.data.FieldErrorType
+import com.sucaldo.travelappv2.ui.common.getErrorText
 import java.util.*
 
 @Composable

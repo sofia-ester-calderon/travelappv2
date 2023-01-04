@@ -1,11 +1,12 @@
 package com.sucaldo.travelappv2.ui.settings
 
-import androidx.compose.foundation.layout.*
+import android.net.Uri
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,11 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.R
+import com.sucaldo.travelappv2.data.CityLocation
 import com.sucaldo.travelappv2.data.FieldErrorType
-import com.sucaldo.travelappv2.ui.common.BigLabel
-import com.sucaldo.travelappv2.ui.common.CountryCity
 import com.sucaldo.travelappv2.ui.common.TopBar
 import com.sucaldo.travelappv2.ui.common.TravelAppToast
+import com.sucaldo.travelappv2.ui.settings.ui.SettingsHomeLocation
+import com.sucaldo.travelappv2.ui.settings.ui.SettingsImportExport
 
 @Composable
 fun SettingsScreen(
@@ -44,8 +46,10 @@ fun SettingsScreen(
                 homeCountry = settingsUiState.homeCountry,
                 homeCity = settingsUiState.homeCity,
                 homeLocationErrorType = settingsUiState.homeLocationErrorType,
-                countries = settingsUiState.countries,
                 onSaveHomeLocation = { settingsViewModel.saveHomeLocation() },
+                onOpenFile = {settingsViewModel.readCsv(it)},
+                onGetData = {settingsViewModel.getGeoData()},
+                location = settingsUiState.readLoc,
             )
         }
     }
@@ -56,30 +60,23 @@ private fun SettingsScreenContent(
     homeCountry: String,
     homeCity: String,
     homeLocationErrorType: FieldErrorType,
-    countries: List<String>,
     onSaveHomeLocation: () -> Unit,
+    onOpenFile: (Uri) -> Unit,
+    onGetData: () -> Unit,
+    location: CityLocation?,
 ) {
     Column(
         modifier = Modifier
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        BigLabel(text = stringResource(id = R.string.settings_home_loc_title))
-        CountryCity(
-            country = homeCountry,
-            city = homeCity,
-            cityError = homeLocationErrorType,
-            countries = countries,
-            onChangeCountry = {},
-            onChangeCity = {},
-            countryError = homeLocationErrorType,
+        SettingsHomeLocation(
+            homeCountry = homeCountry,
+            homeCity = homeCity,
+            homeLocationErrorType = homeLocationErrorType,
+            onSaveHomeLocation = onSaveHomeLocation,
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            Button(onClick = { onSaveHomeLocation() }) {
-                Text(text = "Save")
-            }
-        }
+        SettingsImportExport(onOpenFile = onOpenFile, onGetData = onGetData, location = location)
     }
 }
 
@@ -87,9 +84,12 @@ private fun SettingsScreenContent(
 @Composable
 fun SettingsScreenPreview() {
     SettingsScreenContent(
-        countries = listOf(),
         homeCountry = "Asd",
         homeCity = "dfsd",
         homeLocationErrorType = FieldErrorType.NONE,
-        onSaveHomeLocation = {})
+        onSaveHomeLocation = {},
+        onOpenFile = {},
+        onGetData = {},
+        location = null,
+        )
 }

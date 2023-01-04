@@ -27,7 +27,6 @@ data class TripUiState(
     val endDateErrorType: FieldErrorType = FieldErrorType.NONE,
     val description: String = "",
     val descriptionErrorType: FieldErrorType = FieldErrorType.NONE,
-    val countries: List<String> = listOf(),
 )
 
 enum class TripUiType {

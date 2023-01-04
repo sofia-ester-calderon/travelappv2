@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.data.*
-import com.sucaldo.travelappv2.db.DatabaseHelper
+import com.sucaldo.travelappv2.db.DatabaseHelper2
 import com.sucaldo.travelappv2.ui.common.Routes
 import com.sucaldo.travelappv2.util.DistanceCalculator
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,16 +22,15 @@ class TripViewModel(
 ) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(TripUiState())
     val uiState: StateFlow<TripUiState> = _uiState.asStateFlow()
-    private val myDb: DatabaseHelper
+    private val myDb: DatabaseHelper2
     private val appPreferences: AppPreferences
     private val tripId: Int? = savedStateHandle["tripId"]
     private var groupId: Int? = null
     private var previousTrip: Trip? = null
 
     init {
-        myDb = DatabaseHelper(application.applicationContext)
+        myDb = DatabaseHelper2(application.applicationContext)
         appPreferences = AppPreferences(application.applicationContext, myDb)
-        _uiState.value = _uiState.value.copy(countries = myDb.countries)
         if (tripId != null) {
             _uiState.value = _uiState.value.copy(tripUiType = TripUiType.EDIT)
             loadTrip(tripId)
@@ -52,23 +51,25 @@ class TripViewModel(
 
     private fun loadTrip(tripId: Int) {
         val trip = myDb.getTripById(tripId)
-        val fromLocation = myDb.getLocationOfCity(trip.fromCountry, trip.fromCity)
-        val toLocation = myDb.getLocationOfCity(trip.toCountry, trip.toCity)
-        groupId = trip.groupId
-        _uiState.value = _uiState.value.copy(
-            tripType = trip.type,
-            fromCountry = trip.fromCountry,
-            fromCity = trip.fromCity,
-            fromLatitudeText = fromLocation.latitude.toString(),
-            fromLongitudeText = fromLocation.longitude.toString(),
-            toCountry = trip.toCountry,
-            toCity = trip.toCity,
-            toLatitudeText = toLocation.latitude.toString(),
-            toLongitudeText = toLocation.longitude.toString(),
-            startDate = trip.getPickerFormattedStartDate(),
-            endDate = trip.getPickerFormattedEndDate(),
-            description = trip.description,
-        )
+        if (trip != null) {
+            val fromLocation = myDb.getLocationOfCity(trip.fromCountry, trip.fromCity)
+            val toLocation = myDb.getLocationOfCity(trip.toCountry, trip.toCity)
+            groupId = trip.groupId
+            _uiState.value = _uiState.value.copy(
+                tripType = trip.type,
+                fromCountry = trip.fromCountry,
+                fromCity = trip.fromCity,
+                fromLatitudeText = fromLocation?.latitude.toString(),
+                fromLongitudeText = fromLocation?.longitude.toString(),
+                toCountry = trip.toCountry,
+                toCity = trip.toCity,
+                toLatitudeText = toLocation?.latitude.toString(),
+                toLongitudeText = toLocation?.longitude.toString(),
+                startDate = trip.getPickerFormattedStartDate(),
+                endDate = trip.getPickerFormattedEndDate(),
+                description = trip.description,
+            )
+        }
     }
 
     fun updateTripType(tripType: TripType) {
@@ -112,9 +113,9 @@ class TripViewModel(
         val country = uiState.value.fromCountry
         val city = uiState.value.fromCity
         try {
-            val cityLocation: CityLocation = myDb.getLocationOfCity(country, city)
+            val cityLocation: CityLocation? = myDb.getLocationOfCity(country, city)
             _uiState.value = _uiState.value.copy(
-                fromLatitudeText = formatLatLong(cityLocation.latitude)
+                fromLatitudeText = formatLatLong(cityLocation!!.latitude)
             )
             _uiState.value = _uiState.value.copy(
                 fromLongitudeText = formatLatLong(cityLocation.longitude)
@@ -161,9 +162,9 @@ class TripViewModel(
         val country = uiState.value.toCountry
         val city = uiState.value.toCity
         try {
-            val cityLocation: CityLocation = myDb.getLocationOfCity(country, city)
+            val cityLocation: CityLocation? = myDb.getLocationOfCity(country, city)
             _uiState.value = _uiState.value.copy(
-                toLatitudeText = formatLatLong(cityLocation.latitude)
+                toLatitudeText = formatLatLong(cityLocation!!.latitude)
             )
             _uiState.value = _uiState.value.copy(
                 toLongitudeText = formatLatLong(cityLocation.longitude)
@@ -241,8 +242,8 @@ class TripViewModel(
 
     fun onCompleteStop(navController: NavController) {
         val trip = myDb.getTripById(myDb.lastTripId)
-        trip.type = TripType.MULTI_LAST
-        trip.toContinent = myDb.getContinentOfCountry(trip.fromCountry)
+        trip!!.type = TripType.MULTI_LAST
+        trip.toContinent = getContinentOfCountry(trip.fromCountry)
         myDb.updateTrip(trip)
         navigateToMyTrips(navController)
     }
@@ -268,9 +269,13 @@ class TripViewModel(
         )
     }
 
+    private fun getContinentOfCountry(country: String): String {
+        return countryContinents.find { it.country == country }!!.continent
+    }
+
     fun saveTrip(navController: NavController) {
         if (!isTripValid()) return
-        val continent = myDb.getContinentOfCountry(_uiState.value.toCountry)
+        val continent = getContinentOfCountry(_uiState.value.toCountry)
         val trip = Trip(
             id = tripId,
             groupId = groupId,

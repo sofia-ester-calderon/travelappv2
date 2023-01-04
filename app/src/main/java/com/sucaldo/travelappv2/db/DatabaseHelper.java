@@ -49,14 +49,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_CITY_LOC_LAT = "LATITUDE";
     private static final String COL_CITY_LOC_LONG = "LONGITUDE";
 
-    private static final String TABLE_COUNTRIES = "countries";
-    private static final String COL_COUNTRIES_ID = "ID";
-    private static final String COL_COUNTRIES_CONTINENT = "CONTINENT";
-    private static final String COL_COUNTRIES_COUNTRY = "COUNTRY";
-
-    public static final List<String> CONTINENTS = Arrays.asList(
-            "North America", "Middle East", "South America", "Africa", "Asia",
-            "Central America & Caribbean", "Oceania", "Europe");
+//    private static final String TABLE_COUNTRIES = "countries";
+//    private static final String COL_COUNTRIES_ID = "ID";
+//    private static final String COL_COUNTRIES_CONTINENT = "CONTINENT";
+//    private static final String COL_COUNTRIES_COUNTRY = "COUNTRY";
+//
+//    public static final List<String> CONTINENTS = Arrays.asList(
+//            "North America", "Middle East", "South America", "Africa", "Asia",
+//            "Central America & Caribbean", "Oceania", "Europe");
 
     // Initialization of Database
     public DatabaseHelper(Context context) {
@@ -77,17 +77,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " " + COL_CITY_LOC_LONG + " FLOAT)";
         db.execSQL(createTableCityLoc);
 
-        String createTableCountries = "CREATE TABLE " + TABLE_COUNTRIES + " (" + COL_COUNTRIES_ID +
-                " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_COUNTRIES_CONTINENT + " TEXT, " + COL_COUNTRIES_COUNTRY
-                + " TEXT) ";
-        db.execSQL(createTableCountries);
+//        String createTableCountries = "CREATE TABLE " + TABLE_COUNTRIES + " (" + COL_COUNTRIES_ID +
+//                " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_COUNTRIES_CONTINENT + " TEXT, " + COL_COUNTRIES_COUNTRY
+//                + " TEXT) ";
+//        db.execSQL(createTableCountries);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP IF TABLE EXISTS " + TABLE_TRIPS);
         db.execSQL("DROP IF TABLE EXISTS " + TABLE_CITY_LOC);
-        db.execSQL("DROP IF TABLE EXISTS " + TABLE_COUNTRIES);
+//        db.execSQL("DROP IF TABLE EXISTS " + TABLE_COUNTRIES);
         onCreate(db);
     }
 
@@ -404,55 +404,55 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      ********* TABLE COUNTRIES **********************
      */
 
-    public void addCountryContinentItem(String continent, String country) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_COUNTRIES_CONTINENT, continent);
-        contentValues.put(COL_COUNTRIES_COUNTRY, country);
+//    public void addCountryContinentItem(String continent, String country) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put(COL_COUNTRIES_CONTINENT, continent);
+//        contentValues.put(COL_COUNTRIES_COUNTRY, country);
+//
+//        db.insert(TABLE_COUNTRIES, null, contentValues);
+//    }
+//
+//    public String getContinentOfCountry(String country) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        Cursor data = db.rawQuery("SELECT " + COL_COUNTRIES_CONTINENT + " FROM " + TABLE_COUNTRIES +
+//                " WHERE " + COL_COUNTRIES_COUNTRY + " = '" + country + "'", null);
+//        try {
+//            if (data.moveToNext()) {
+//                return data.getString(0);
+//            }
+//            return null;
+//        } finally {
+//            closeCursor(data);
+//        }
+//    }
 
-        db.insert(TABLE_COUNTRIES, null, contentValues);
-    }
+//    public boolean isCountriesTableEmpty() {
+//        return isTableEmpty(TABLE_COUNTRIES);
+//    }
 
-    public String getContinentOfCountry(String country) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor data = db.rawQuery("SELECT " + COL_COUNTRIES_CONTINENT + " FROM " + TABLE_COUNTRIES +
-                " WHERE " + COL_COUNTRIES_COUNTRY + " = '" + country + "'", null);
-        try {
-            if (data.moveToNext()) {
-                return data.getString(0);
-            }
-            return null;
-        } finally {
-            closeCursor(data);
-        }
-    }
-
-    public boolean isCountriesTableEmpty() {
-        return isTableEmpty(TABLE_COUNTRIES);
-    }
-
-    public List<String> getCountries() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor data = db.rawQuery("SELECT DISTINCT " + COL_COUNTRIES_COUNTRY + " FROM " + TABLE_COUNTRIES,
-                null);
-
-        int numRows = data.getCount();
-        try {
-            if (numRows == 0) {
-                // empty list will be returned
-                return new ArrayList<>();
-            } else {
-                List<String> countries = new ArrayList<>();
-                while (data.moveToNext()) {
-                    countries.add(data.getString(0));
-                }
-                Collections.sort(countries);
-                return countries;
-            }
-        } finally {
-            closeCursor(data);
-        }
-    }
+//    public List<String> getCountries() {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        Cursor data = db.rawQuery("SELECT DISTINCT " + COL_COUNTRIES_COUNTRY + " FROM " + TABLE_COUNTRIES,
+//                null);
+//
+//        int numRows = data.getCount();
+//        try {
+//            if (numRows == 0) {
+//                // empty list will be returned
+//                return new ArrayList<>();
+//            } else {
+//                List<String> countries = new ArrayList<>();
+//                while (data.moveToNext()) {
+//                    countries.add(data.getString(0));
+//                }
+//                Collections.sort(countries);
+//                return countries;
+//            }
+//        } finally {
+//            closeCursor(data);
+//        }
+//    }
 
 //    public List<CountriesContinents> getAllCountriesContinents() {
 //        SQLiteDatabase db = this.getWritableDatabase();
@@ -660,13 +660,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //
 //    }
 
-    private List<Integer> getKmsPerContinentList(Map<String, Integer> continentsAndKmsMap) {
-        List<Integer> kmsPerContinentList = new ArrayList<>();
-        for (String continent : CONTINENTS) {
-            kmsPerContinentList.add(continentsAndKmsMap.getOrDefault(continent, 0));
-        }
-        return kmsPerContinentList;
-    }
+//    private List<Integer> getKmsPerContinentList(Map<String, Integer> continentsAndKmsMap) {
+//        List<Integer> kmsPerContinentList = new ArrayList<>();
+//        for (String continent : CONTINENTS) {
+//            kmsPerContinentList.add(continentsAndKmsMap.getOrDefault(continent, 0));
+//        }
+//        return kmsPerContinentList;
+//    }
 
 
 //    public List<DataEntry> getKmsAndTripsPerYear() {

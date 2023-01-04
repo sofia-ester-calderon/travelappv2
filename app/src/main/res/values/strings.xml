@@ -22,6 +22,7 @@
     <string name="trip_label_start">Start</string>
     <string name="trip_label_end">End</string>
     <string name="trip_label_description">Description</string>
+    <string name="trip_button_save">Save</string>
 
     <string name="trip_dialog_edit_success">Trip was updated</string>
     <string name="trip_dialog_save_error">Oops… Error saving trip</string>
@@ -43,5 +44,7 @@
 
     <string name="settings_home_loc_title">Set Home Location</string>
     <string name="settings_home_loc_success">Home location saved</string>
+    <string name="settings_import_export_title">Import/Export Data</string>
+    <string name="settings_import_export_import_locations">Import Geo Data</string>
 
 </resources>

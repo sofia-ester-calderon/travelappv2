@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.sucaldo.travelappv2.db.DatabaseHelper
+import com.sucaldo.travelappv2.db.DatabaseHelper2
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 
-class AppPreferences(private val context: Context, databaseHelper: DatabaseHelper) {
-    private val myDB: DatabaseHelper = databaseHelper
+class AppPreferences(private val context: Context, databaseHelper: DatabaseHelper2) {
+    private val myDB: DatabaseHelper2 = databaseHelper
 
     suspend fun storeHomeLocation(country: String, city: String) {
         storeCountrySelection(country)
