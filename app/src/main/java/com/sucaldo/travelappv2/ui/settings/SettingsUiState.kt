@@ -7,10 +7,11 @@ data class SettingsUiState(
     val homeCity: String = "",
     val homeLocationErrorType: FieldErrorType = FieldErrorType.NONE,
     val homeLocationSaveSuccessful: Boolean = false,
-    val importState: ImportGeoDataState = ImportGeoDataState.READY,
+    val importGeoDataState: ImportState = ImportState.READY,
+    val importTripState: ImportState = ImportState.READY,
 )
 
-enum class ImportGeoDataState {
+enum class ImportState {
     NOT_IMPORTABLE,
     READY,
     LOADING,

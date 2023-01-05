@@ -10,7 +10,7 @@ import com.sucaldo.travelappv2.data.AppPreferences
 import com.sucaldo.travelappv2.data.FieldErrorType
 import com.sucaldo.travelappv2.db.CsvHelper
 import com.sucaldo.travelappv2.db.DatabaseHelper
-import com.sucaldo.travelappv2.ui.settings.ImportGeoDataState.*
+import com.sucaldo.travelappv2.ui.settings.ImportState.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,7 +34,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         contentResolver = application.applicationContext.contentResolver
         csvHelper = CsvHelper(myDb)
         if (!myDb.isCityLocTableEmpty) {
-            _uiState.update { it.copy(importState = NOT_IMPORTABLE) }
+            _uiState.update { it.copy(importGeoDataState = NOT_IMPORTABLE) }
         }
         viewModelScope.launch {
             val savedHomeLocation = appPreferences.getSavedHomeLocation()
@@ -60,14 +60,14 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun importLocationDataFromCsv(uri: Uri) {
-        _uiState.update { it.copy(importState = LOADING) }
+        _uiState.update { it.copy(importGeoDataState = LOADING) }
         thread(start = true) {
             Thread.sleep(3000)
             contentResolver.openInputStream(uri)?.use { inputStream ->
                 val isImportSuccessful = csvHelper.readCityLocationsCsvFile(inputStream)
                 _uiState.update {
                     it.copy(
-                        importState = if (isImportSuccessful) IMPORT_SUCCESS else IMPORT_FAIL
+                        importGeoDataState = if (isImportSuccessful) IMPORT_SUCCESS else IMPORT_FAIL
                     )
                 }
             }

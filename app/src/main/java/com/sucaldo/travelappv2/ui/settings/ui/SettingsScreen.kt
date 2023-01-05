@@ -22,7 +22,7 @@ import com.sucaldo.travelappv2.R
 import com.sucaldo.travelappv2.data.FieldErrorType
 import com.sucaldo.travelappv2.ui.common.TopBar
 import com.sucaldo.travelappv2.ui.common.TravelAppToast
-import com.sucaldo.travelappv2.ui.settings.ImportGeoDataState
+import com.sucaldo.travelappv2.ui.settings.ImportState
 import com.sucaldo.travelappv2.ui.settings.SettingsViewModel
 
 @Composable
@@ -50,7 +50,7 @@ fun SettingsScreen(
                 onSaveHomeLocation = { settingsViewModel.saveHomeLocation() },
                 onSelectLocationFile = { settingsViewModel.importLocationDataFromCsv(it) },
                 startThread = { settingsViewModel.startThread() },
-                importState = settingsUiState.importState,
+                importGeoDataState = settingsUiState.importGeoDataState,
             )
         }
     }
@@ -64,7 +64,7 @@ private fun SettingsScreenContent(
     onSaveHomeLocation: () -> Unit,
     onSelectLocationFile: (Uri) -> Unit,
     startThread: () -> Unit,
-    importState: ImportGeoDataState,
+    importGeoDataState: ImportState,
 ) {
     Column(
         modifier = Modifier
@@ -78,7 +78,7 @@ private fun SettingsScreenContent(
             onSaveHomeLocation = onSaveHomeLocation,
         )
         SettingsImportExport(
-            importGeoDataState = importState,
+            importGeoDataState = importGeoDataState,
             onSelectLocationFile = onSelectLocationFile
         )
 
@@ -98,6 +98,6 @@ fun SettingsScreenPreview() {
         onSaveHomeLocation = {},
         onSelectLocationFile = {},
         startThread = {},
-        importState = ImportGeoDataState.READY,
+        importGeoDataState = ImportState.READY,
     )
 }
