@@ -16,8 +16,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DatabaseHelper2  // Initialization of Database
-    (context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {
         // SQLite does not have data type varchar() or Date
@@ -283,10 +282,11 @@ class DatabaseHelper2  // Initialization of Database
         get() = isTableEmpty(TABLE_CITY_LOC)
 
     fun getLocationOfCity(country: String, city: String): CityLocation? {
+        if (country.isBlank() || city.isBlank()) return null
         val cityLocations: List<CityLocation> = getStoredCityCoordinates(country, city)
         return if (cityLocations.isEmpty()) {
             null
-        } else cityLocations.get(0)
+        } else cityLocations[0]
     }
 
     fun saveCityLocationIfNotInDb(cityLocation: CityLocation) {
@@ -511,7 +511,8 @@ class DatabaseHelper2  // Initialization of Database
                 closeCursor(data)
             }
         }
-//    val visitedCountries: List<DataEntry>
+
+    //    val visitedCountries: List<DataEntry>
 //        get() {
 //            val db = this.writableDatabase
 //            val data = db.rawQuery(
@@ -656,7 +657,7 @@ class DatabaseHelper2  // Initialization of Database
         return kmsPerContinentList
     }
 
-//    val kmsAndTripsPerYear: List<DataEntry>
+    //    val kmsAndTripsPerYear: List<DataEntry>
 //        get() {
 //            val allYears = allYearsOfTrips
 //            val bubbleChartList: MutableList<DataEntry> = ArrayList()

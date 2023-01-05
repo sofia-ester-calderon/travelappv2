@@ -4,32 +4,25 @@ import android.util.Log
 import com.opencsv.CSVReader
 import java.io.*
 
-class CsvHelper (private val myDB: DatabaseHelper2) {
+class CsvHelper(private val myDB: DatabaseHelper) {
 
-    fun readCityLocationsCsvFile(inputStream: InputStream?) {
+    fun readCityLocationsCsvFile(inputStream: InputStream?): Boolean {
         try {
             val reader = CSVReader(InputStreamReader(inputStream))
-            var i = 0
-//            var progressPercentage = 0
             val csvLines = reader.readAll()
-            val IMPORT_TOTAL_STEPS = 40
-            val importStep = csvLines.size / IMPORT_TOTAL_STEPS
             for (nextLine in csvLines) {
-                // % is equivalent to MOD in Excel
-//                if (i++ % importStep == 0) {
-//                    progressPercentage += 100 / IMPORT_TOTAL_STEPS
-//                    progressBar.progress = progressPercentage
-//                }
                 if (nextLine.size == 4) {
+                    Log.d("CSVHelper", "${nextLine[0]}, ${nextLine[1]}")
                     myDB.addCityLocation(
                         nextLine[0],
                         nextLine[1], nextLine[2].toFloat(), nextLine[3].toFloat()
                     )
                 }
             }
-//            progressBar.progress = 100
+            return true
         } catch (e: IOException) {
             Log.e("CSV_CityLoc", "Line in .csv file could not be read")
+            return false
         }
     }
 
@@ -132,6 +125,7 @@ class CsvHelper (private val myDB: DatabaseHelper2) {
             e.printStackTrace()
         }
     }
+
     companion object {
         private const val COLUMN_SEPARATOR = ","
         private const val ROW_SEPARATOR = "\n"

@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.sucaldo.travelappv2.ui.home.HomeScreen
-import com.sucaldo.travelappv2.ui.settings.SettingsScreen
+import com.sucaldo.travelappv2.ui.settings.ui.SettingsScreen
 import com.sucaldo.travelappv2.ui.trip.ui.TripScreen
 
 @Composable

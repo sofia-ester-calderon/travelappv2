@@ -1,4 +1,4 @@
-package com.sucaldo.travelappv2.ui.settings
+package com.sucaldo.travelappv2.ui.settings.ui
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,12 +19,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.R
-import com.sucaldo.travelappv2.data.CityLocation
 import com.sucaldo.travelappv2.data.FieldErrorType
 import com.sucaldo.travelappv2.ui.common.TopBar
 import com.sucaldo.travelappv2.ui.common.TravelAppToast
-import com.sucaldo.travelappv2.ui.settings.ui.SettingsHomeLocation
-import com.sucaldo.travelappv2.ui.settings.ui.SettingsImportExport
+import com.sucaldo.travelappv2.ui.settings.ImportGeoDataState
+import com.sucaldo.travelappv2.ui.settings.SettingsViewModel
 
 @Composable
 fun SettingsScreen(
@@ -47,9 +48,9 @@ fun SettingsScreen(
                 homeCity = settingsUiState.homeCity,
                 homeLocationErrorType = settingsUiState.homeLocationErrorType,
                 onSaveHomeLocation = { settingsViewModel.saveHomeLocation() },
-                onOpenFile = {settingsViewModel.readCsv(it)},
-                onGetData = {settingsViewModel.getGeoData()},
-                location = settingsUiState.readLoc,
+                onSelectLocationFile = { settingsViewModel.importLocationDataFromCsv(it) },
+                startThread = { settingsViewModel.startThread() },
+                importState = settingsUiState.importState,
             )
         }
     }
@@ -61,9 +62,9 @@ private fun SettingsScreenContent(
     homeCity: String,
     homeLocationErrorType: FieldErrorType,
     onSaveHomeLocation: () -> Unit,
-    onOpenFile: (Uri) -> Unit,
-    onGetData: () -> Unit,
-    location: CityLocation?,
+    onSelectLocationFile: (Uri) -> Unit,
+    startThread: () -> Unit,
+    importState: ImportGeoDataState,
 ) {
     Column(
         modifier = Modifier
@@ -76,7 +77,14 @@ private fun SettingsScreenContent(
             homeLocationErrorType = homeLocationErrorType,
             onSaveHomeLocation = onSaveHomeLocation,
         )
-        SettingsImportExport(onOpenFile = onOpenFile, onGetData = onGetData, location = location)
+        SettingsImportExport(
+            importGeoDataState = importState,
+            onSelectLocationFile = onSelectLocationFile
+        )
+
+        Button(onClick = startThread) {
+            Text(text = "Start thread")
+        }
     }
 }
 
@@ -88,8 +96,8 @@ fun SettingsScreenPreview() {
         homeCity = "dfsd",
         homeLocationErrorType = FieldErrorType.NONE,
         onSaveHomeLocation = {},
-        onOpenFile = {},
-        onGetData = {},
-        location = null,
-        )
+        onSelectLocationFile = {},
+        startThread = {},
+        importState = ImportGeoDataState.READY,
+    )
 }

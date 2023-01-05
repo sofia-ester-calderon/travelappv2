@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.data.*
-import com.sucaldo.travelappv2.db.DatabaseHelper2
+import com.sucaldo.travelappv2.db.DatabaseHelper
 import com.sucaldo.travelappv2.ui.common.Routes
 import com.sucaldo.travelappv2.util.DistanceCalculator
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,14 +22,14 @@ class TripViewModel(
 ) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(TripUiState())
     val uiState: StateFlow<TripUiState> = _uiState.asStateFlow()
-    private val myDb: DatabaseHelper2
+    private val myDb: DatabaseHelper
     private val appPreferences: AppPreferences
     private val tripId: Int? = savedStateHandle["tripId"]
     private var groupId: Int? = null
     private var previousTrip: Trip? = null
 
     init {
-        myDb = DatabaseHelper2(application.applicationContext)
+        myDb = DatabaseHelper(application.applicationContext)
         appPreferences = AppPreferences(application.applicationContext, myDb)
         if (tripId != null) {
             _uiState.value = _uiState.value.copy(tripUiType = TripUiType.EDIT)

@@ -5,19 +5,29 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.sucaldo.travelappv2.R
-import com.sucaldo.travelappv2.data.CityLocation
 import com.sucaldo.travelappv2.ui.common.BigLabel
+import com.sucaldo.travelappv2.ui.settings.ImportGeoDataState
+import com.sucaldo.travelappv2.ui.trip.ui.ErrorText
 
 @Composable
 fun SettingsImportExport(
-    onOpenFile: (Uri) -> Unit,
-    onGetData: () -> Unit,
-    location: CityLocation?,
+    importGeoDataState: ImportGeoDataState,
+    onSelectLocationFile: (Uri) -> Unit,
 ) {
     BigLabel(text = stringResource(id = R.string.settings_import_export_title))
 
@@ -27,24 +37,67 @@ fun SettingsImportExport(
             pickedFileUri = it.data?.data
         }
     pickedFileUri?.let {
-        onOpenFile(it)
+        onSelectLocationFile(it)
     }
-    Button(
-        onClick = {
-            val intent =
-                Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                    .apply {
-                        addCategory(Intent.CATEGORY_OPENABLE)
-                    }
-            launcher.launch(intent)
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Button(
+            onClick = {
+                val intent =
+                    Intent(Intent.ACTION_OPEN_DOCUMENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                        .apply {
+                            addCategory(Intent.CATEGORY_OPENABLE)
+                        }
+                launcher.launch(intent)
+            }
+        ) {
+            Text(stringResource(id = R.string.settings_import_export_import_locations))
         }
-    ) {
-        Text(stringResource(id = R.string.settings_import_export_import_locations))
+        Spacer(modifier = Modifier.width(8.dp))
+        ImportGeoDataInfo(importGeoDataState)
     }
-    Button(onClick = onGetData) {
-        Text(text = "Get Geo Data")
+}
+
+@Composable
+private fun ImportGeoDataInfo(importGeoDataState: ImportGeoDataState) {
+    Column(verticalArrangement = Arrangement.Bottom) {
+        when (importGeoDataState) {
+            ImportGeoDataState.READY -> ErrorText(text = "No location in DB. Please import city_locations.csv file!")
+            ImportGeoDataState.IMPORT_SUCCESS -> Icon(Icons.Default.Check, contentDescription = "Import successful")
+            ImportGeoDataState.IMPORT_FAIL -> Icon(Icons.Default.Close, contentDescription = "Import failed")
+            ImportGeoDataState.LOADING -> CircularProgressIndicator(Modifier.size(24.dp))
+            ImportGeoDataState.NOT_IMPORTABLE -> ErrorText(text = "Locations already in DB, no need to import")
+        }
     }
-    location?.let {
-        Text(text = "Country: ${location.country}, city: ${location.city}, latitude: ${location.latitude}, longitude: ${location.longitude}")
+}
+
+@Preview
+@Composable
+fun SettingsImportExportSuccessPreview() {
+    Column {
+        SettingsImportExport(ImportGeoDataState.IMPORT_SUCCESS, {})
+    }
+}
+
+@Preview
+@Composable
+fun SettingsImportExportLoadingsPreview() {
+    Column {
+        SettingsImportExport(ImportGeoDataState.LOADING, {})
+    }
+}
+
+@Preview
+@Composable
+fun SettingsImportExportErrorPreview() {
+    Column {
+        SettingsImportExport(ImportGeoDataState.IMPORT_FAIL, {})
+    }
+}
+
+@Preview
+@Composable
+fun SettingsImportExportReadyPreview() {
+    Column {
+        SettingsImportExport(ImportGeoDataState.READY, {})
     }
 }
