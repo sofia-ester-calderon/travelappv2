@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(SettingsUiState())
@@ -53,11 +52,19 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         if (cityCoordinates.size == 0) {
             _uiState.value = _uiState.value.copy(homeLocationErrorType = FieldErrorType.LOCATION_DB)
         } else {
-            runBlocking {
+            viewModelScope.launch {
                 appPreferences.storeHomeLocation(homeCountry, homeCity)
                 _uiState.value = _uiState.value.copy(homeLocationSaveSuccessful = true)
             }
         }
+    }
+
+    fun saveHomeCountry(country: String) {
+        _uiState.update { it.copy(homeCountry = country) }
+    }
+
+    fun saveHomeCity(city: String) {
+        _uiState.update { it.copy(homeCity = city) }
     }
 
     fun importLocationDataFromCsv(uri: Uri) {

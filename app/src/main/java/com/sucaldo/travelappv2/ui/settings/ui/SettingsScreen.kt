@@ -46,10 +46,12 @@ fun SettingsScreen(
                 homeCity = settingsUiState.homeCity,
                 homeLocationErrorType = settingsUiState.homeLocationErrorType,
                 onSaveHomeLocation = { settingsViewModel.saveHomeLocation() },
+                onChangeHomeCountry = { settingsViewModel.saveHomeCountry(it) },
+                onChangeHomeCity = { settingsViewModel.saveHomeCity(it) },
                 onSelectLocationFile = { settingsViewModel.importLocationDataFromCsv(it) },
                 importGeoDataState = settingsUiState.importGeoDataState,
                 importTripDataState = settingsUiState.importTripState,
-                onSelectTripFile = {settingsViewModel.importTripDataFromCsv(it)}
+                onSelectTripFile = {settingsViewModel.importTripDataFromCsv(it)},
             )
         }
     }
@@ -61,6 +63,8 @@ private fun SettingsScreenContent(
     homeCity: String,
     homeLocationErrorType: FieldErrorType,
     onSaveHomeLocation: () -> Unit,
+    onChangeHomeCountry: (String) -> Unit,
+    onChangeHomeCity: (String) -> Unit,
     onSelectLocationFile: (Uri) -> Unit,
     onSelectTripFile: (Uri) -> Unit,
     importGeoDataState: ImportState,
@@ -76,6 +80,8 @@ private fun SettingsScreenContent(
             homeCity = homeCity,
             homeLocationErrorType = homeLocationErrorType,
             onSaveHomeLocation = onSaveHomeLocation,
+            onChangeHomeCountry = onChangeHomeCountry,
+            onChangeHomeCity = onChangeHomeCity,
         )
         SettingsImportExport(
             importGeoDataState = importGeoDataState,
@@ -98,5 +104,7 @@ fun SettingsScreenPreview() {
         importGeoDataState = ImportState.Ready,
         importTripDataState = ImportState.ImportStarted.Error,
         onSelectTripFile = {},
+        onChangeHomeCity = {},
+        onChangeHomeCountry = {},
     )
 }

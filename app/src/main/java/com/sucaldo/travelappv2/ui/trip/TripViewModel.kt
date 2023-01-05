@@ -3,6 +3,7 @@ package com.sucaldo.travelappv2.ui.trip
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.data.*
 import com.sucaldo.travelappv2.db.DatabaseHelper
@@ -11,7 +12,7 @@ import com.sucaldo.travelappv2.util.DistanceCalculator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -35,7 +36,7 @@ class TripViewModel(
             _uiState.value = _uiState.value.copy(tripUiType = TripUiType.EDIT)
             loadTrip(tripId)
         } else {
-            runBlocking {
+            viewModelScope.launch {
                 val storedHomeLocation = appPreferences.getSavedHomeLocation()
                 if (storedHomeLocation != null) {
                     _uiState.value = _uiState.value.copy(

@@ -18,14 +18,16 @@ fun SettingsHomeLocation(
     homeCity: String,
     homeLocationErrorType: FieldErrorType,
     onSaveHomeLocation: () -> Unit,
+    onChangeHomeCountry: (String) -> Unit,
+    onChangeHomeCity: (String) -> Unit,
 ) {
     BigLabel(text = stringResource(id = R.string.settings_home_loc_title))
     CountryCity(
         country = homeCountry,
         city = homeCity,
         cityError = homeLocationErrorType,
-        onChangeCountry = {},
-        onChangeCity = {},
+        onChangeCountry = { onChangeHomeCountry(it) },
+        onChangeCity = { onChangeHomeCity(it) },
         countryError = homeLocationErrorType,
     )
     Spacer(modifier = Modifier.height(8.dp))
