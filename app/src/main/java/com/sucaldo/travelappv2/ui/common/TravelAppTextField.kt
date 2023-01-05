@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.sp
+import com.sucaldo.travelappv2.ui.common.ErrorText
 
 @Composable
 fun TravelAppTextField(
@@ -50,10 +50,4 @@ fun TravelAppTextField(
     if (errorText != null) {
         ErrorText(text = errorText)
     }
-}
-
-@Composable
-fun ErrorText(text: String) {
-    Text(text = text, fontSize = 12.sp, color = Color.Red)
-
 }

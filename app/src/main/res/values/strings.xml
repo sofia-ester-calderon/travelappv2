@@ -46,8 +46,11 @@
     <string name="settings_home_loc_success">Home location saved</string>
     <string name="settings_import_export_title">Import/Export Data</string>
     <string name="settings_import_locations">Import Geo Data</string>
-    <string name="settings_import_not_possible">Locations already in DB, no need to import</string>
-    <string name="settings_import_ready">No location in DB. Please import city_locations.csv file!</string>
+    <string name="settings_import_trips">Import Trips</string>
+    <string name="settings_import_geo_not_possible">Locations already in DB, no need to import</string>
+    <string name="settings_import_geo_ready">No location in DB. Please import city_locations.csv file!</string>
+    <string name="settings_import_trip_ready">You can upload trips from your trips.csv file.</string>
+    <string name="settings_import_trip_db_full">Careful, you already have trips in your db! You can still upload a trips.csv file.</string>
     <string name="settings_import_success">Import successful</string>
     <string name="settings_import_error">Import failed</string>
 

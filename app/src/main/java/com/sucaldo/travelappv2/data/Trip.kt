@@ -45,6 +45,32 @@ class Trip {
         this.toContinent = toContinent
     }
 
+    constructor(
+        groupId: Int,
+        fromCountry: String,
+        fromCity: String,
+        toCountry: String,
+        toCity: String,
+        description: String,
+        startDate: String,
+        endDate: String?,
+        distance: String,
+        toContinent: String,
+        type: String,
+    ) {
+        this.groupId = groupId
+        this.fromCountry = fromCountry
+        this.fromCity = fromCity
+        this.toCountry = toCountry
+        this.toCity = toCity
+        this.description = description
+        this.distance = distance.toLong()
+        this.toContinent = toContinent
+        this.type = TripType.valueOf(type)
+        this.startDate = getDateFromString(startDate, DateFormat.DB)
+        this.endDate = if (endDate.isNullOrBlank()) null else getDateFromString(endDate, DateFormat.DB)
+    }
+
     constructor(data: Cursor) {
         fromCountry = data.getString(1)
         fromCity = data.getString(2)
@@ -64,17 +90,17 @@ class Trip {
     }
 
     fun getPickerFormattedStartDate(): String {
-        return formatDate(startDate, DateFormat.PRETTY)
+        return formatDate(startDate)
     }
 
     fun getPickerFormattedEndDate(): String {
         return if (endDate == null) {
             ""
-        } else formatDate(endDate!!, DateFormat.PRETTY)
+        } else formatDate(endDate!!)
     }
 
-    private fun formatDate(date: Date, format: String): String {
-        val dateFormat = SimpleDateFormat(format, Locale.getDefault())
+    private fun formatDate(date: Date): String {
+        val dateFormat = SimpleDateFormat(DateFormat.PRETTY, Locale.getDefault())
         return dateFormat.format(date)
     }
 
@@ -88,5 +114,5 @@ class Trip {
 }
 
 enum class TripType {
-    RETURN, MULTI, ONE_WAY, MULTI_LAST,
+    RETURN, MULTI_STOP, ONE_WAY, MULTI_STOP_LAST_STOP,
 }

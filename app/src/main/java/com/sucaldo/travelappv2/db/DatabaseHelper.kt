@@ -47,6 +47,9 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
     /*
      ********* TABLE TRIPS **********************
      */
+    val isTripTableEmpty: Boolean
+        get() = isTableEmpty(TABLE_TRIPS)
+
     fun addTrip(trip: Trip): Boolean {
         val db = this.writableDatabase
         val contentValues = ContentValues()

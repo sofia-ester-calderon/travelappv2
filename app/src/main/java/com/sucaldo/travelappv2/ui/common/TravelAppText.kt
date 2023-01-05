@@ -1,9 +1,23 @@
 package com.sucaldo.travelappv2.ui.common
 
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 import com.sucaldo.travelappv2.R
 import com.sucaldo.travelappv2.data.FieldErrorType
+
+
+@Composable
+fun InfoText(text: String) {
+    Text(text = text, fontSize = 12.sp)
+}
+
+@Composable
+fun ErrorText(text: String) {
+    Text(text = text, fontSize = 12.sp, color = Color.Red)
+}
 
 @Composable
 fun getErrorText(fieldErrorType: FieldErrorType): String? {

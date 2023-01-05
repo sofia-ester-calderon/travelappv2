@@ -2,6 +2,8 @@ package com.sucaldo.travelappv2.db
 
 import android.util.Log
 import com.opencsv.CSVReader
+import com.sucaldo.travelappv2.data.Trip
+import com.sucaldo.travelappv2.data.TripType
 import java.io.*
 
 class CsvHelper(private val myDB: DatabaseHelper) {
@@ -12,7 +14,7 @@ class CsvHelper(private val myDB: DatabaseHelper) {
             val csvLines = reader.readAll()
             for (nextLine in csvLines) {
                 if (nextLine.size == 4) {
-                    Log.d("CSVHelper", "${nextLine[0]}, ${nextLine[1]}")
+                    Log.d("CSV_CityLoc", "${nextLine[0]}, ${nextLine[1]}")
                     myDB.addCityLocation(
                         nextLine[0],
                         nextLine[1], nextLine[2].toFloat(), nextLine[3].toFloat()
@@ -26,32 +28,35 @@ class CsvHelper(private val myDB: DatabaseHelper) {
         }
     }
 
-    fun readTripsCsvFile(inputStream: InputStream?) {
-//        try {
-//            val reader = CSVReader(InputStreamReader(inputStream))
-//            var nextLine: Array<String>
-//            while (reader.readNext().also { nextLine = it } != null) {
-//                if (nextLine.size == 11) {
-//                    Log.d("CSV_trips", nextLine[3])
-//                    val newTrip = Trip(
-//                        nextLine[0].toInt(),
-//                        nextLine[1],
-//                        nextLine[2],
-//                        nextLine[3],
-//                        nextLine[4],
-//                        nextLine[5],
-//                        nextLine[6],
-//                        nextLine[7],
-//                        nextLine[8].toInt(),
-//                        nextLine[9],
-//                        TripType.valueOf(nextLine[10])
-//                    )
-//                    myDB.addTrip(newTrip)
-//                }
-//            }
-//        } catch (e: IOException) {
-//            Log.e("CSV_trips", "Line in .csv file could not be read")
-//        }
+    fun readTripsCsvFile(inputStream: InputStream?): Boolean {
+        try {
+            val reader = CSVReader(InputStreamReader(inputStream))
+            val csvLines = reader.readAll()
+            for (nextLine in csvLines) {
+                if (nextLine.size == 11) {
+                    Log.d("CSV_trips", nextLine[3])
+                    val newTrip = Trip(
+                        groupId = nextLine[0].toInt(),
+                        fromCountry = nextLine[1],
+                        fromCity = nextLine[2],
+                        toCountry = nextLine[3],
+                        toCity = nextLine[4],
+                        description = nextLine[5],
+                        startDate = nextLine[6],
+                        endDate = nextLine[7],
+                        distance = nextLine[8],
+                        toContinent = nextLine[9],
+                        type = nextLine[10],
+                    )
+                    Log.d("CSV_trips", "${nextLine[3]}, ${nextLine[4]}")
+                    myDB.addTrip(newTrip)
+                }
+            }
+            return true
+        } catch (e: IOException) {
+            Log.e("CSV_trips", "Line in .csv file could not be read")
+            return false
+        }
     }
 
     fun writeTripsToCsv(rootFile: File?) {

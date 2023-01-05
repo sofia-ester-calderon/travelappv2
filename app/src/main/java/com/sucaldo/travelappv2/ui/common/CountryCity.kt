@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.sucaldo.travelappv2.R
 import com.sucaldo.travelappv2.data.FieldErrorType
 import com.sucaldo.travelappv2.data.countries
-import com.sucaldo.travelappv2.ui.trip.ui.ErrorText
 import com.sucaldo.travelappv2.ui.trip.ui.TravelAppTextField
 
 @Composable

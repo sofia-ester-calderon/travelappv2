@@ -12,17 +12,24 @@ import com.sucaldo.travelappv2.ui.settings.ImportState
 @Composable
 fun SettingsImportExport(
     importGeoDataState: ImportState,
+    importTripDataState: ImportState,
     onSelectLocationFile: (Uri) -> Unit,
+    onSelectTripFile: (Uri) -> Unit,
 ) {
     BigLabel(text = stringResource(id = R.string.settings_import_export_title))
-    SettingsImport(importGeoDataState = importGeoDataState, onSelectLocationFile = onSelectLocationFile)
+    SettingsImport(
+        importGeoDataState = importGeoDataState,
+        importTripDataState = importTripDataState,
+        onSelectLocationFile = onSelectLocationFile,
+        onSelectTripFile = onSelectTripFile
+    )
 }
 
 @Preview
 @Composable
 fun SettingsImportExportSuccessPreview() {
     Column {
-        SettingsImportExport(ImportState.IMPORT_SUCCESS, {})
+        SettingsImportExport(ImportState.ImportStarted.Success, ImportState.ImportStarted.Success, {}, {})
     }
 }
 
@@ -30,7 +37,7 @@ fun SettingsImportExportSuccessPreview() {
 @Composable
 fun SettingsImportExportLoadingsPreview() {
     Column {
-        SettingsImportExport(ImportState.LOADING, {})
+        SettingsImportExport(ImportState.ImportStarted.Loading, ImportState.ImportStarted.Success, {}, {})
     }
 }
 
@@ -38,7 +45,7 @@ fun SettingsImportExportLoadingsPreview() {
 @Composable
 fun SettingsImportExportErrorPreview() {
     Column {
-        SettingsImportExport(ImportState.IMPORT_FAIL, {})
+        SettingsImportExport(ImportState.ImportStarted.Error, ImportState.ImportStarted.Success, {}, {})
     }
 }
 
@@ -46,6 +53,6 @@ fun SettingsImportExportErrorPreview() {
 @Composable
 fun SettingsImportExportReadyPreview() {
     Column {
-        SettingsImportExport(ImportState.READY, {})
+        SettingsImportExport(ImportState.Ready, ImportState.ImportStarted.Success, {}, {})
     }
 }

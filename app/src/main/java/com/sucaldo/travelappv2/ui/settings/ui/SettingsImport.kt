@@ -19,28 +19,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sucaldo.travelappv2.R
+import com.sucaldo.travelappv2.ui.common.ErrorText
+import com.sucaldo.travelappv2.ui.common.InfoText
 import com.sucaldo.travelappv2.ui.settings.ImportState
-import com.sucaldo.travelappv2.ui.trip.ui.ErrorText
 
 @Composable
 fun SettingsImport(
     importGeoDataState: ImportState,
+    importTripDataState: ImportState,
     onSelectLocationFile: (Uri) -> Unit,
-) {
-    ImportGeoData(importGeoDataState, onSelectLocationFile)
-}
-
-@Composable
-private fun ImportGeoData(
-    importGeoDataState: ImportState,
-    onSelectLocationFile: (Uri) -> Unit,
+    onSelectTripFile: (Uri) -> Unit,
 ) {
     ImportData(
         label = stringResource(id = R.string.settings_import_locations),
         onSelectFile = onSelectLocationFile,
-        enabled = importGeoDataState != ImportState.NOT_IMPORTABLE,
+        enabled = importGeoDataState != ImportState.DbPopulated && importGeoDataState != ImportState.ImportStarted.Success,
     ) {
         ImportGeoDataInfo(importGeoDataState)
+    }
+    ImportData(
+        label = stringResource(id = R.string.settings_import_trips),
+        onSelectFile = onSelectTripFile,
+    ) {
+        ImportTripDataInfo(importTripDataState)
     }
 }
 
@@ -61,6 +62,7 @@ private fun ImportData(
     }
     Row(verticalAlignment = Alignment.CenterVertically) {
         Button(
+            modifier = Modifier.width(160.dp),
             enabled = enabled,
             onClick = {
                 val intent =
@@ -85,17 +87,35 @@ private fun ImportData(
 private fun ImportGeoDataInfo(importGeoDataState: ImportState) {
     Column(verticalArrangement = Arrangement.Bottom) {
         when (importGeoDataState) {
-            ImportState.READY -> ErrorText(text = stringResource(id = R.string.settings_import_ready))
-            ImportState.IMPORT_SUCCESS -> Icon(
-                Icons.Default.Check,
-                contentDescription = stringResource(id = R.string.settings_import_success)
-            )
-            ImportState.IMPORT_FAIL -> Icon(
-                Icons.Default.Close,
-                contentDescription = stringResource(id = R.string.settings_import_error)
-            )
-            ImportState.LOADING -> CircularProgressIndicator(Modifier.size(24.dp))
-            ImportState.NOT_IMPORTABLE -> ErrorText(text = stringResource(id = R.string.settings_import_not_possible))
+            ImportState.Ready -> ErrorText(text = stringResource(id = R.string.settings_import_geo_ready))
+            ImportState.DbPopulated -> InfoText(text = stringResource(id = R.string.settings_import_geo_not_possible))
+            is ImportState.ImportStarted -> LoadingIcons(loadingState = importGeoDataState)
         }
+    }
+}
+
+@Composable
+private fun ImportTripDataInfo(importTripDataState: ImportState) {
+    Column(verticalArrangement = Arrangement.Bottom) {
+        when (importTripDataState) {
+            ImportState.Ready -> InfoText(text = stringResource(id = R.string.settings_import_trip_ready))
+            ImportState.DbPopulated -> ErrorText(text = stringResource(id = R.string.settings_import_trip_db_full))
+            is ImportState.ImportStarted -> LoadingIcons(loadingState = importTripDataState)
+        }
+    }
+}
+
+@Composable
+private fun LoadingIcons(loadingState: ImportState.ImportStarted) {
+    when (loadingState) {
+        ImportState.ImportStarted.Success -> Icon(
+            Icons.Default.Check,
+            contentDescription = stringResource(id = R.string.settings_import_success)
+        )
+        ImportState.ImportStarted.Error -> Icon(
+            Icons.Default.Close,
+            contentDescription = stringResource(id = R.string.settings_import_error)
+        )
+        ImportState.ImportStarted.Loading -> CircularProgressIndicator(Modifier.size(24.dp))
     }
 }

@@ -3,7 +3,6 @@ package com.sucaldo.travelappv2.ui.settings
 import android.app.Application
 import android.content.ContentResolver
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.sucaldo.travelappv2.data.AppPreferences
@@ -17,7 +16,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlin.concurrent.thread
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(SettingsUiState())
@@ -34,7 +32,10 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         contentResolver = application.applicationContext.contentResolver
         csvHelper = CsvHelper(myDb)
         if (!myDb.isCityLocTableEmpty) {
-            _uiState.update { it.copy(importGeoDataState = NOT_IMPORTABLE) }
+            _uiState.update { it.copy(importGeoDataState = DbPopulated) }
+        }
+        if (!myDb.isTripTableEmpty) {
+            _uiState.update { it.copy(importTripState = DbPopulated) }
         }
         viewModelScope.launch {
             val savedHomeLocation = appPreferences.getSavedHomeLocation()
@@ -60,30 +61,29 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun importLocationDataFromCsv(uri: Uri) {
-        _uiState.update { it.copy(importGeoDataState = LOADING) }
-        thread(start = true) {
-            Thread.sleep(3000)
+        _uiState.update { it.copy(importGeoDataState = ImportStarted.Loading) }
+        viewModelScope.launch {
             contentResolver.openInputStream(uri)?.use { inputStream ->
                 val isImportSuccessful = csvHelper.readCityLocationsCsvFile(inputStream)
                 _uiState.update {
                     it.copy(
-                        importGeoDataState = if (isImportSuccessful) IMPORT_SUCCESS else IMPORT_FAIL
+                        importGeoDataState = if (isImportSuccessful) ImportStarted.Success else ImportStarted.Error
                     )
                 }
             }
         }
     }
 
-    fun startThread() {
-        thread(start = true) {
-            Log.d("VM", "New Thread")
-            val locationOfCity = myDb.getLocationOfCity("Australia", "Sydney")
-            Log.d("VM", locationOfCity?.city ?: "")
-            _uiState.update {
-                it.copy(
-                    homeCountry = locationOfCity?.country ?: "",
-                    homeCity = locationOfCity?.country ?: ""
-                )
+    fun importTripDataFromCsv(uri: Uri) {
+        _uiState.update { it.copy(importTripState = ImportStarted.Loading) }
+        viewModelScope.launch {
+            contentResolver.openInputStream(uri)?.use { inputStream ->
+                val isImportSuccessful = csvHelper.readTripsCsvFile(inputStream)
+                _uiState.update {
+                    it.copy(
+                        importTripState = if (isImportSuccessful) ImportStarted.Success else ImportStarted.Error
+                    )
+                }
             }
         }
     }

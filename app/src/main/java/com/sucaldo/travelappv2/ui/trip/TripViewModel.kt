@@ -224,7 +224,7 @@ class TripViewModel(
         _uiState.value = _uiState.value.copy(
             tripUiType = TripUiType.NEW_STOP,
             tripDialogState = TripDialogState.NONE,
-            tripType = TripType.MULTI,
+            tripType = TripType.MULTI_STOP,
             fromCity = previousTrip!!.fromCity,
             fromCountry = previousTrip!!.fromCountry,
             fromLatitudeText = "",
@@ -242,7 +242,7 @@ class TripViewModel(
 
     fun onCompleteStop(navController: NavController) {
         val trip = myDb.getTripById(myDb.lastTripId)
-        trip!!.type = TripType.MULTI_LAST
+        trip!!.type = TripType.MULTI_STOP_LAST_STOP
         trip.toContinent = getContinentOfCountry(trip.fromCountry)
         myDb.updateTrip(trip)
         navigateToMyTrips(navController)
@@ -322,7 +322,7 @@ class TripViewModel(
             when(trip.type) {
                 TripType.RETURN, TripType.ONE_WAY ->
                     _uiState.value = _uiState.value.copy(tripDialogState = TripDialogState.SIMPLE_TRIP)
-                TripType.MULTI, TripType.MULTI_LAST ->
+                TripType.MULTI_STOP, TripType.MULTI_STOP_LAST_STOP ->
                     _uiState.value = _uiState.value.copy(tripDialogState = TripDialogState.MULTI_TRIP)
             }
         } else {
@@ -433,7 +433,7 @@ class TripViewModel(
                 return false
             }
         }
-        if (_uiState.value.tripType == TripType.MULTI) {
+        if (_uiState.value.tripType == TripType.MULTI_STOP) {
             val endDatePreviousStop: Date? = previousTrip?.endDate
             if (endDatePreviousStop == null || endDatePreviousStop.after(startDate)) {
                 _uiState.value =

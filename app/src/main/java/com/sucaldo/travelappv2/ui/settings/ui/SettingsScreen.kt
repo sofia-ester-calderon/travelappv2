@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -49,8 +47,9 @@ fun SettingsScreen(
                 homeLocationErrorType = settingsUiState.homeLocationErrorType,
                 onSaveHomeLocation = { settingsViewModel.saveHomeLocation() },
                 onSelectLocationFile = { settingsViewModel.importLocationDataFromCsv(it) },
-                startThread = { settingsViewModel.startThread() },
                 importGeoDataState = settingsUiState.importGeoDataState,
+                importTripDataState = settingsUiState.importTripState,
+                onSelectTripFile = {settingsViewModel.importTripDataFromCsv(it)}
             )
         }
     }
@@ -63,8 +62,9 @@ private fun SettingsScreenContent(
     homeLocationErrorType: FieldErrorType,
     onSaveHomeLocation: () -> Unit,
     onSelectLocationFile: (Uri) -> Unit,
-    startThread: () -> Unit,
+    onSelectTripFile: (Uri) -> Unit,
     importGeoDataState: ImportState,
+    importTripDataState: ImportState,
 ) {
     Column(
         modifier = Modifier
@@ -79,12 +79,10 @@ private fun SettingsScreenContent(
         )
         SettingsImportExport(
             importGeoDataState = importGeoDataState,
-            onSelectLocationFile = onSelectLocationFile
+            importTripDataState = importTripDataState,
+            onSelectLocationFile = onSelectLocationFile,
+            onSelectTripFile = onSelectTripFile,
         )
-
-        Button(onClick = startThread) {
-            Text(text = "Start thread")
-        }
     }
 }
 
@@ -97,7 +95,8 @@ fun SettingsScreenPreview() {
         homeLocationErrorType = FieldErrorType.NONE,
         onSaveHomeLocation = {},
         onSelectLocationFile = {},
-        startThread = {},
-        importGeoDataState = ImportState.READY,
+        importGeoDataState = ImportState.Ready,
+        importTripDataState = ImportState.ImportStarted.Error,
+        onSelectTripFile = {},
     )
 }

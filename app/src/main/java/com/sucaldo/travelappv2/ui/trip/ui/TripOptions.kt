@@ -36,7 +36,7 @@ fun TripOptions(
         ),
         TripOptionsUi(
             label = stringResource(id = R.string.trip_options_multi),
-            tripType = TripType.MULTI,
+            tripType = TripType.MULTI_STOP,
         ),
     )
 
