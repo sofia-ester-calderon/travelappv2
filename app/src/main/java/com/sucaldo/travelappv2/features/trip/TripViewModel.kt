@@ -344,10 +344,7 @@ class TripViewModel(
     }
 
     private fun isTripValid(): Boolean {
-        val areFieldsEmpty = !areFieldsFilled()
-        val areFieldsInvalid = !areFieldsValid()
-        val areDatesInvalid = !areDatesValid()
-        return areFieldsEmpty || areFieldsInvalid || areDatesInvalid
+        return areFieldsFilled() && areFieldsValid() && areDatesValid()
     }
 
     private fun areFieldsFilled(): Boolean {
@@ -429,7 +426,7 @@ class TripViewModel(
                 e.printStackTrace()
                 return false
             }
-            if (endDate.after(startDate)) {
+            if (startDate.after(endDate)) {
                 _uiState.value =
                     _uiState.value.copy(endDateErrorType = FieldErrorType.INVALID_END_DATE)
                 return false
