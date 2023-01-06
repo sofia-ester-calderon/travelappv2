@@ -10,8 +10,8 @@ import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.sucaldo.travelappv2.data.CONTINENTS
 import com.sucaldo.travelappv2.data.CityLocation
-import com.sucaldo.travelappv2.data.DateFormat
 import com.sucaldo.travelappv2.data.Trip
+import com.sucaldo.travelappv2.util.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -192,7 +192,7 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
                             startDate = Date()
                         }
                         val cal = Calendar.getInstance()
-                        cal.time = startDate
+                        cal.time = startDate!!
                         val year = cal[Calendar.YEAR]
                         if (!years.contains(year)) {
                             years.add(year)
@@ -250,7 +250,7 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
         }
     }
 
-    val allTrips: List<Any>
+    val allTrips: List<Trip>
         get() {
             val db = this.writableDatabase
             val data = db.rawQuery("SELECT * FROM " + TABLE_TRIPS, null)
@@ -356,7 +356,7 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
         )
     }
 
-    val allCityLocations: List<Any>
+    val allCityLocations: List<CityLocation>
         get() {
             val db = this.writableDatabase
             val data = db.rawQuery(

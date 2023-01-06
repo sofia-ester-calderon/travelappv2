@@ -1,12 +1,19 @@
 package com.sucaldo.travelappv2.db
 
+import android.os.Environment
 import android.util.Log
 import com.opencsv.CSVReader
+import com.sucaldo.travelappv2.data.CityLocation
 import com.sucaldo.travelappv2.data.Trip
-import com.sucaldo.travelappv2.data.TripType
+import com.sucaldo.travelappv2.util.DateFormat
+import com.sucaldo.travelappv2.util.formatDate
 import java.io.*
+import java.util.*
 
 class CsvHelper(private val myDB: DatabaseHelper) {
+
+    private val downloadsDir =
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
 
     fun readCityLocationsCsvFile(inputStream: InputStream?): Boolean {
         try {
@@ -59,76 +66,58 @@ class CsvHelper(private val myDB: DatabaseHelper) {
         }
     }
 
-    fun writeTripsToCsv(rootFile: File?) {
-//        val csvFile = File(rootFile, "trips.csv")
-//        val csvString = StringBuilder()
-//        val trips: List<Trip> = myDB.getAllTrips()
-//        for (trip in trips) {
-//            csvString.append(trip.getGroupId())
-//                .append(COLUMN_SEPARATOR)
-//                .append(trip.getFromCountry())
-//                .append(COLUMN_SEPARATOR)
-//                .append(trip.getFromCity())
-//                .append(COLUMN_SEPARATOR)
-//                .append(trip.getToCountry())
-//                .append(COLUMN_SEPARATOR)
-//                .append(trip.getToCity())
-//                .append(COLUMN_SEPARATOR)
-//                .append(trip.getDescription())
-//                .append(COLUMN_SEPARATOR)
-//                .append(trip.getStartDate())
-//                .append(COLUMN_SEPARATOR)
-//                .append(trip.getEndDateAsString())
-//                .append(COLUMN_SEPARATOR)
-//                .append(trip.getDistance())
-//                .append(COLUMN_SEPARATOR)
-//                .append(trip.getToContinent())
-//                .append(COLUMN_SEPARATOR)
-//                .append(trip.getType())
-//                .append(ROW_SEPARATOR)
-//        }
-//        writeCsvFile(csvFile, csvString.toString())
+    fun writeTripsToCsv() {
+        val file = File(downloadsDir, "${formatDate(Date(), DateFormat.CSV)}_trips.csv")
+        val csvString = StringBuilder()
+        val trips: List<Trip> = myDB.allTrips
+        for (trip in trips) {
+            csvString.append(trip.groupId)
+                .append(COLUMN_SEPARATOR)
+                .append(trip.fromCountry)
+                .append(COLUMN_SEPARATOR)
+                .append(trip.fromCity)
+                .append(COLUMN_SEPARATOR)
+                .append(trip.toCountry)
+                .append(COLUMN_SEPARATOR)
+                .append(trip.toCity)
+                .append(COLUMN_SEPARATOR)
+                .append(trip.description)
+                .append(COLUMN_SEPARATOR)
+                .append(trip.startDate.toString())
+                .append(COLUMN_SEPARATOR)
+                .append(trip.endDate ?: "")
+                .append(COLUMN_SEPARATOR)
+                .append(trip.distance)
+                .append(COLUMN_SEPARATOR)
+                .append(trip.toContinent)
+                .append(COLUMN_SEPARATOR)
+                .append(trip.type)
+                .append(ROW_SEPARATOR)
+        }
+        writeCsvFile(file, csvString.toString())
     }
 
-    fun writeCityLocationsToCsv(rootFile: File?) {
-//        val csvFile = File(rootFile, "city_locations.csv")
-//        val csvString = StringBuilder()
-//        val cityLocations: List<CityLocation> = myDB.allCityLocations
-//        for (cityLocation in cityLocations) {
-//            csvString.append(cityLocation.getCountry())
-//                .append(COLUMN_SEPARATOR)
-//                .append(cityLocation.getCity())
-//                .append(COLUMN_SEPARATOR)
-//                .append(cityLocation.getLatitude())
-//                .append(COLUMN_SEPARATOR)
-//                .append(cityLocation.getLongitude())
-//                .append(ROW_SEPARATOR)
-//        }
-//        writeCsvFile(csvFile, csvString.toString())
-    }
-
-    fun writeCountriesContinentsToCsv(rootFile: File?) {
-//        val csvFile = File(rootFile, "countries_continents.csv")
-//        val csvString = StringBuilder()
-//        val countriesContinents: List<CountriesContinents> = myDB.getAllCountriesContinents()
-//        for (countriesContinent in countriesContinents) {
-//            csvString.append(countriesContinent.getContinent())
-//                .append(COLUMN_SEPARATOR)
-//                .append(countriesContinent.getCountry())
-//                .append(ROW_SEPARATOR)
-//        }
-//        writeCsvFile(csvFile, csvString.toString())
+    fun writeCityLocationsToCsv() {
+        val file = File(downloadsDir, "${formatDate(Date(), DateFormat.CSV)}_city_locations.csv")
+        val csvString = StringBuilder()
+        val cityLocations: List<CityLocation> = myDB.allCityLocations
+        for (cityLocation in cityLocations) {
+            csvString.append(cityLocation.country)
+                .append(COLUMN_SEPARATOR)
+                .append(cityLocation.city)
+                .append(COLUMN_SEPARATOR)
+                .append(cityLocation.latitude)
+                .append(COLUMN_SEPARATOR)
+                .append(cityLocation.longitude)
+                .append(ROW_SEPARATOR)
+        }
+        writeCsvFile(file, csvString.toString())
     }
 
     private fun writeCsvFile(file: File, content: String) {
-        try {
-            val fos = FileOutputStream(file)
-            fos.write(content.toByteArray())
-            fos.close()
-        } catch (e: IOException) {
-            // TODO error handling
-            e.printStackTrace()
-        }
+        val fos = FileOutputStream(file)
+        fos.write(content.toByteArray())
+        fos.close()
     }
 
     companion object {

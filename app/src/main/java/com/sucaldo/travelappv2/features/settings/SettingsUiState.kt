@@ -9,6 +9,7 @@ data class SettingsUiState(
     val homeLocationSaveSuccessful: Boolean = false,
     val importGeoDataState: ImportState = ImportState.Ready,
     val importTripState: ImportState = ImportState.Ready,
+    val exportDataState: ImportState = ImportState.Ready,
 )
 
 sealed interface ImportState {

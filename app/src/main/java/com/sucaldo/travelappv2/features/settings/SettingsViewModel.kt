@@ -3,6 +3,7 @@ package com.sucaldo.travelappv2.features.settings
 import android.app.Application
 import android.content.ContentResolver
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.sucaldo.travelappv2.data.AppPreferences
@@ -23,7 +24,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val appPreferences: AppPreferences
     private val contentResolver: ContentResolver
     private val csvHelper: CsvHelper
-
 
     init {
         myDb = DatabaseHelper(application.applicationContext)
@@ -93,5 +93,21 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
                 }
             }
         }
+    }
+
+    fun exportAllData() {
+        _uiState.update { it.copy(exportDataState = ImportStarted.Loading) }
+        viewModelScope.launch {
+            try {
+                csvHelper.writeTripsToCsv()
+                csvHelper.writeCityLocationsToCsv()
+                _uiState.update { it.copy(exportDataState = ImportStarted.Success) }
+            } catch (e: Exception) {
+                Log.e("Export data error", e.stackTraceToString())
+                _uiState.update { it.copy(exportDataState = ImportStarted.Error) }
+            }
+
+        }
+
     }
 }

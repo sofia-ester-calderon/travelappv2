@@ -50,8 +50,10 @@
     <string name="settings_import_geo_not_possible">Locations already in DB, no need to import</string>
     <string name="settings_import_geo_ready">No location in DB. Please import city_locations.csv file!</string>
     <string name="settings_import_trip_ready">You can upload trips from your trips.csv file.</string>
-    <string name="settings_import_trip_db_full">Careful, you already have trips in your db! You can still upload a trips.csv file.</string>
+    <string name="settings_import_trip_db_full">Careful, you already have trips in your db!</string>
     <string name="settings_import_success">Import successful</string>
     <string name="settings_import_error">Import failed</string>
+    <string name="settings_export_title">Export all data</string>
+    <string name="settings_export_ready">After export, csv files can be found in the Downloads folder</string>
 
 </resources>

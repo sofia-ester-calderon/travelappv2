@@ -7,12 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -102,20 +97,5 @@ private fun ImportTripDataInfo(importTripDataState: ImportState) {
             ImportState.DbPopulated -> ErrorText(text = stringResource(id = R.string.settings_import_trip_db_full))
             is ImportState.ImportStarted -> LoadingIcons(loadingState = importTripDataState)
         }
-    }
-}
-
-@Composable
-private fun LoadingIcons(loadingState: ImportState.ImportStarted) {
-    when (loadingState) {
-        ImportState.ImportStarted.Success -> Icon(
-            Icons.Default.Check,
-            contentDescription = stringResource(id = R.string.settings_import_success)
-        )
-        ImportState.ImportStarted.Error -> Icon(
-            Icons.Default.Close,
-            contentDescription = stringResource(id = R.string.settings_import_error)
-        )
-        ImportState.ImportStarted.Loading -> CircularProgressIndicator(Modifier.size(24.dp))
     }
 }

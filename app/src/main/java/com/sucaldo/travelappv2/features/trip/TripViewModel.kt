@@ -7,7 +7,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.data.*
 import com.sucaldo.travelappv2.db.DatabaseHelper
-import com.sucaldo.travelappv2.features.common.Routes
+import com.sucaldo.travelappv2.features.common.ui.Routes
+import com.sucaldo.travelappv2.util.DateFormat
 import com.sucaldo.travelappv2.util.DistanceCalculator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

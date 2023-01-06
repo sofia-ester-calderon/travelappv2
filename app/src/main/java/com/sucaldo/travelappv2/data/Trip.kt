@@ -1,8 +1,9 @@
 package com.sucaldo.travelappv2.data
 
 import android.database.Cursor
-import java.text.ParseException
-import java.text.SimpleDateFormat
+import com.sucaldo.travelappv2.util.DateFormat
+import com.sucaldo.travelappv2.util.formatDate
+import com.sucaldo.travelappv2.util.getDateFromString
 import java.util.*
 
 class Trip {
@@ -99,18 +100,6 @@ class Trip {
         } else formatDate(endDate!!)
     }
 
-    private fun formatDate(date: Date): String {
-        val dateFormat = SimpleDateFormat(DateFormat.PRETTY, Locale.getDefault())
-        return dateFormat.format(date)
-    }
-
-    private fun getDateFromString(stringDate: String, format: String): Date {
-       return try {
-                SimpleDateFormat(format, Locale.getDefault()).parse(stringDate)!!
-        } catch (e: ParseException) {
-            Date()
-        }
-    }
 }
 
 enum class TripType {

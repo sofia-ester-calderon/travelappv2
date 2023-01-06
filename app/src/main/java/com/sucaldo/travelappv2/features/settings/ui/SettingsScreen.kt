@@ -1,15 +1,11 @@
 package com.sucaldo.travelappv2.features.settings.ui
 
 import android.net.Uri
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,7 +47,9 @@ fun SettingsScreen(
                 onSelectLocationFile = { settingsViewModel.importLocationDataFromCsv(it) },
                 importGeoDataState = settingsUiState.importGeoDataState,
                 importTripDataState = settingsUiState.importTripState,
+                exportDataState = settingsUiState.exportDataState,
                 onSelectTripFile = {settingsViewModel.importTripDataFromCsv(it)},
+                onExportData = { settingsViewModel.exportAllData() }
             )
         }
     }
@@ -69,6 +67,8 @@ private fun SettingsScreenContent(
     onSelectTripFile: (Uri) -> Unit,
     importGeoDataState: ImportState,
     importTripDataState: ImportState,
+    exportDataState: ImportState,
+    onExportData: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -86,8 +86,10 @@ private fun SettingsScreenContent(
         SettingsImportExport(
             importGeoDataState = importGeoDataState,
             importTripDataState = importTripDataState,
+            exportDataState = exportDataState,
             onSelectLocationFile = onSelectLocationFile,
             onSelectTripFile = onSelectTripFile,
+            onExportData = onExportData
         )
     }
 }
@@ -106,5 +108,7 @@ fun SettingsScreenPreview() {
         onSelectTripFile = {},
         onChangeHomeCity = {},
         onChangeHomeCountry = {},
+        onExportData = {},
+        exportDataState = ImportState.Ready,
     )
 }
