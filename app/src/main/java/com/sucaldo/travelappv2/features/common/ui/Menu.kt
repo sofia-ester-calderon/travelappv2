@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +22,7 @@ fun DropdownMenu(navController: NavController) {
     var expanded by remember { mutableStateOf(false) }
     val tripRoute = Routes.TRIP
     val homeRoute = Routes.HOME
+    val cityCoordinatesRoute = Routes.CITY_COORDINATES
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -51,10 +54,24 @@ fun DropdownMenu(navController: NavController) {
             }) {
                 Row {
                     Icon(
-                        Icons.Outlined.Edit,
+                        Icons.Outlined.Add,//LocationOn
                         contentDescription = null
                     )
                     Text(stringResource(id = R.string.title_new_trip))
+
+                }
+            }
+            Divider()
+            DropdownMenuItem(onClick = {
+                navController.navigate(cityCoordinatesRoute)
+//                navController.navigate("$tripRoute?tripId=1234")
+            }) {
+                Row {
+                    Icon(
+                        Icons.Outlined.LocationOn,
+                        contentDescription = null
+                    )
+                    Text(stringResource(id = R.string.title_city_coordinates))
 
                 }
             }

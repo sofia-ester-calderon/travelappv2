@@ -73,6 +73,10 @@ fun LoadingIcons(loadingState: ImportState.ImportStarted) {
 @Composable
 fun SettingsImportExportSuccessPreview() {
     Column {
-        SettingsImportExport(ImportState.ImportStarted.Success, ImportState.ImportStarted.Success, ImportState.Ready, {}, {}, {})
+        SettingsImportExport(
+            ImportState.ImportStarted.Success,
+            ImportState.ImportStarted.Success,
+            ImportState.Ready,
+            {}, {}, {})
     }
 }

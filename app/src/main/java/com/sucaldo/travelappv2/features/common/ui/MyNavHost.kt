@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.sucaldo.travelappv2.features.citycoordinates.ui.CityCoordinatesScreen
 import com.sucaldo.travelappv2.features.home.HomeScreen
 import com.sucaldo.travelappv2.features.settings.ui.SettingsScreen
 import com.sucaldo.travelappv2.features.trip.ui.TripScreen
@@ -13,9 +14,7 @@ import com.sucaldo.travelappv2.features.trip.ui.TripScreen
 fun MyNavHost() {
     val navController = rememberNavController()
     val homeRoute = Routes.HOME
-    val tripRoute = Routes.TRIP
     val tripRouteTripId = Routes.TRIP_ROUTE_ID
-    val settingsRoute = Routes.SETTINGS
     NavHost(
         navController = navController,
         startDestination = homeRoute,
@@ -27,7 +26,7 @@ fun MyNavHost() {
         }
         composable(
             route = buildRouteWithArgument(
-                route = tripRoute,
+                route = Routes.TRIP,
                 argument = tripRouteTripId,
             ),
             arguments = listOf(navArgument(tripRouteTripId) {
@@ -40,9 +39,14 @@ fun MyNavHost() {
             )
         }
         composable(
-            route = settingsRoute
+            route = Routes.SETTINGS
         ) {
             SettingsScreen(navController)
+        }
+        composable(
+            route = Routes.CITY_COORDINATES
+        ) {
+            CityCoordinatesScreen(navController)
         }
     }
 }
@@ -56,5 +60,6 @@ object Routes {
     const val TRIP = "trip"
     const val TRIP_ROUTE_ID = "tripId"
     const val SETTINGS = "settings"
+    const val CITY_COORDINATES = "cityCoordinates"
 }
 
