@@ -57,4 +57,7 @@
     <string name="settings_export_title">Export all data</string>
     <string name="settings_export_ready">After export, csv files can be found in the Downloads folder</string>
 
+    <string name="city_coord_location">Location</string>
+    <string name="city_coord_search">Search</string>
+
 </resources>
