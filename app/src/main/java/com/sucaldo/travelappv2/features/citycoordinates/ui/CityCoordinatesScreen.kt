@@ -23,7 +23,7 @@ import com.sucaldo.travelappv2.features.citycoordinates.CityCoordinatesViewModel
 import com.sucaldo.travelappv2.features.common.ui.BigLabel
 import com.sucaldo.travelappv2.features.common.ui.CountryCity
 import com.sucaldo.travelappv2.features.common.ui.TopBar
-import com.sucaldo.travelappv2.features.settings.CityCoordinatesUiState
+import com.sucaldo.travelappv2.features.citycoordinates.CityCoordinatesUiState
 
 @Composable
 fun CityCoordinatesScreen(
@@ -125,7 +125,8 @@ private fun LocationRow(
 @Preview
 @Composable
 fun CityCoordinatesPreview() {
-    CityCoordinatesContent(CityCoordinatesUiState(
+    CityCoordinatesContent(
+        CityCoordinatesUiState(
         city = "x", country = "", cityCoordinates = listOf(
             CityLocation(
                 country = "Australia",

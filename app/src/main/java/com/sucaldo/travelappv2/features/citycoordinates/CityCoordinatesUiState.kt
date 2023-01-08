@@ -1,4 +1,4 @@
-package com.sucaldo.travelappv2.features.settings
+package com.sucaldo.travelappv2.features.citycoordinates
 
 import com.sucaldo.travelappv2.data.CityLocation
 import com.sucaldo.travelappv2.data.FieldErrorType

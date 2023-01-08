@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.sucaldo.travelappv2.data.FieldErrorType
 import com.sucaldo.travelappv2.db.DatabaseHelper
-import com.sucaldo.travelappv2.features.settings.CityCoordinatesUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
