@@ -35,7 +35,7 @@ fun CountryCity(
         modifier = Modifier.fillMaxWidth(),
         value = city,
         onValueChange = { onChangeCity(it) },
-        label = (stringResource(id = R.string.trip_label_city)),
+        label = (stringResource(id = R.string.common_city)),
         errorText = getErrorText(cityError)
     )
 }
@@ -69,7 +69,7 @@ fun CountryCityLatLong(
             modifier = Modifier.requiredWidth(LocalConfiguration.current.screenWidthDp.dp / 2f),
         ) {
             LongitudeLatitude(
-                label = stringResource(id = R.string.trip_label_latitude),
+                label = stringResource(id = R.string.common_latitude),
                 value = latitude,
                 errorType = latLongError,
                 onValueChange = { onChangeLatitude(it) },
@@ -79,7 +79,7 @@ fun CountryCityLatLong(
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             LongitudeLatitude(
-                label = stringResource(id = R.string.trip_label_longitude),
+                label = stringResource(id = R.string.common_longitude),
                 value = longitude,
                 errorType = latLongError,
                 onValueChange = { onChangeLongitude(it) },
@@ -104,7 +104,7 @@ private fun Country(
             modifier = Modifier.fillMaxWidth(),
             value = country,
             onValueChange = { onChangeCountry(it) },
-            label = { Text(stringResource(id = R.string.trip_label_country)) },
+            label = { Text(stringResource(id = R.string.common_country)) },
             singleLine = true,
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = exp)

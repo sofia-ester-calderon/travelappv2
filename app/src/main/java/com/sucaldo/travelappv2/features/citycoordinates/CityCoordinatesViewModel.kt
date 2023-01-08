@@ -20,11 +20,13 @@ class CityCoordinatesViewModel(application: Application) : AndroidViewModel(appl
     }
 
     fun updateCountry(country: String) {
-        _uiState.update { it.copy(country = country, countryErrorType = FieldErrorType.NONE) }
+        updateErrorType(FieldErrorType.NONE)
+        _uiState.update { it.copy(country = country) }
     }
 
     fun updateCity(city: String) {
-        _uiState.update { it.copy(city = city, cityErrorType = FieldErrorType.NONE) }
+        updateErrorType(FieldErrorType.NONE)
+        _uiState.update { it.copy(city = city) }
     }
 
     fun searchLocation() {
