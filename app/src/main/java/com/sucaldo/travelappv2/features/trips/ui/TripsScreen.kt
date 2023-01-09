@@ -1,10 +1,14 @@
 package com.sucaldo.travelappv2.features.trips.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.R
@@ -29,12 +33,16 @@ fun TripsScreen(
     ) {
         Box(modifier = Modifier.padding(it)) {
             TripsContent(
+                navController = navController,
                 years = tripsUiState.tripYears,
-                showTripDetails = tripsUiState.showTripDetails,
                 tripDetail = tripsUiState.tripDetail,
-                onExpandYear = { tripsViewModel.onExpandYear(it) },
+                showDeleteDialog = tripsUiState.showDeleteDialog,
+                onExpandYear = { tripsViewModel.onToggleYear(it) },
                 onOpenTripDetails = { tripsViewModel.openTripDetails(it) },
                 onCloseTripDetails = { tripsViewModel.closeTripDetails() },
+                onHideDeleteDialog = { tripsViewModel.hideDeleteDialog() },
+                onClickDeleteTrip = { tripsViewModel.clickDeleteTrip() },
+                onDeleteTrip = { tripsViewModel.confirmDeleteTrip() },
             )
         }
     }
@@ -43,13 +51,20 @@ fun TripsScreen(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun TripsContent(
+    navController: NavController,
     years: List<TripYear>,
-    showTripDetails: Boolean,
     tripDetail: Trip?,
+    showDeleteDialog: Boolean,
     onExpandYear: (Int) -> Unit,
     onOpenTripDetails: (Trip) -> Unit,
     onCloseTripDetails: () -> Unit,
+    onHideDeleteDialog: () -> Unit,
+    onClickDeleteTrip: () -> Unit,
+    onDeleteTrip: () -> Unit,
 ) {
+    if (showDeleteDialog) {
+        TripDeleteDialog(onHideDialog = onHideDeleteDialog, onDeleteTrip = onDeleteTrip)
+    }
     val bottomDrawerState = remember {
         BottomDrawerState(
             BottomDrawerValue.Closed,
@@ -61,11 +76,11 @@ private fun TripsContent(
             }
         )
     }
-    BottomDrawerLaunchedEffect(state = bottomDrawerState, isBottomDrawerOpen = showTripDetails)
+    BottomDrawerLaunchedEffect(state = bottomDrawerState, isBottomDrawerOpen = tripDetail != null)
 
     BottomDrawer(drawerState = bottomDrawerState, gesturesEnabled = true, drawerContent = {
         if (tripDetail != null) {
-            TripDetail(trip = tripDetail)
+            TripDetail(navController = navController, trip = tripDetail, onDeleteTrip = onClickDeleteTrip)
         } else {
             Text(text = "No Trip Selected")
         }
@@ -85,6 +100,30 @@ private fun BottomDrawerLaunchedEffect(
             state.open()
         } else {
             state.close()
+        }
+    }
+}
+
+@Composable
+private fun TripDeleteDialog(onHideDialog: () -> Unit, onDeleteTrip: () -> Unit) {
+    Dialog(onDismissRequest = onHideDialog) {
+        Column(
+            Modifier
+                .background(Color.White)
+                .padding(16.dp)
+        ) {
+            Text(text = stringResource(id = R.string.trips_delete_confirm))
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Button(onClick = {
+                    onDeleteTrip()
+                }) {
+                    Text(text = stringResource(id = R.string.common_yes))
+                }
+                Button(onClick = onHideDialog) {
+                    Text(text = stringResource(id = R.string.common_no))
+                }
+            }
         }
     }
 }

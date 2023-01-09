@@ -13,16 +13,14 @@ class TripsViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(TripsUiState())
     val uiState: StateFlow<TripsUiState> = _uiState.asStateFlow()
     private val myDb: DatabaseHelper
-    private var tripYears: List<TripYear>
+    private lateinit var tripYears: List<TripYear>
 
     init {
         myDb = DatabaseHelper(application.applicationContext)
-        val years = myDb.allYearsOfTrips
-        tripYears = years.map { TripYear(it) }
-        updateTripYears()
+        resetTripYears()
     }
 
-    fun onExpandYear(year: Int) {
+    fun onToggleYear(year: Int) {
         tripYears = tripYears.map {
             var trips: List<Trip>? = it.trips
             if (it.year == year) {
@@ -30,6 +28,12 @@ class TripsViewModel(application: Application) : AndroidViewModel(application) {
             }
             TripYear(year = it.year, trips = trips)
         }
+        updateTripYears()
+    }
+
+    private fun resetTripYears() {
+        val years = myDb.allYearsOfTrips
+        tripYears = years.map { TripYear(it) }
         updateTripYears()
     }
 
@@ -46,10 +50,30 @@ class TripsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun openTripDetails(trip: Trip) {
-        _uiState.update { it.copy(showTripDetails = true, tripDetail = trip) }
+        _uiState.update { it.copy(tripDetail = trip) }
     }
 
     fun closeTripDetails() {
-        _uiState.update { it.copy(showTripDetails = false, tripDetail = null) }
+        _uiState.update { it.copy(tripDetail = null) }
+    }
+
+    fun clickDeleteTrip() {
+        _uiState.update { it.copy(showDeleteDialog = true) }
+    }
+
+    fun hideDeleteDialog() {
+        _uiState.update { it.copy(showDeleteDialog = false, tripDetail = null) }
+    }
+
+    fun confirmDeleteTrip() {
+        val trip = _uiState.value.tripDetail
+        if (trip != null) {
+            trip.id?.let {
+                myDb.deleteTrip(it)
+            }
+            resetTripYears()
+        }
+        closeTripDetails()
+        hideDeleteDialog()
     }
 }

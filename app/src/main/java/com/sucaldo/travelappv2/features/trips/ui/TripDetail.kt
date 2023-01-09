@@ -15,13 +15,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.sucaldo.travelappv2.data.Trip
 import com.sucaldo.travelappv2.util.formatDate
 import java.util.*
 import com.sucaldo.travelappv2.R
+import com.sucaldo.travelappv2.features.common.ui.Routes
 
 @Composable
-fun TripDetail(trip: Trip) {
+fun TripDetail(navController: NavController, trip: Trip, onDeleteTrip: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,16 +42,23 @@ fun TripDetail(trip: Trip) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = trip.description)
     }
+    TripActionButtons(navController = navController, tripId = trip.id!!, onDeleteTrip = onDeleteTrip)
+}
+
+@Composable
+private fun TripActionButtons(navController: NavController, tripId: Int, onDeleteTrip: () -> Unit) {
     Column {
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = onDeleteTrip) {
                 Icon(
                     Icons.Default.Delete,
                     contentDescription = stringResource(id = R.string.trips_delete),
                     tint = Color.Red
                 )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                navController.navigate("${Routes.TRIP}?tripId=${tripId}")
+            }) {
                 Icon(
                     Icons.Default.Edit,
                     contentDescription = stringResource(id = R.string.title_edit_trip)

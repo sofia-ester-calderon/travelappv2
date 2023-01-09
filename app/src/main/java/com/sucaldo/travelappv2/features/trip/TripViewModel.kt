@@ -26,7 +26,7 @@ class TripViewModel(
     val uiState: StateFlow<TripUiState> = _uiState.asStateFlow()
     private val myDb: DatabaseHelper
     private val appPreferences: AppPreferences
-    private val tripId: Int? = savedStateHandle["tripId"]
+    private val tripId: String? = savedStateHandle["tripId"]
     private var groupId: Int? = null
     private var previousTrip: Trip? = null
 
@@ -35,7 +35,7 @@ class TripViewModel(
         appPreferences = AppPreferences(application.applicationContext, myDb)
         if (tripId != null) {
             _uiState.value = _uiState.value.copy(tripUiType = TripUiType.EDIT)
-            loadTrip(tripId)
+            loadTrip(tripId.toInt())
         } else {
             viewModelScope.launch {
                 val storedHomeLocation = appPreferences.getSavedHomeLocation()
@@ -279,7 +279,7 @@ class TripViewModel(
         if (!isTripValid()) return
         val continent = getContinentOfCountry(_uiState.value.toCountry)
         val trip = Trip(
-            id = tripId,
+            id = tripId?.toInt(),
             groupId = groupId,
             fromCountry = _uiState.value.fromCountry,
             fromCity = _uiState.value.toCity,
