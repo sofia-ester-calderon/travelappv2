@@ -6,6 +6,7 @@ data class TripsUiState(
     val trips: List<Trip> = listOf(),
     val tripYears: List<TripYear> = listOf(),
     val showTripDetails: Boolean = false,
+    val tripDetail: Trip? = null,
 )
 
 data class TripYear(

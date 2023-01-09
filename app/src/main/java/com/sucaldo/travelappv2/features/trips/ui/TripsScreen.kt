@@ -5,7 +5,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.R
@@ -32,6 +31,7 @@ fun TripsScreen(
             TripsContent(
                 years = tripsUiState.tripYears,
                 showTripDetails = tripsUiState.showTripDetails,
+                tripDetail = tripsUiState.tripDetail,
                 onExpandYear = { tripsViewModel.onExpandYear(it) },
                 onOpenTripDetails = { tripsViewModel.openTripDetails(it) },
                 onCloseTripDetails = { tripsViewModel.closeTripDetails() },
@@ -45,6 +45,7 @@ fun TripsScreen(
 private fun TripsContent(
     years: List<TripYear>,
     showTripDetails: Boolean,
+    tripDetail: Trip?,
     onExpandYear: (Int) -> Unit,
     onOpenTripDetails: (Trip) -> Unit,
     onCloseTripDetails: () -> Unit,
@@ -63,7 +64,11 @@ private fun TripsContent(
     BottomDrawerLaunchedEffect(state = bottomDrawerState, isBottomDrawerOpen = showTripDetails)
 
     BottomDrawer(drawerState = bottomDrawerState, gesturesEnabled = true, drawerContent = {
-        Text(text = "TRIP DETAIL")
+        if (tripDetail != null) {
+            TripDetail(trip = tripDetail)
+        } else {
+            Text(text = "No Trip Selected")
+        }
     }) {
         TripList(years, onExpandYear, onOpenTripDetails)
     }
@@ -82,19 +87,4 @@ private fun BottomDrawerLaunchedEffect(
             state.close()
         }
     }
-}
-
-@Preview
-@Composable
-fun TripsPreview() {
-    TripsContent(
-        years = listOf(
-            TripYear(2008, listOf()),
-            TripYear(2009, null),
-            TripYear(2010, listOf()),
-            TripYear(2011, listOf())
-        ),
-        showTripDetails = false,
-        {}, {}, {}
-    )
 }

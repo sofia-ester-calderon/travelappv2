@@ -62,4 +62,10 @@
     <string name="city_coord_location">Location</string>
     <string name="city_coord_search">Search</string>
 
+    <string name="trips_dates">%s - %s</string>
+    <string name="trips_from_to">%s to %s</string>
+    <string name="trips_distance">%s km</string>
+    <string name="trips_delete">Delete</string>
+    <string name="trips_edit">Edit</string>
+
 </resources>

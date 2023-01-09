@@ -46,11 +46,10 @@ class TripsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun openTripDetails(trip: Trip) {
-        _uiState.update { it.copy(showTripDetails = true) }
+        _uiState.update { it.copy(showTripDetails = true, tripDetail = trip) }
     }
 
     fun closeTripDetails() {
-        _uiState.update { it.copy(showTripDetails = false) }
-
+        _uiState.update { it.copy(showTripDetails = false, tripDetail = null) }
     }
 }
