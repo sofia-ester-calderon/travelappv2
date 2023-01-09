@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.Absolute.SpaceBetween
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -24,9 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.R
+import com.sucaldo.travelappv2.data.Trip
 import com.sucaldo.travelappv2.features.common.ui.TopBar
 import com.sucaldo.travelappv2.features.trips.TripYear
 import com.sucaldo.travelappv2.features.trips.TripsViewModel
+import com.sucaldo.travelappv2.util.formatDate
 
 @Composable
 fun TripsScreen(
@@ -59,17 +62,15 @@ private fun TripsContent(years: List<TripYear>, onExpandYear: (Int) -> Unit) {
         modifier = Modifier.padding(16.dp)
     ) {
         years.forEach {
+            val expanded = it.trips != null
             item {
-                YearRow(year = it.year, expanded = it.expanded, onExpandYear = onExpandYear)
+                YearRow(year = it.year, expanded = expanded, onExpandYear = onExpandYear)
             }
-            if (it.expanded) {
-                item {
-                    Row {
-                        Text(text = "TRIPS")
-                    }
+            if (expanded) {
+                items(items = it.trips!!) { trip->
+                    TripRow(trip)
                 }
             }
-
         }
     }
 }
@@ -91,7 +92,7 @@ private fun YearRow(year: Int, expanded: Boolean, onExpandYear: (Int) -> Unit) {
         Text(text = year.toString())
         Icon(
             Icons.Default.ArrowDropDown,
-            contentDescription = "Open",
+            contentDescription = year.toString(),
             modifier = Modifier.rotate(
                 if (expanded)
                     180f
@@ -102,15 +103,27 @@ private fun YearRow(year: Int, expanded: Boolean, onExpandYear: (Int) -> Unit) {
     }
 }
 
+@Composable
+private fun TripRow(trip: Trip) {
+    Row(
+        Modifier
+            .padding(start = 8.dp, end = 8.dp)
+            .fillMaxWidth()) {
+        Text(text = formatDate(trip.startDate), modifier = Modifier.weight(1f))
+        Text(text = trip.fromCity, modifier = Modifier.weight(1f))
+        Text(text = trip.toCity, modifier = Modifier.weight(1f))
+    }
+}
+
 @Preview
 @Composable
 fun TripsPreview() {
     TripsContent(
         years = listOf(
-            TripYear(2008, false),
-            TripYear(2009, false),
-            TripYear(2010, true),
-            TripYear(2011, false)
+            TripYear(2008, listOf()),
+            TripYear(2009, null),
+            TripYear(2010, listOf()),
+            TripYear(2011, listOf())
         ), {}
     )
 }

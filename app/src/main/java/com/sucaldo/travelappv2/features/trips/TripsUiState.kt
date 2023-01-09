@@ -9,5 +9,5 @@ data class TripsUiState(
 
 data class TripYear(
     val year: Int,
-    var expanded: Boolean = false,
+    var trips: List<Trip>? = null,
 )

@@ -206,25 +206,25 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
             }
         }
 
-//    fun getTripsOfYearSortedByDate(year: Int): List<Trip> {
-//        val db = this.writableDatabase
-//        val data = db.rawQuery(
-//            ("SELECT * FROM " + TABLE_TRIPS + " WHERE " + COL_TRIPS_START_DATE +
-//                    " LIKE '%" + year + "' "), null
-//        )
-//        val numRows = data.count
-//        if (numRows == 0) {
-//            // empty list will be returned
-//            return listOf()
-//        } else {
-//            val trips: MutableList<Trip> = ArrayList<Trip>()
-//            while (data.moveToNext()) {
-//                trips.add(Trip(data))
-//            }
-//            Collections.sort(trips)
-//            return trips
-//        }
-//    }
+    fun getTripsOfYearSortedByDate(year: Int): List<Trip> {
+        val db = this.writableDatabase
+        val data = db.rawQuery(
+            ("SELECT * FROM " + TABLE_TRIPS + " WHERE " + COL_TRIPS_START_DATE +
+                    " LIKE '%" + year + "' "), null
+        )
+        val numRows = data.count
+        if (numRows == 0) {
+            // empty list will be returned
+            return listOf()
+        } else {
+            val trips: MutableList<Trip> = ArrayList<Trip>()
+            while (data.moveToNext()) {
+                trips.add(Trip(data))
+            }
+            trips.sortBy { it.startDate }
+            return trips
+        }
+    }
 
     fun getTripsThatContainSpecificLocation(country: String, city: String): List<Trip> {
         val db = this.writableDatabase
