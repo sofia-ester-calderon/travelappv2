@@ -7,7 +7,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -32,8 +31,6 @@ fun TripDate(
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row {
             Column(
@@ -80,15 +77,17 @@ private fun DateField(
             onChangeDate("$mDayOfMonth.${mMonth + 1}.$mYear")
         }, pickerYear, pickerMonth, pickerDay
     )
+    Column {
+        TravelAppTextField(
+            label = label,
+            value = date,
+            onValueChange = { onChangeDate(it) },
+            icon = Icons.Default.DateRange,
+            onClickIcon = { mDatePickerDialog.show() },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            enabled = enabled,
+            errorText = getErrorText(fieldErrorType = errorType)
+        )
 
-    TravelAppTextField(
-        label = label,
-        value = date,
-        onValueChange = { onChangeDate(it) },
-        icon = Icons.Default.DateRange,
-        onClickIcon = { mDatePickerDialog.show() },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        enabled = enabled,
-        errorText = getErrorText(fieldErrorType = errorType)
-    )
+    }
 }
