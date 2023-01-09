@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import com.sucaldo.travelappv2.features.citycoordinates.ui.CityCoordinatesScreen
 import com.sucaldo.travelappv2.features.home.HomeScreen
 import com.sucaldo.travelappv2.features.settings.ui.SettingsScreen
+import com.sucaldo.travelappv2.features.statistics.ui.StatisticsScreen
 import com.sucaldo.travelappv2.features.trip.ui.TripScreen
 import com.sucaldo.travelappv2.features.trips.ui.TripsScreen
 
@@ -26,10 +27,7 @@ fun MyNavHost() {
             HomeScreen(navController = navController)
         }
         composable(
-            route = buildRouteWithArgument(
-                route = Routes.TRIP,
-                argument = tripRouteTripId,
-            ),
+            "${Routes.TRIP}?$tripRouteTripId={$tripRouteTripId}",
             arguments = listOf(navArgument(tripRouteTripId) {
                 nullable = true
             })
@@ -54,11 +52,12 @@ fun MyNavHost() {
         ) {
             TripsScreen(navController)
         }
+        composable(
+            route = Routes.STATISTICS
+        ) {
+            StatisticsScreen(navController)
+        }
     }
-}
-
-private fun buildRouteWithArgument(route: String, argument: String): String {
-    return "$route?$argument={$argument}"
 }
 
 object Routes {
@@ -68,5 +67,6 @@ object Routes {
     const val SETTINGS = "settings"
     const val CITY_COORDINATES = "cityCoordinates"
     const val TRIPS = "trips"
+    const val STATISTICS = "statistics"
 }
 

@@ -4,10 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.List
-import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,8 +40,11 @@ fun DropdownMenu(navController: NavController) {
             MenuRow(icon = Icons.Outlined.LocationOn, textId = R.string.title_city_coordinates) {
                 navController.navigate(Routes.CITY_COORDINATES)
             }
-            MenuRow(icon = Icons.Outlined.List, textId = R.string.title_trips, isLast = true) {
+            MenuRow(icon = Icons.Outlined.List, textId = R.string.title_trips) {
                 navController.navigate(Routes.TRIPS)
+            }
+            MenuRow(icon = Icons.Outlined.FavoriteBorder, textId = R.string.title_statistics, isLast = true) {
+                navController.navigate(Routes.STATISTICS)
             }
         }
     }
