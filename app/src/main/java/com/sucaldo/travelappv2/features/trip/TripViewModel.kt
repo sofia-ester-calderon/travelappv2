@@ -53,6 +53,7 @@ class TripViewModel(
 
     private fun loadTrip(tripId: Int) {
         val trip = myDb.getTripById(tripId)
+        previousTrip = myDb.getTripById(tripId - 1)
         if (trip != null) {
             val fromLocation = myDb.getLocationOfCity(trip.fromCountry, trip.fromCity)
             val toLocation = myDb.getLocationOfCity(trip.toCountry, trip.toCity)
