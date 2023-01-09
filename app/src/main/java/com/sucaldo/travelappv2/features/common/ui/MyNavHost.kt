@@ -9,6 +9,7 @@ import com.sucaldo.travelappv2.features.citycoordinates.ui.CityCoordinatesScreen
 import com.sucaldo.travelappv2.features.home.HomeScreen
 import com.sucaldo.travelappv2.features.settings.ui.SettingsScreen
 import com.sucaldo.travelappv2.features.trip.ui.TripScreen
+import com.sucaldo.travelappv2.features.trips.ui.TripsScreen
 
 @Composable
 fun MyNavHost() {
@@ -48,6 +49,11 @@ fun MyNavHost() {
         ) {
             CityCoordinatesScreen(navController)
         }
+        composable(
+            route = Routes.TRIPS
+        ) {
+            TripsScreen(navController)
+        }
     }
 }
 
@@ -61,5 +67,6 @@ object Routes {
     const val TRIP_ROUTE_ID = "tripId"
     const val SETTINGS = "settings"
     const val CITY_COORDINATES = "cityCoordinates"
+    const val TRIPS = "trips"
 }
 
