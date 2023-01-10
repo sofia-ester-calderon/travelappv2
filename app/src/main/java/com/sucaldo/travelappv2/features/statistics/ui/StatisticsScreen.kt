@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -13,7 +14,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.R
 import com.sucaldo.travelappv2.features.common.ui.TopBar
+import com.sucaldo.travelappv2.features.statistics.StatisticsType
 import com.sucaldo.travelappv2.features.statistics.StatisticsViewModel
+import kotlin.math.abs
 
 @Composable
 fun StatisticsScreen(
@@ -21,8 +24,7 @@ fun StatisticsScreen(
     statisticsViewModel: StatisticsViewModel = viewModel(),
 ) {
     val statisticsUiState by statisticsViewModel.uiState.collectAsState()
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
+    var direction by remember { mutableStateOf(SwipeDirection.NONE) }
 
     Scaffold(
         topBar = {
@@ -35,25 +37,41 @@ fun StatisticsScreen(
         Box(modifier = Modifier
             .padding(paddingValues)
             .pointerInput(Unit) {
-                detectDragGestures { change, dragAmount ->
-                    change.consume()
-                    when {
-                        dragAmount.x > 0 -> {
-                            statisticsViewModel.goToPreviousStatistic()
+                detectDragGestures(
+                    onDrag = { change, dragAmount ->
+                        change.consume()
+                        val (x, y) = dragAmount
+                        if (abs(x) > abs(y)) {
+                            when {
+                                x > 0 -> direction = SwipeDirection.RIGHT
+                                x < 0 -> direction = SwipeDirection.LEFT
+                            }
                         }
-                        dragAmount.x < 0 -> {
-                            statisticsViewModel.goToNextStatistic()
+                    },
+                    onDragEnd = {
+                        when (direction) {
+                            SwipeDirection.RIGHT -> statisticsViewModel.goToPreviousStatistic()
+                            SwipeDirection.LEFT -> statisticsViewModel.goToNextStatistic()
+                            else -> return@detectDragGestures
                         }
                     }
-                    offsetX += dragAmount.x
-                    offsetY += dragAmount.y
-                }
+                )
             }) {
             Column {
-                TopTenChart(
-                    onInitChart = { statisticsViewModel.setTopTenChart(it) },
-                    onUpdateChart = { statisticsViewModel.updateTopTenChart(it) })
+                when (statisticsUiState.statisticsType) {
+                    StatisticsType.TOP_PLACES -> TopTenChart(
+                        onInitChart = { statisticsViewModel.setTopTenChart(it) },
+                        onUpdateChart = { statisticsViewModel.updateTopTenChart(it) })
+                    StatisticsType.PLACES_CLOUD -> Text(text = "PLACES CLOUD")
+                    StatisticsType.DISTANCE_CONTINENT -> Text(text = "DISTANCE PER CONTINENT")
+                    StatisticsType.DISTANCE_BUBBLE -> Text(text = "DISTANCE BUBBLE")
+                }
+
             }
         }
     }
+}
+
+enum class SwipeDirection {
+    NONE, LEFT, RIGHT,
 }

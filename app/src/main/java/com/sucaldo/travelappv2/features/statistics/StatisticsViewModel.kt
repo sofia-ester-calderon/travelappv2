@@ -24,11 +24,29 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun goToNextStatistic() {
-
+        _uiState.update {
+            it.copy(
+                statisticsType = when (it.statisticsType) {
+                    StatisticsType.TOP_PLACES -> StatisticsType.PLACES_CLOUD
+                    StatisticsType.PLACES_CLOUD -> StatisticsType.DISTANCE_CONTINENT
+                    StatisticsType.DISTANCE_CONTINENT -> StatisticsType.DISTANCE_BUBBLE
+                    StatisticsType.DISTANCE_BUBBLE -> StatisticsType.TOP_PLACES
+                }
+            )
+        }
     }
 
     fun goToPreviousStatistic() {
-
+        _uiState.update {
+            it.copy(
+                statisticsType = when (it.statisticsType) {
+                    StatisticsType.TOP_PLACES -> StatisticsType.DISTANCE_BUBBLE
+                    StatisticsType.PLACES_CLOUD -> StatisticsType.TOP_PLACES
+                    StatisticsType.DISTANCE_CONTINENT -> StatisticsType.PLACES_CLOUD
+                    StatisticsType.DISTANCE_BUBBLE -> StatisticsType.DISTANCE_CONTINENT
+                }
+            )
+        }
     }
 
     fun setTopTenChart(topTenChartView: AnyChartView) {
