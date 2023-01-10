@@ -451,7 +451,7 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
     /*
        ********* STATISTICS / CHARTS **********************
        */
-    fun getTop10VisitedPlaces(years: List<String>): List<DataEntry> {
+    fun getTop10VisitedPlaces(years: List<String> = listOf()): List<DataEntry> {
         val db = this.writableDatabase
         val yearQuery = buildYearQuery(years)
         val data = db.rawQuery(
@@ -483,7 +483,6 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
         }
     }
 
-    // SQlite does not support type Date, this is a workaround for filtering by trip year
     private fun buildYearQuery(years: List<String>): String {
         if (years.isEmpty()) {
             return ""

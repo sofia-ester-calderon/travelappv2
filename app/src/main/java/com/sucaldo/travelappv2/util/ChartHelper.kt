@@ -1,0 +1,267 @@
+package com.sucaldo.travelappv2.util
+
+import com.anychart.APIlib
+import com.anychart.AnyChart
+import com.anychart.AnyChartView
+import com.anychart.chart.common.dataentry.DataEntry
+import com.anychart.charts.Cartesian
+import com.anychart.enums.*
+import com.sucaldo.travelappv2.db.DatabaseHelper
+
+class ChartHelper(myDb: DatabaseHelper) {
+    private val myDb: DatabaseHelper = myDb
+    private val FONT_SIZE = 10
+    private val COLOR_SCHEMA = arrayOf(
+        "#fa70b5", "#8e44ad", "#00c3ff", "#009175", "#34eb31", "#ffd000", "#ff0404", "#a8a8a8"
+    )
+
+    /*
+     ********* BAR CHART **********************
+     */
+    fun initTop10PlacesChart(
+        anyChartView: AnyChartView,
+        data: List<DataEntry?>?
+    ): Cartesian {
+        APIlib.getInstance().setActiveAnyChartView(anyChartView)
+        val barChart = AnyChart.column()
+        val column = barChart.column(data)
+        column.tooltip()
+            .titleFormat("{%X}")
+            .position(Position.CENTER_BOTTOM)
+            .anchor(Anchor.CENTER_BOTTOM)
+            .offsetX(0.0)
+            .offsetY(5.0)
+            .format("{%Value}{groupsSeparator: }")
+        barChart.animation(true)
+        barChart.yScale().minimum(0.0)
+        barChart.yScale().ticks().interval(2)
+        barChart.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
+        barChart.tooltip().positionMode(TooltipPositionMode.POINT).fontSize(FONT_SIZE)
+        barChart.interactivity().hoverMode(HoverMode.BY_X)
+        barChart.yAxis(0).title(TOP_PLACES_Y_AXIS)
+        barChart.xAxis(0).title().fontSize(FONT_SIZE)
+        barChart.yAxis(0).title().fontSize(FONT_SIZE)
+        barChart.xAxis(0).staggerMode(true)
+        barChart.xAxis(0).staggerLines(2)
+        barChart.xAxis(0).labels().fontSize(FONT_SIZE)
+        barChart.yAxis(0).labels().fontSize(FONT_SIZE)
+        anyChartView.setChart(barChart)
+        return barChart
+    }
+
+    fun updateChart(barChart: Cartesian, data: List<DataEntry?>?) {
+        barChart.data(data)
+    }
+
+//    /*
+//     ********* CLOUD CHART **********************
+//     */
+//    fun initCountriesCloudChart(
+//        anyChartView: AnyChartView,
+//        fullscreen: Boolean,
+//        data: List<DataEntry?>?
+//    ): TagCloud {
+//        APIlib.getInstance().setActiveAnyChartView(anyChartView)
+//        val tagCloud = AnyChart.tagCloud()
+//        if (!fullscreen) {
+//            tagCloud.title(context.getString(R.string.title_countries_cloud))
+//        }
+//        val ordinalColor = OrdinalColor.instantiate()
+//        ordinalColor.colors(COLOR_SCHEMA.clone())
+//        tagCloud.colorScale(ordinalColor)
+//        tagCloud.angles(arrayOf(-90.0, 0.0, 90.0))
+//        if (fullscreen) {
+//            tagCloud.colorRange().labels().width(50)
+//            tagCloud.colorRange().enabled(true)
+//            tagCloud.colorRange().colorLineSize(15.0)
+//        }
+//        tagCloud.tooltip().useHtml(true)
+//        tagCloud.tooltip().format(TAG_CLOUD_COUNTRIES_TOOLTIP)
+//        tagCloud.data(data)
+//        anyChartView.setChart(tagCloud)
+//        return tagCloud
+//    }
+//
+//    private val TAG_CLOUD_COUNTRIES_TOOLTIP = "function() {return '" +
+//            "<p style=\"color: #d2d2d2; font-size: 15px\"> Trips:' + this.getData('value') + '</p>" +
+//            " <table style=\"color: #d2d2d2; font-size: 15px\">" +
+//            "' + this.getData('html') + '</table>';}"
+//
+//    init {
+//        this.myDB = myDB
+//        this.context = context
+//    }
+//
+//    fun updateChart(tagCloud: TagCloud, countries: Boolean, data: List<DataEntry?>?) {
+//        if (countries) {
+//            tagCloud.tooltip().format(TAG_CLOUD_COUNTRIES_TOOLTIP)
+//        } else {
+//            tagCloud.tooltip().format("Trips: {%value}")
+//        }
+//        tagCloud.data(data)
+//    }
+//
+//    class CustomCategoryValueDataEntry(x: String?, category: String?, value: Int?) :
+//        CategoryValueDataEntry(x, category, value) {
+//        fun setTripsInfo(trips: List<Trip>) {
+//            val html = StringBuilder()
+//            val selectedTrips: List<Trip>
+//            // A max of 15 trips can fit nicely into tooltip based on current Tablet size
+//            selectedTrips = if (trips.size < 15) {
+//                trips
+//            } else {
+//                selectRandomTrips(trips)
+//            }
+//            for (trip in selectedTrips) {
+//                html.append("<tr> <td>")
+//                    .append(trip.getFormattedStartDate())
+//                    .append("</td>")
+//                    .append("<td> <b>")
+//                    .append(trip.getToCity())
+//                    .append("</b> </td>")
+//                    .append("<td>")
+//                    .append(trip.getDescription())
+//                    .append("</td> </tr>")
+//            }
+//            setValue("html", html.toString())
+//        }
+//    }
+//
+//    /*
+//     ********* AREA CHART **********************
+//     */
+//    fun initKmsAreaChart(anyChartView: AnyChartView, fullscreen: Boolean, data: List<DataEntry?>?) {
+//        APIlib.getInstance().setActiveAnyChartView(anyChartView)
+//        val areaChart = AnyChart.area()
+//        if (!fullscreen) {
+//            areaChart.title(context.getString(R.string.title_kms_area_chart))
+//        }
+//        areaChart.animation(true)
+//        val crosshair = areaChart.crosshair()
+//        crosshair.enabled(true)
+//        crosshair.yLabel(0).enabled(true)
+//        areaChart.yScale().stackMode(ScaleStackMode.VALUE)
+//        val set = Set.instantiate()
+//        set.data(data)
+//        for (i in 0 until DatabaseHelper.CONTINENTS.size()) {
+//            val valuePostfix = i + 1
+//            val seriesDataMap = set.mapAs("{ x: 'x', value: 'value$valuePostfix' }")
+//            val series = areaChart.area(seriesDataMap)
+//            series.name(DatabaseHelper.CONTINENTS.get(i))
+//            series.stroke("3 #fff")
+//            series.hovered().stroke("3 #fff")
+//            series.hovered().markers().enabled(true)
+//            series.hovered().markers()
+//                .type(MarkerType.CIRCLE)
+//                .size(4.0)
+//                .stroke("1.5 #fff")
+//            series.markers().zIndex(100.0)
+//        }
+//        if (fullscreen) {
+//            areaChart.legend().enabled(true)
+//            areaChart.legend().fontSize(13.0)
+//            areaChart.legend().padding(0.0, 0.0, 20.0, 0.0)
+//            areaChart.interactivity().hoverMode(HoverMode.BY_X)
+//            areaChart.xAxis(0).labels().fontSize(AXIS_LABEL_FONT_SIZE)
+//            areaChart.yAxis(0).title().fontSize(AXIS_TITLE_FONT_SIZE)
+//            areaChart.yAxis(0).labels().fontSize(AXIS_LABEL_FONT_SIZE)
+//        }
+//        areaChart.tooltip()
+//            .valuePostfix(context.getString(R.string.kms_area_chart_y_axis))
+//            .fontSize(15)
+//            .displayMode(TooltipDisplayMode.UNION)
+//        areaChart.xAxis(0).title(false)
+//        areaChart.xAxis(0).ticks(false)
+//        areaChart.yAxis(0).title(context.getString(R.string.kms_area_chart_y_axis))
+//        areaChart.yScale().ticks().interval(10000)
+//        anyChartView.setChart(areaChart)
+//    }
+//
+//    class CustomDataEntry(x: String?, values: List<Int?>) :
+//        ValueDataEntry(x, 0) {
+//        init {
+//            var i = 1
+//            for (value in values) {
+//                val key = "value" + i++
+//                setValue(key, value)
+//            }
+//        }
+//    }
+//
+//    /*
+//     ********* BUBBLE CHART **********************
+//     */
+//    fun initKmsBubbleChart(
+//        anyChartView: AnyChartView,
+//        fullscreen: Boolean,
+//        data: List<DataEntry?>?
+//    ) {
+//        APIlib.getInstance().setActiveAnyChartView(anyChartView)
+//        val bubble = AnyChart.bubble()
+//        bubble.animation(true)
+//        val allYears: List<Int> = myDB.getAllYearsOfTrips()
+//        bubble.xScale().minimum(allYears[0] - 1)
+//        bubble.xScale().maximum(allYears[allYears.size - 1] + 1)
+//        bubble.yAxis(0)
+//            .title(context.getString(R.string.kms_bubble_chart_y_axis))
+//        bubble.yGrid(true)
+//        bubble.bubble(data).name("Details").selected().fill("#31eb97", 0.5)
+//        bubble.padding(20.0, 20.0, 10.0, 20.0)
+//        if (!fullscreen) {
+//            bubble.title(context.getString(R.string.title_kms_bubble_chart))
+//            bubble.minBubbleSize(2.0)
+//                .maxBubbleSize(20.0)
+//        }
+//        if (fullscreen) {
+//            bubble.minBubbleSize(10.0)
+//                .maxBubbleSize(50.0)
+//            bubble.yAxis(0).labels().fontSize(AXIS_LABEL_FONT_SIZE)
+//            bubble.yAxis(0).title().fontSize(AXIS_TITLE_FONT_SIZE)
+//            bubble.xAxis(0).labels().fontSize(AXIS_LABEL_FONT_SIZE)
+//        }
+//        bubble.tooltip()
+//            .useHtml(true)
+//            .fontColor("#fff")
+//            .format(
+//                """function() {
+//        return '<div style="width: 175px; font-size: 15px">            Year: <span style="color: #d2d2d2; font-size: 15px">' +
+//          this.getData('x') + '</span></strong><br/>' +
+//          'Trips: <span style="color: #d2d2d2; font-size: 15px">' +
+//          this.getData('value') + '</span></strong><br/>' +
+//          'Distance: <span style="color: #d2d2d2; font-size: 15px">' +
+//          this.getData('size') + ' kms.</span></strong><br/>' +
+//          'Countries: <span style="color: #d2d2d2; font-size: 15px">' +
+//          this.getData('countries') + '</span></strong><br/> </div>';
+//      }"""
+//            )
+//        anyChartView.setChart(bubble)
+//    }
+//
+//    class CustomBubbleDataEntry(x: Int?, value: Int?, size: Int?, countries: List<String?>) :
+//        BubbleDataEntry(x, value, size) {
+//        init {
+//            val joiner = StringJoiner(", ")
+//            for (country in countries) {
+//                joiner.add(country)
+//            }
+//            setValue("countries", joiner.toString())
+//        }
+//    }
+//
+    companion object {
+//        private fun selectRandomTrips(trips: List<Trip>): List<Trip> {
+//            val randomTrips: MutableSet<Trip> = HashSet<Trip>()
+//            while (randomTrips.size < 15) {
+//                val r = Random()
+//                val low = 0
+//                val high = trips.size - 1
+//                val result = r.nextInt(high - low) + low
+//                randomTrips.add(trips[result])
+//            }
+//            val selectedTrips: List<Trip> = ArrayList<Any?>(randomTrips)
+//            Collections.sort(selectedTrips)
+//            return selectedTrips
+//        }
+        private const val TOP_PLACES_Y_AXIS = "Number of Visits"
+    }
+}

@@ -73,4 +73,6 @@
     <string name="trips_delete_confirm">Are you sure you want to delete the trip?</string>
     <string name="trips_edit">Edit</string>
 
+    <string name="trips_statistics_top_ten_y_axis">Number of Visits</string>
+
 </resources>
