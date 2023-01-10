@@ -74,5 +74,10 @@
     <string name="trips_edit">Edit</string>
 
     <string name="trips_statistics_top_ten_y_axis">Number of Visits</string>
+    <string name="trips_statistics_top_ten_overall">Overall</string>
+    <string name="trips_statistics_top_ten_last_two">Last 2 Years</string>
+    <string name="trips_statistics_top_ten_last_five">Last 5 Years</string>
+    <string name="trips_statistics_top_ten_last_ten">Last 10 Years</string>
+    <string name="trips_statistics_top_ten_selected">Selected</string>
 
 </resources>

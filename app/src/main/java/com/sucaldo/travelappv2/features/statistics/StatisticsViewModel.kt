@@ -51,18 +51,20 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
 
     fun setTopTenChart(topTenChartView: AnyChartView) {
         val barChart = chartHelper.initTop10PlacesChart(topTenChartView, _uiState.value.topTenData)
-        _uiState.update { it.copy(barChart = barChart) }
+        _uiState.update { it.copy(topTenBarChart = barChart) }
     }
 
-    fun updateTopTenChart(numberOfYears: Int? = null) {
-        _uiState.value.barChart?.let {
-            val yearList = if (numberOfYears == null) {
-                listOf()
-            } else {
-                getLastNYears(numberOfYears)
+    fun updateTopTenChart(topPlacesType: TopPlacesType) {
+        _uiState.value.topTenBarChart?.let {
+            val years = when (topPlacesType) {
+                TopPlacesType.OVERALL -> listOf()
+                TopPlacesType.LAST_TWO -> getLastNYears(2)
+                TopPlacesType.LAST_FIVE -> getLastNYears(5)
+                TopPlacesType.LAST_TEN -> getLastNYears(10)
             }
-            chartHelper.updateChart(it, myDb.getTop10VisitedPlaces(yearList))
+            chartHelper.updateChart(it, myDb.getTop10VisitedPlaces(years))
         }
+        _uiState.update { it.copy(topTenType = topPlacesType) }
     }
 
     private fun getLastNYears(n: Int): List<String> {

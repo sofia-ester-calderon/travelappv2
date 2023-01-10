@@ -1,23 +1,45 @@
 package com.sucaldo.travelappv2.features.statistics.ui
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.anychart.AnyChartView
+import com.sucaldo.travelappv2.R
+import com.sucaldo.travelappv2.features.statistics.TopPlacesType
 
 
 @Composable
 fun TopTenChart(
+    topPlacesType: TopPlacesType,
     onInitChart: (AnyChartView) -> Unit,
-    onUpdateChart: (Int?) -> Unit
+    onUpdateChart: (TopPlacesType) -> Unit
+) {
+    TopTenSelection(
+        topPlacesType = topPlacesType,
+        onUpdateChart = onUpdateChart
+    )
+    AndroidView(
+        factory = {
+            val chart = AnyChartView(it)
+            onInitChart(chart)
+            chart
+        }, modifier = Modifier
+            .fillMaxSize()
+    )
+}
+
+@Composable
+private fun TopTenSelection(
+    topPlacesType: TopPlacesType,
+    onUpdateChart: (TopPlacesType) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -32,36 +54,57 @@ fun TopTenChart(
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             DropdownMenuItem(onClick = {
                 expanded = false
-                onUpdateChart(null)
+                onUpdateChart(TopPlacesType.OVERALL)
             }) {
-                Text(text = "Overall")
+                TopTenMenuItem(
+                    text = stringResource(id = R.string.trips_statistics_top_ten_overall),
+                    selected = topPlacesType == TopPlacesType.OVERALL
+                )
             }
             DropdownMenuItem(onClick = {
                 expanded = false
-                onUpdateChart(2)
+                onUpdateChart(TopPlacesType.LAST_TWO)
             }) {
-                Text(text = "Last 2 years")
+                TopTenMenuItem(
+                    text = stringResource(id = R.string.trips_statistics_top_ten_last_two),
+                    selected = topPlacesType == TopPlacesType.LAST_TWO
+                )
             }
             DropdownMenuItem(onClick = {
                 expanded = false
-                onUpdateChart(5)
+                onUpdateChart(TopPlacesType.LAST_FIVE)
             }) {
-                Text(text = "Last 5 years")
+                TopTenMenuItem(
+                    text = stringResource(id = R.string.trips_statistics_top_ten_last_five),
+                    selected = topPlacesType == TopPlacesType.LAST_FIVE
+                )
             }
             DropdownMenuItem(onClick = {
                 expanded = false
-                onUpdateChart(10)
+                onUpdateChart(TopPlacesType.LAST_TEN)
             }) {
-                Text(text = "Last 10 years")
+                TopTenMenuItem(
+                    text = stringResource(id = R.string.trips_statistics_top_ten_last_ten),
+                    selected = topPlacesType == TopPlacesType.LAST_TEN
+                )
             }
         }
     }
-    AndroidView(
-        factory = {
-            val chart = AnyChartView(it)
-            onInitChart(chart)
-            chart
-        }, modifier = Modifier
-            .fillMaxSize()
-    )
+}
+
+@Composable
+private fun TopTenMenuItem(text: String, selected: Boolean) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(text = text)
+        if (selected) {
+            Spacer(modifier = Modifier.width(4.dp))
+            Icon(
+                Icons.Default.Check,
+                contentDescription = "Selected",
+                modifier = Modifier.height(16.dp)
+            )
+        }
+
+    }
+
 }

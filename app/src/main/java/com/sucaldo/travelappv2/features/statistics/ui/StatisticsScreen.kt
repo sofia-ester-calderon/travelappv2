@@ -60,6 +60,7 @@ fun StatisticsScreen(
             Column {
                 when (statisticsUiState.statisticsType) {
                     StatisticsType.TOP_PLACES -> TopTenChart(
+                        topPlacesType = statisticsUiState.topTenType,
                         onInitChart = { statisticsViewModel.setTopTenChart(it) },
                         onUpdateChart = { statisticsViewModel.updateTopTenChart(it) })
                     StatisticsType.PLACES_CLOUD -> Text(text = "PLACES CLOUD")

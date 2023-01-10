@@ -6,7 +6,8 @@ import com.anychart.charts.Cartesian
 data class StatisticsUiState(
     val statisticsType: StatisticsType = StatisticsType.TOP_PLACES,
     val topTenData: List<DataEntry> = listOf(),
-    val barChart: Cartesian? = null,
+    val topTenType: TopPlacesType = TopPlacesType.OVERALL,
+    val topTenBarChart: Cartesian? = null,
 )
 
 enum class StatisticsType {
@@ -14,4 +15,11 @@ enum class StatisticsType {
     PLACES_CLOUD,
     DISTANCE_CONTINENT,
     DISTANCE_BUBBLE,
+}
+
+enum class TopPlacesType {
+    OVERALL,
+    LAST_TWO,
+    LAST_FIVE,
+    LAST_TEN,
 }
