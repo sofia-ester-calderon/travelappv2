@@ -33,7 +33,6 @@ fun DropdownMenu(navController: NavController) {
             MenuRow(icon = Icons.Outlined.Edit, textId = R.string.title_home) {
                 navController.navigate(Routes.HOME)
             }
-//          navController.navigate("$Routes.TRIP?tripId=1234")
             MenuRow(icon = Icons.Outlined.Add, textId = R.string.title_new_trip) {
                 navController.navigate(Routes.TRIP)
             }
@@ -43,8 +42,11 @@ fun DropdownMenu(navController: NavController) {
             MenuRow(icon = Icons.Outlined.List, textId = R.string.title_trips) {
                 navController.navigate(Routes.TRIPS)
             }
-            MenuRow(icon = Icons.Outlined.FavoriteBorder, textId = R.string.title_statistics, isLast = true) {
+            MenuRow(icon = Icons.Outlined.FavoriteBorder, textId = R.string.title_statistics) {
                 navController.navigate(Routes.STATISTICS)
+            }
+            MenuRow(icon = Icons.Outlined.Place, textId = R.string.title_world_map, isLast = true) {
+                navController.navigate(Routes.WORLD_MAP)
             }
         }
     }

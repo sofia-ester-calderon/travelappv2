@@ -11,6 +11,10 @@
     <string name="title_trips">All Trips</string>
     <string name="title_statistics">Statistics</string>
     <string name="title_statistics_top_places">Top Places Visited</string>
+    <string name="title_statistics_place_cloud">Visited Places</string>
+    <string name="title_statistics_distance">Distance Travelled per Year</string>
+    <string name="title_statistics_bubble">Trips Made per Year</string>
+    <string name="title_world_map">World Map</string>
 
     <string name="common_country">Country</string>
     <string name="common_city">Place</string>

@@ -25,11 +25,18 @@ fun StatisticsScreen(
     val statisticsUiState by statisticsViewModel.uiState.collectAsState()
     var direction by remember { mutableStateOf(SwipeDirection.NONE) }
 
+    val title = when(statisticsUiState.statisticsType) {
+        StatisticsType.TOP_PLACES -> stringResource(id = R.string.title_statistics_top_places)
+        StatisticsType.PLACES_CLOUD -> stringResource(id = R.string.title_statistics_place_cloud)
+        StatisticsType.DISTANCE_CONTINENT -> stringResource(id = R.string.title_statistics_distance)
+        StatisticsType.DISTANCE_BUBBLE -> stringResource(id = R.string.title_statistics_bubble)
+    }
+
     Scaffold(
         topBar = {
             TopBar(
                 navController = navController,
-                title = stringResource(id = R.string.title_statistics_top_places)
+                title = title
             )
         }
     ) { paddingValues ->
