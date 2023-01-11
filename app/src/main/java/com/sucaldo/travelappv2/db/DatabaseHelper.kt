@@ -615,39 +615,39 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
                 closeCursor(data)
             }
         }
-//    val kmsPerContinentPerYear: List<DataEntry>
-//        get() {
-//            val allYears = allYearsOfTrips
-//            val areaChartList: MutableList<DataEntry> = ArrayList()
-//            for (year: Int in allYears) {
-//                val db = this.writableDatabase
-//                val data = db.rawQuery(
-//                    ("SELECT " + COL_TRIPS_CONTINENT + ", SUM(" + COL_TRIPS_DISTANCE + ")" +
-//                            " FROM " + TABLE_TRIPS +
-//                            " WHERE " + COL_TRIPS_START_DATE + " LIKE '%" + year + "'" +
-//                            " GROUP BY " + COL_TRIPS_CONTINENT), null
-//                )
-//                val numRows = data.count
-//                try {
-//                    if (numRows == 0) {
-//                        continue
-//                    }
-//                    val continentsAndKmsMap: MutableMap<String, Int> = HashMap()
-//                    while (data.moveToNext()) {
-//                        continentsAndKmsMap[data.getString(0)] = data.getInt(1)
-//                    }
-//                    areaChartList.add(
-//                        CustomDataEntry(
-//                            Integer.toString(year),
-//                            getKmsPerContinentList(continentsAndKmsMap)
-//                        )
-//                    )
-//                } finally {
-//                    closeCursor(data)
-//                }
-//            }
-//            return areaChartList
-//        }
+    val kmsPerContinentPerYear: List<DataEntry>
+        get() {
+            val allYears = allYearsOfTrips
+            val areaChartList: MutableList<DataEntry> = ArrayList()
+            for (year: Int in allYears) {
+                val db = this.writableDatabase
+                val data = db.rawQuery(
+                    ("SELECT " + COL_TRIPS_CONTINENT + ", SUM(" + COL_TRIPS_DISTANCE + ")" +
+                            " FROM " + TABLE_TRIPS +
+                            " WHERE " + COL_TRIPS_START_DATE + " LIKE '%" + year + "'" +
+                            " GROUP BY " + COL_TRIPS_CONTINENT), null
+                )
+                val numRows = data.count
+                try {
+                    if (numRows == 0) {
+                        continue
+                    }
+                    val continentsAndKmsMap: MutableMap<String, Int> = HashMap()
+                    while (data.moveToNext()) {
+                        continentsAndKmsMap[data.getString(0)] = data.getInt(1)
+                    }
+                    areaChartList.add(
+                        ChartHelper.CustomDataEntry(
+                            year.toString(),
+                            getKmsPerContinentList(continentsAndKmsMap)
+                        )
+                    )
+                } finally {
+                    closeCursor(data)
+                }
+            }
+            return areaChartList
+        }
 
     private fun getKmsPerContinentList(continentsAndKmsMap: Map<String, Int>): List<Int?> {
         val kmsPerContinentList: MutableList<Int?> = ArrayList()
@@ -661,55 +661,56 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
         return kmsPerContinentList
     }
 
-    //    val kmsAndTripsPerYear: List<DataEntry>
-//        get() {
-//            val allYears = allYearsOfTrips
-//            val bubbleChartList: MutableList<DataEntry> = ArrayList()
-//            for (year: Int in allYears) {
-//                val db = this.writableDatabase
-//                val data = db.rawQuery(
-//                    ("SELECT SUM(" + COL_TRIPS_DISTANCE + "), COUNT(DISTINCT(" + COL_TRIPS_GRP_ID + "))" +
-//                            " FROM " + TABLE_TRIPS +
-//                            " WHERE " + COL_TRIPS_START_DATE + " LIKE '%" + year + "'"), null
-//                )
-//                val data2 = db.rawQuery(
-//                    ("SELECT DISTINCT(" + COL_TRIPS_TO_COUNTRY + ")" +
-//                            " FROM " + TABLE_TRIPS +
-//                            " WHERE " + COL_TRIPS_START_DATE + " LIKE '%" + year + "'"), null
-//                )
-//                val numRows2 = data2.count
-//                val countries: MutableList<String> = ArrayList()
-//                try {
-//                    if (numRows2 == 0) {
-//                        continue
-//                    }
-//                    while (data2.moveToNext()) {
-//                        countries.add(data2.getString(0))
-//                    }
-//                } finally {
-//                    closeCursor(data2)
-//                }
-//                val numRows = data.count
-//                try {
-//                    if (numRows == 0) {
-//                        continue
-//                    }
-//                    while (data.moveToNext()) {
-//                        bubbleChartList.add(
-//                            CustomBubbleDataEntry(
-//                                year,
-//                                data.getInt(1),
-//                                data.getInt(0),
-//                                countries
-//                            )
-//                        )
-//                    }
-//                } finally {
-//                    closeCursor(data)
-//                }
-//            }
-//            return bubbleChartList
-//        }
+        val kmsAndTripsPerYear: List<DataEntry>
+        get() {
+            val allYears = allYearsOfTrips
+            val bubbleChartList: MutableList<DataEntry> = ArrayList()
+            for (year: Int in allYears) {
+                val db = this.writableDatabase
+                val data = db.rawQuery(
+                    ("SELECT SUM(" + COL_TRIPS_DISTANCE + "), COUNT(DISTINCT(" + COL_TRIPS_GRP_ID + "))" +
+                            " FROM " + TABLE_TRIPS +
+                            " WHERE " + COL_TRIPS_START_DATE + " LIKE '%" + year + "'"), null
+                )
+                val data2 = db.rawQuery(
+                    ("SELECT DISTINCT(" + COL_TRIPS_TO_COUNTRY + ")" +
+                            " FROM " + TABLE_TRIPS +
+                            " WHERE " + COL_TRIPS_START_DATE + " LIKE '%" + year + "'"), null
+                )
+                val numRows2 = data2.count
+                val countries: MutableList<String> = ArrayList()
+                try {
+                    if (numRows2 == 0) {
+                        continue
+                    }
+                    while (data2.moveToNext()) {
+                        countries.add(data2.getString(0))
+                    }
+                } finally {
+                    closeCursor(data2)
+                }
+                val numRows = data.count
+                try {
+                    if (numRows == 0) {
+                        continue
+                    }
+                    while (data.moveToNext()) {
+                        bubbleChartList.add(
+                            ChartHelper.CustomBubbleDataEntry(
+                                year,
+                                data.getInt(1),
+                                data.getInt(0),
+                                countries
+                            )
+                        )
+                    }
+                } finally {
+                    closeCursor(data)
+                }
+            }
+            return bubbleChartList
+        }
+
     val totalTravelledKms: Int
         get() {
             val db = this.writableDatabase

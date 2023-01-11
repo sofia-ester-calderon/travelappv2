@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -66,10 +65,14 @@ fun StatisticsScreen(
                     StatisticsType.PLACES_CLOUD -> PlacesCloud(
                         cloudType = statisticsUiState.placesCloudType,
                         onInitChart = { statisticsViewModel.setPlacesCloudChart(it) },
-                        onUpdateChart ={ statisticsViewModel.updatePlacesClouds(it) },
+                        onUpdateChart = { statisticsViewModel.updatePlacesClouds(it) },
                     )
-                    StatisticsType.DISTANCE_CONTINENT -> Text(text = "DISTANCE PER CONTINENT")
-                    StatisticsType.DISTANCE_BUBBLE -> Text(text = "DISTANCE BUBBLE")
+                    StatisticsType.DISTANCE_CONTINENT -> DistanceChart(
+                        onInitChart = { statisticsViewModel.setDistanceAreaChart(it) }
+                    )
+                    StatisticsType.DISTANCE_BUBBLE -> BubbleChart(
+                        onInitChart = { statisticsViewModel.setBubbleChart(it) }
+                    )
                 }
 
             }

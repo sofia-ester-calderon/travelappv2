@@ -3,21 +3,19 @@ package com.sucaldo.travelappv2.util
 import com.anychart.APIlib
 import com.anychart.AnyChart
 import com.anychart.AnyChartView
+import com.anychart.chart.common.dataentry.BubbleDataEntry
 import com.anychart.chart.common.dataentry.CategoryValueDataEntry
 import com.anychart.chart.common.dataentry.DataEntry
+import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.anychart.charts.Cartesian
 import com.anychart.charts.TagCloud
-import com.anychart.enums.Anchor
-import com.anychart.enums.HoverMode
-import com.anychart.enums.Position
-import com.anychart.enums.TooltipPositionMode
+import com.anychart.enums.*
 import com.anychart.scales.OrdinalColor
+import com.sucaldo.travelappv2.data.CONTINENTS
 import com.sucaldo.travelappv2.data.Trip
-import com.sucaldo.travelappv2.db.DatabaseHelper
 import java.util.*
 
-class ChartHelper(myDb: DatabaseHelper) {
-    private val myDb: DatabaseHelper = myDb
+class ChartHelper {
     private val FONT_SIZE = 10
     private val COLOR_SCHEMA = arrayOf(
         "#fa70b5", "#8e44ad", "#00c3ff", "#009175", "#34eb31", "#ffd000", "#ff0404", "#a8a8a8"
@@ -115,128 +113,115 @@ class ChartHelper(myDb: DatabaseHelper) {
         }
     }
 
-    //
-//    /*
-//     ********* AREA CHART **********************
-//     */
-//    fun initKmsAreaChart(anyChartView: AnyChartView, fullscreen: Boolean, data: List<DataEntry?>?) {
-//        APIlib.getInstance().setActiveAnyChartView(anyChartView)
-//        val areaChart = AnyChart.area()
-//        if (!fullscreen) {
-//            areaChart.title(context.getString(R.string.title_kms_area_chart))
-//        }
-//        areaChart.animation(true)
-//        val crosshair = areaChart.crosshair()
-//        crosshair.enabled(true)
-//        crosshair.yLabel(0).enabled(true)
-//        areaChart.yScale().stackMode(ScaleStackMode.VALUE)
-//        val set = Set.instantiate()
-//        set.data(data)
-//        for (i in 0 until DatabaseHelper.CONTINENTS.size()) {
-//            val valuePostfix = i + 1
-//            val seriesDataMap = set.mapAs("{ x: 'x', value: 'value$valuePostfix' }")
-//            val series = areaChart.area(seriesDataMap)
-//            series.name(DatabaseHelper.CONTINENTS.get(i))
-//            series.stroke("3 #fff")
-//            series.hovered().stroke("3 #fff")
-//            series.hovered().markers().enabled(true)
-//            series.hovered().markers()
-//                .type(MarkerType.CIRCLE)
-//                .size(4.0)
-//                .stroke("1.5 #fff")
-//            series.markers().zIndex(100.0)
-//        }
-//        if (fullscreen) {
-//            areaChart.legend().enabled(true)
-//            areaChart.legend().fontSize(13.0)
-//            areaChart.legend().padding(0.0, 0.0, 20.0, 0.0)
-//            areaChart.interactivity().hoverMode(HoverMode.BY_X)
-//            areaChart.xAxis(0).labels().fontSize(AXIS_LABEL_FONT_SIZE)
-//            areaChart.yAxis(0).title().fontSize(AXIS_TITLE_FONT_SIZE)
-//            areaChart.yAxis(0).labels().fontSize(AXIS_LABEL_FONT_SIZE)
-//        }
-//        areaChart.tooltip()
-//            .valuePostfix(context.getString(R.string.kms_area_chart_y_axis))
-//            .fontSize(15)
-//            .displayMode(TooltipDisplayMode.UNION)
-//        areaChart.xAxis(0).title(false)
-//        areaChart.xAxis(0).ticks(false)
-//        areaChart.yAxis(0).title(context.getString(R.string.kms_area_chart_y_axis))
-//        areaChart.yScale().ticks().interval(10000)
-//        anyChartView.setChart(areaChart)
-//    }
-//
-//    class CustomDataEntry(x: String?, values: List<Int?>) :
-//        ValueDataEntry(x, 0) {
-//        init {
-//            var i = 1
-//            for (value in values) {
-//                val key = "value" + i++
-//                setValue(key, value)
-//            }
-//        }
-//    }
-//
-//    /*
-//     ********* BUBBLE CHART **********************
-//     */
-//    fun initKmsBubbleChart(
-//        anyChartView: AnyChartView,
-//        fullscreen: Boolean,
-//        data: List<DataEntry?>?
-//    ) {
-//        APIlib.getInstance().setActiveAnyChartView(anyChartView)
-//        val bubble = AnyChart.bubble()
-//        bubble.animation(true)
-//        val allYears: List<Int> = myDB.getAllYearsOfTrips()
-//        bubble.xScale().minimum(allYears[0] - 1)
-//        bubble.xScale().maximum(allYears[allYears.size - 1] + 1)
-//        bubble.yAxis(0)
-//            .title(context.getString(R.string.kms_bubble_chart_y_axis))
-//        bubble.yGrid(true)
-//        bubble.bubble(data).name("Details").selected().fill("#31eb97", 0.5)
-//        bubble.padding(20.0, 20.0, 10.0, 20.0)
-//        if (!fullscreen) {
-//            bubble.title(context.getString(R.string.title_kms_bubble_chart))
-//            bubble.minBubbleSize(2.0)
-//                .maxBubbleSize(20.0)
-//        }
-//        if (fullscreen) {
-//            bubble.minBubbleSize(10.0)
-//                .maxBubbleSize(50.0)
-//            bubble.yAxis(0).labels().fontSize(AXIS_LABEL_FONT_SIZE)
-//            bubble.yAxis(0).title().fontSize(AXIS_TITLE_FONT_SIZE)
-//            bubble.xAxis(0).labels().fontSize(AXIS_LABEL_FONT_SIZE)
-//        }
-//        bubble.tooltip()
-//            .useHtml(true)
-//            .fontColor("#fff")
-//            .format(
-//                """function() {
-//        return '<div style="width: 175px; font-size: 15px">            Year: <span style="color: #d2d2d2; font-size: 15px">' +
-//          this.getData('x') + '</span></strong><br/>' +
-//          'Trips: <span style="color: #d2d2d2; font-size: 15px">' +
-//          this.getData('value') + '</span></strong><br/>' +
-//          'Distance: <span style="color: #d2d2d2; font-size: 15px">' +
-//          this.getData('size') + ' kms.</span></strong><br/>' +
-//          'Countries: <span style="color: #d2d2d2; font-size: 15px">' +
-//          this.getData('countries') + '</span></strong><br/> </div>';
-//      }"""
-//            )
-//        anyChartView.setChart(bubble)
-//    }
-//
-//    class CustomBubbleDataEntry(x: Int?, value: Int?, size: Int?, countries: List<String?>) :
-//        BubbleDataEntry(x, value, size) {
-//        init {
-//            val joiner = StringJoiner(", ")
-//            for (country in countries) {
-//                joiner.add(country)
-//            }
-//            setValue("countries", joiner.toString())
-//        }
-//    }
-//
+
+    /*
+     ********* AREA CHART **********************
+     */
+    fun initKmsAreaChart(anyChartView: AnyChartView, data: List<DataEntry?>?) {
+        APIlib.getInstance().setActiveAnyChartView(anyChartView)
+        val areaChart = AnyChart.area()
+        areaChart.animation(true)
+        val crosshair = areaChart.crosshair()
+        crosshair.enabled(true)
+        crosshair.yLabel(0).enabled(true)
+        areaChart.yScale().stackMode(ScaleStackMode.VALUE)
+        val set = com.anychart.data.Set.instantiate()
+        set.data(data)
+        for (i in 0 until CONTINENTS.size) {
+            val valuePostfix = i + 1
+            val seriesDataMap = set.mapAs("{ x: 'x', value: 'value$valuePostfix' }")
+            val series = areaChart.area(seriesDataMap)
+            series.name(CONTINENTS[i])
+            series.stroke("3 #fff")
+            series.hovered().stroke("3 #fff")
+            series.hovered().markers().enabled(true)
+            series.hovered().markers()
+                .type(MarkerType.CIRCLE)
+                .size(4.0)
+                .stroke("1.5 #fff")
+            series.markers().zIndex(100.0)
+        }
+            areaChart.legend().enabled(true)
+            areaChart.legend().fontSize(13.0)
+            areaChart.legend().padding(0.0, 0.0, 20.0, 0.0)
+            areaChart.interactivity().hoverMode(HoverMode.BY_X)
+            areaChart.xAxis(0).labels().fontSize(FONT_SIZE)
+            areaChart.yAxis(0).title().fontSize(FONT_SIZE)
+            areaChart.yAxis(0).labels().fontSize(FONT_SIZE)
+        areaChart.tooltip()
+            .valuePostfix("kms")
+            .fontSize(15)
+            .displayMode(TooltipDisplayMode.UNION)
+        areaChart.xAxis(0).title(false)
+        areaChart.xAxis(0).ticks(false)
+        areaChart.yAxis(0).title("kms")
+        areaChart.yScale().ticks().interval(10000)
+        anyChartView.setChart(areaChart)
+    }
+
+    class CustomDataEntry(x: String?, values: List<Int?>) :
+        ValueDataEntry(x, 0) {
+        init {
+            var i = 1
+            for (value in values) {
+                val key = "value" + i++
+                setValue(key, value)
+            }
+        }
+    }
+
+    /*
+     ********* BUBBLE CHART **********************
+     */
+    fun initKmsBubbleChart(
+        anyChartView: AnyChartView,
+        allYears: List<Int>,
+        data: List<DataEntry?>?
+    ) {
+        APIlib.getInstance().setActiveAnyChartView(anyChartView)
+        val bubble = AnyChart.bubble()
+        bubble.animation(true)
+        bubble.xScale().minimum(allYears[0] - 1)
+        bubble.xScale().maximum(allYears[allYears.size - 1] + 1)
+        bubble.yAxis(0)
+            .title("Number of Trips")
+        bubble.yGrid(true)
+        bubble.bubble(data).name("Details").selected().fill("#31eb97", 0.5)
+        bubble.padding(20.0, 20.0, 10.0, 20.0)
+            bubble.minBubbleSize(10.0)
+                .maxBubbleSize(30.0)
+            bubble.yAxis(0).labels().fontSize(FONT_SIZE)
+            bubble.yAxis(0).title().fontSize(FONT_SIZE)
+            bubble.xAxis(0).labels().fontSize(FONT_SIZE)
+        bubble.tooltip()
+            .useHtml(true)
+            .fontColor("#fff")
+            .format(
+                """function() {
+        return '<div style="width: 175px; font-size: 15px">            Year: <span style="color: #d2d2d2; font-size: 15px">' +
+          this.getData('x') + '</span></strong><br/>' +
+          'Trips: <span style="color: #d2d2d2; font-size: 15px">' +
+          this.getData('value') + '</span></strong><br/>' +
+          'Distance: <span style="color: #d2d2d2; font-size: 15px">' +
+          this.getData('size') + ' kms.</span></strong><br/>' +
+          'Countries: <span style="color: #d2d2d2; font-size: 15px">' +
+          this.getData('countries') + '</span></strong><br/> </div>';
+      }"""
+            )
+        anyChartView.setChart(bubble)
+    }
+
+    class CustomBubbleDataEntry(x: Int?, value: Int?, size: Int?, countries: List<String?>) :
+        BubbleDataEntry(x, value, size) {
+        init {
+            val joiner = StringJoiner(", ")
+            for (country in countries) {
+                joiner.add(country)
+            }
+            setValue("countries", joiner.toString())
+        }
+    }
+
     companion object {
         private fun selectRandomTrips(trips: List<Trip>): List<Trip> {
             val randomTrips: MutableList<Trip> = arrayListOf()

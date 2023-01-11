@@ -19,7 +19,7 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
 
     init {
         myDb = DatabaseHelper(application.applicationContext)
-        chartHelper = ChartHelper(myDb)
+        chartHelper = ChartHelper()
     }
 
     fun goToNextStatistic() {
@@ -79,6 +79,14 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
             }
         }
         _uiState.update { it.copy(placesCloudType = placesCloudType) }
+    }
+
+    fun setDistanceAreaChart(distanceAreaView: AnyChartView) {
+        chartHelper.initKmsAreaChart(distanceAreaView, myDb.kmsPerContinentPerYear)
+    }
+
+    fun setBubbleChart(bubbleView: AnyChartView) {
+        chartHelper.initKmsBubbleChart(bubbleView, myDb.allYearsOfTrips, myDb.kmsAndTripsPerYear)
     }
 
     private fun getLastNYears(n: Int): List<String> {
