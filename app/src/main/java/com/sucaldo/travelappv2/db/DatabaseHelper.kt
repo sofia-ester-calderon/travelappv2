@@ -266,8 +266,6 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
                 return trips
             }
         }
-    val isTripsTableEmpty: Boolean
-        get() = isTableEmpty(TABLE_TRIPS)
 
     /*
        ********* TABLE CITY_LOC  **********************
@@ -726,7 +724,7 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
                 closeCursor(data)
             }
         }
-    val latitudeAndLongitudeOfVisitedCities: List<Any>
+    val latitudeAndLongitudeOfVisitedCities: List<CityLocation>
         get() {
             val db = this.writableDatabase
             val data = db.rawQuery(
