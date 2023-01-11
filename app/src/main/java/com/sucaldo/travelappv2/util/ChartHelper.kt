@@ -3,10 +3,18 @@ package com.sucaldo.travelappv2.util
 import com.anychart.APIlib
 import com.anychart.AnyChart
 import com.anychart.AnyChartView
+import com.anychart.chart.common.dataentry.CategoryValueDataEntry
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.charts.Cartesian
-import com.anychart.enums.*
+import com.anychart.charts.TagCloud
+import com.anychart.enums.Anchor
+import com.anychart.enums.HoverMode
+import com.anychart.enums.Position
+import com.anychart.enums.TooltipPositionMode
+import com.anychart.scales.OrdinalColor
+import com.sucaldo.travelappv2.data.Trip
 import com.sucaldo.travelappv2.db.DatabaseHelper
+import java.util.*
 
 class ChartHelper(myDb: DatabaseHelper) {
     private val myDb: DatabaseHelper = myDb
@@ -53,80 +61,61 @@ class ChartHelper(myDb: DatabaseHelper) {
         barChart.data(data)
     }
 
-//    /*
-//     ********* CLOUD CHART **********************
-//     */
-//    fun initCountriesCloudChart(
-//        anyChartView: AnyChartView,
-//        fullscreen: Boolean,
-//        data: List<DataEntry?>?
-//    ): TagCloud {
-//        APIlib.getInstance().setActiveAnyChartView(anyChartView)
-//        val tagCloud = AnyChart.tagCloud()
-//        if (!fullscreen) {
-//            tagCloud.title(context.getString(R.string.title_countries_cloud))
-//        }
-//        val ordinalColor = OrdinalColor.instantiate()
-//        ordinalColor.colors(COLOR_SCHEMA.clone())
-//        tagCloud.colorScale(ordinalColor)
-//        tagCloud.angles(arrayOf(-90.0, 0.0, 90.0))
-//        if (fullscreen) {
-//            tagCloud.colorRange().labels().width(50)
-//            tagCloud.colorRange().enabled(true)
-//            tagCloud.colorRange().colorLineSize(15.0)
-//        }
-//        tagCloud.tooltip().useHtml(true)
-//        tagCloud.tooltip().format(TAG_CLOUD_COUNTRIES_TOOLTIP)
-//        tagCloud.data(data)
-//        anyChartView.setChart(tagCloud)
-//        return tagCloud
-//    }
-//
-//    private val TAG_CLOUD_COUNTRIES_TOOLTIP = "function() {return '" +
-//            "<p style=\"color: #d2d2d2; font-size: 15px\"> Trips:' + this.getData('value') + '</p>" +
-//            " <table style=\"color: #d2d2d2; font-size: 15px\">" +
-//            "' + this.getData('html') + '</table>';}"
-//
-//    init {
-//        this.myDB = myDB
-//        this.context = context
-//    }
-//
-//    fun updateChart(tagCloud: TagCloud, countries: Boolean, data: List<DataEntry?>?) {
-//        if (countries) {
-//            tagCloud.tooltip().format(TAG_CLOUD_COUNTRIES_TOOLTIP)
-//        } else {
-//            tagCloud.tooltip().format("Trips: {%value}")
-//        }
-//        tagCloud.data(data)
-//    }
-//
-//    class CustomCategoryValueDataEntry(x: String?, category: String?, value: Int?) :
-//        CategoryValueDataEntry(x, category, value) {
-//        fun setTripsInfo(trips: List<Trip>) {
-//            val html = StringBuilder()
-//            val selectedTrips: List<Trip>
-//            // A max of 15 trips can fit nicely into tooltip based on current Tablet size
-//            selectedTrips = if (trips.size < 15) {
-//                trips
-//            } else {
-//                selectRandomTrips(trips)
-//            }
-//            for (trip in selectedTrips) {
-//                html.append("<tr> <td>")
-//                    .append(trip.getFormattedStartDate())
-//                    .append("</td>")
-//                    .append("<td> <b>")
-//                    .append(trip.getToCity())
-//                    .append("</b> </td>")
-//                    .append("<td>")
-//                    .append(trip.getDescription())
-//                    .append("</td> </tr>")
-//            }
-//            setValue("html", html.toString())
-//        }
-//    }
-//
+    /*
+     ********* CLOUD CHART **********************
+     */
+    fun initCountriesCloudChart(
+        anyChartView: AnyChartView,
+        data: List<DataEntry?>?
+    ): TagCloud {
+        APIlib.getInstance().setActiveAnyChartView(anyChartView)
+        val tagCloud = AnyChart.tagCloud()
+        val ordinalColor = OrdinalColor.instantiate()
+        ordinalColor.colors(COLOR_SCHEMA.clone())
+        tagCloud.colorScale(ordinalColor)
+        tagCloud.angles(arrayOf(-90.0, 0.0, 90.0))
+        tagCloud.colorRange().enabled(true)
+        tagCloud.colorRange().colorLineSize(5.0)
+        tagCloud.tooltip().useHtml(true)
+        tagCloud.tooltip().format(TAG_CLOUD_COUNTRIES_TOOLTIP)
+        tagCloud.data(data)
+        anyChartView.setChart(tagCloud)
+        return tagCloud
+    }
+
+    private val TAG_CLOUD_COUNTRIES_TOOLTIP = "function() {return '" +
+            "<p style=\"color: #d2d2d2; font-size: 15px\"> Trips:' + this.getData('value') + '</p>" +
+            " <table style=\"color: #d2d2d2; font-size: 15px\">" +
+            "' + this.getData('html') + '</table>';}"
+
+    fun updateTagCloud(tagCloud: TagCloud, countries: Boolean, data: List<DataEntry?>?) {
+        if (countries) {
+            tagCloud.tooltip().format(TAG_CLOUD_COUNTRIES_TOOLTIP)
+        } else {
+            tagCloud.tooltip().format("Trips: {%value}")
+        }
+        tagCloud.data(data)
+    }
+
+    class CustomCategoryValueDataEntry(x: String?, category: String?, value: Int?) :
+        CategoryValueDataEntry(x, category, value) {
+        fun setTripsInfo(trips: List<Trip>) {
+            val html = StringBuilder()
+            // A max of 15 trips can fit nicely into tooltip based on current Tablet size
+            val selectedTrips = if (trips.size < 15) trips else selectRandomTrips(trips)
+            for (trip in selectedTrips) {
+                html.append("<tr> <td>")
+                    .append(formatDate(trip.startDate))
+                    .append("</td>")
+                    .append("<td> <b>")
+                    .append(trip.toCity)
+                    .append("</b> </td> </tr>")
+            }
+            setValue("html", html.toString())
+        }
+    }
+
+    //
 //    /*
 //     ********* AREA CHART **********************
 //     */
@@ -249,19 +238,19 @@ class ChartHelper(myDb: DatabaseHelper) {
 //    }
 //
     companion object {
-//        private fun selectRandomTrips(trips: List<Trip>): List<Trip> {
-//            val randomTrips: MutableSet<Trip> = HashSet<Trip>()
-//            while (randomTrips.size < 15) {
-//                val r = Random()
-//                val low = 0
-//                val high = trips.size - 1
-//                val result = r.nextInt(high - low) + low
-//                randomTrips.add(trips[result])
-//            }
-//            val selectedTrips: List<Trip> = ArrayList<Any?>(randomTrips)
-//            Collections.sort(selectedTrips)
-//            return selectedTrips
-//        }
+        private fun selectRandomTrips(trips: List<Trip>): List<Trip> {
+            val randomTrips: MutableList<Trip> = arrayListOf()
+            while (randomTrips.size < 15) {
+                val r = Random()
+                val low = 0
+                val high = trips.size - 1
+                val result = r.nextInt(high - low) + low
+                randomTrips.add(trips[result])
+            }
+            randomTrips.sortBy { it.startDate }
+            return randomTrips
+        }
+
         private const val TOP_PLACES_Y_AXIS = "Number of Visits"
     }
 }

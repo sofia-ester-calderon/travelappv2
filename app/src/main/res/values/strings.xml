@@ -80,4 +80,7 @@
     <string name="trips_statistics_top_ten_last_ten">Last 10 Years</string>
     <string name="trips_statistics_top_ten_selected">Selected</string>
 
+    <string name="trips_statistics_cloud_countries">Countries</string>
+    <string name="trips_statistics_cloud_places">Places</string>
+
 </resources>

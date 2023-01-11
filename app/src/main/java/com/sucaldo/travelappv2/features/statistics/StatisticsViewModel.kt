@@ -20,7 +20,6 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     init {
         myDb = DatabaseHelper(application.applicationContext)
         chartHelper = ChartHelper(myDb)
-        _uiState.update { it.copy(topTenData = myDb.getTop10VisitedPlaces()) }
     }
 
     fun goToNextStatistic() {
@@ -50,7 +49,7 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun setTopTenChart(topTenChartView: AnyChartView) {
-        val barChart = chartHelper.initTop10PlacesChart(topTenChartView, _uiState.value.topTenData)
+        val barChart = chartHelper.initTop10PlacesChart(topTenChartView, myDb.getTop10VisitedPlaces())
         _uiState.update { it.copy(topTenBarChart = barChart) }
     }
 
@@ -65,6 +64,21 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
             chartHelper.updateChart(it, myDb.getTop10VisitedPlaces(years))
         }
         _uiState.update { it.copy(topTenType = topPlacesType) }
+    }
+
+    fun setPlacesCloudChart(placesCloudView: AnyChartView) {
+        val tagCloud = chartHelper.initCountriesCloudChart(placesCloudView, myDb.visitedCountries)
+        _uiState.update { it.copy(placesCloudChart = tagCloud) }
+    }
+
+    fun updatePlacesClouds(placesCloudType: PlacesCloudType) {
+        _uiState.value.placesCloudChart?.let {
+            when (placesCloudType) {
+                PlacesCloudType.COUNTRIES -> chartHelper.updateTagCloud(it, true, myDb.visitedCountries)
+                PlacesCloudType.PLACES -> chartHelper.updateTagCloud(it, false, myDb.visitedPlaces)
+            }
+        }
+        _uiState.update { it.copy(placesCloudType = placesCloudType) }
     }
 
     private fun getLastNYears(n: Int): List<String> {

@@ -11,6 +11,7 @@ import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.sucaldo.travelappv2.data.CONTINENTS
 import com.sucaldo.travelappv2.data.CityLocation
 import com.sucaldo.travelappv2.data.Trip
+import com.sucaldo.travelappv2.util.ChartHelper
 import com.sucaldo.travelappv2.util.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -514,56 +515,57 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
             }
         }
 
-    //    val visitedCountries: List<DataEntry>
-//        get() {
-//            val db = this.writableDatabase
-//            val data = db.rawQuery(
-//                ("SELECT " + COL_TRIPS_TO_COUNTRY + ", " + COL_TRIPS_CONTINENT + ", COUNT(" + COL_TRIPS_TO_COUNTRY + ")" +
-//                        " FROM (" +
-//                        " SELECT " + COL_TRIPS_GRP_ID + ", " + COL_TRIPS_TO_COUNTRY + ", " + COL_TRIPS_CONTINENT +
-//                        " FROM " + TABLE_TRIPS +
-//                        " WHERE " + COL_TRIPS_TYPE + " NOT IN ('MULTI_STOP_LAST_STOP')" +
-//                        " GROUP BY " + COL_TRIPS_GRP_ID + ", " + COL_TRIPS_TO_COUNTRY + ", " + COL_TRIPS_CONTINENT +
-//                        " ) AS countries" +
-//                        " GROUP BY " + COL_TRIPS_TO_COUNTRY + ", " + COL_TRIPS_CONTINENT +
-//                        " ORDER BY " + COL_TRIPS_CONTINENT), null
-//            )
-//            val numRows = data.count
-//            try {
-//                if (numRows == 0) {
-//                    return ArrayList()
-//                } else {
-//                    val visitedCountries: MutableList<DataEntry> = ArrayList()
-//                    while (data.moveToNext()) {
-//                        visitedCountries.add(
-//                            CustomCategoryValueDataEntry(
-//                                data.getString(0), data.getString(1), data.getInt(2)
-//                            )
-//                        )
-//                    }
-//                    for (dataEntry: DataEntry in visitedCountries) {
-//                        val customEntry: ChartHelper.CustomCategoryValueDataEntry =
-//                            dataEntry as ChartHelper.CustomCategoryValueDataEntry
-//                        val visitedCountry = customEntry.getValue("x") as String
-//                        val data2 = db.rawQuery(
-//                            ("SELECT * FROM " + TABLE_TRIPS + " WHERE "
-//                                    + COL_TRIPS_TO_COUNTRY + " = '" + visitedCountry + "' " +
-//                                    " AND " + COL_TRIPS_TYPE + " NOT IN ('MULTI_STOP_LAST_STOP')"),
-//                            null
-//                        )
-//                        val trips: MutableList<Trip> = ArrayList<Trip>()
-//                        while (data2.moveToNext()) {
-//                            trips.add(Trip(data2))
-//                        }
-//                        customEntry.setTripsInfo(trips)
-//                        closeCursor(data2)
-//                    }
-//                    return visitedCountries
-//                }
-//            } finally {
-//                closeCursor(data)
-//            }
-//        }
+        val visitedCountries: List<DataEntry>
+        get() {
+            val db = this.writableDatabase
+            val data = db.rawQuery(
+                ("SELECT " + COL_TRIPS_TO_COUNTRY + ", " + COL_TRIPS_CONTINENT + ", COUNT(" + COL_TRIPS_TO_COUNTRY + ")" +
+                        " FROM (" +
+                        " SELECT " + COL_TRIPS_GRP_ID + ", " + COL_TRIPS_TO_COUNTRY + ", " + COL_TRIPS_CONTINENT +
+                        " FROM " + TABLE_TRIPS +
+                        " WHERE " + COL_TRIPS_TYPE + " NOT IN ('MULTI_STOP_LAST_STOP')" +
+                        " GROUP BY " + COL_TRIPS_GRP_ID + ", " + COL_TRIPS_TO_COUNTRY + ", " + COL_TRIPS_CONTINENT +
+                        " ) AS countries" +
+                        " GROUP BY " + COL_TRIPS_TO_COUNTRY + ", " + COL_TRIPS_CONTINENT +
+                        " ORDER BY " + COL_TRIPS_CONTINENT), null
+            )
+            val numRows = data.count
+            try {
+                if (numRows == 0) {
+                    return ArrayList()
+                } else {
+                    val visitedCountries: MutableList<DataEntry> = ArrayList()
+                    while (data.moveToNext()) {
+                        visitedCountries.add(
+                            ChartHelper.CustomCategoryValueDataEntry(
+                                data.getString(0), data.getString(1), data.getInt(2)
+                            )
+                        )
+                    }
+                    for (dataEntry: DataEntry in visitedCountries) {
+                        val customEntry: ChartHelper.CustomCategoryValueDataEntry =
+                            dataEntry as ChartHelper.CustomCategoryValueDataEntry
+                        val visitedCountry = customEntry.getValue("x") as String
+                        val data2 = db.rawQuery(
+                            ("SELECT * FROM " + TABLE_TRIPS + " WHERE "
+                                    + COL_TRIPS_TO_COUNTRY + " = '" + visitedCountry + "' " +
+                                    " AND " + COL_TRIPS_TYPE + " NOT IN ('MULTI_STOP_LAST_STOP')"),
+                            null
+                        )
+                        val trips: MutableList<Trip> = ArrayList<Trip>()
+                        while (data2.moveToNext()) {
+                            trips.add(Trip(data2))
+                        }
+                        customEntry.setTripsInfo(trips)
+                        closeCursor(data2)
+                    }
+                    return visitedCountries
+                }
+            } finally {
+                closeCursor(data)
+            }
+        }
+
     val numberOfVisitedCountries: Int
         get() {
             val db = this.writableDatabase

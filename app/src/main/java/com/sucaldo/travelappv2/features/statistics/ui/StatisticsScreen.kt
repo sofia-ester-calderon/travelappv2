@@ -63,7 +63,11 @@ fun StatisticsScreen(
                         topPlacesType = statisticsUiState.topTenType,
                         onInitChart = { statisticsViewModel.setTopTenChart(it) },
                         onUpdateChart = { statisticsViewModel.updateTopTenChart(it) })
-                    StatisticsType.PLACES_CLOUD -> Text(text = "PLACES CLOUD")
+                    StatisticsType.PLACES_CLOUD -> PlacesCloud(
+                        cloudType = statisticsUiState.placesCloudType,
+                        onInitChart = { statisticsViewModel.setPlacesCloudChart(it) },
+                        onUpdateChart ={ statisticsViewModel.updatePlacesClouds(it) },
+                    )
                     StatisticsType.DISTANCE_CONTINENT -> Text(text = "DISTANCE PER CONTINENT")
                     StatisticsType.DISTANCE_BUBBLE -> Text(text = "DISTANCE BUBBLE")
                 }
