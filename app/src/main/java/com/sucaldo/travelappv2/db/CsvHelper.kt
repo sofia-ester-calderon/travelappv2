@@ -21,7 +21,7 @@ class CsvHelper(private val myDB: DatabaseHelper) {
             val csvLines = reader.readAll()
             for (nextLine in csvLines) {
                 if (nextLine.size == 4) {
-                    Log.d("CSV_CityLoc", "${nextLine[0]}, ${nextLine[1]}")
+                    Log.d("CSV_CityLoc", "LOCATION: ${nextLine[0]}, ${nextLine[1]}")
                     myDB.addCityLocation(
                         nextLine[0],
                         nextLine[1], nextLine[2].toFloat(), nextLine[3].toFloat()
@@ -41,7 +41,6 @@ class CsvHelper(private val myDB: DatabaseHelper) {
             val csvLines = reader.readAll()
             for (nextLine in csvLines) {
                 if (nextLine.size == 11) {
-                    Log.d("CSV_trips", nextLine[3])
                     val newTrip = Trip(
                         groupId = nextLine[0].toInt(),
                         fromCountry = nextLine[1],
@@ -55,7 +54,7 @@ class CsvHelper(private val myDB: DatabaseHelper) {
                         toContinent = nextLine[9],
                         type = nextLine[10],
                     )
-                    Log.d("CSV_trips", "${nextLine[3]}, ${nextLine[4]}")
+                    Log.d("CSV_trips", "TRIP: ${nextLine[6]}, ${nextLine[4]}")
                     myDB.addTrip(newTrip)
                 }
             }

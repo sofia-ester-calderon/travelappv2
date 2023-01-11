@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.concurrent.thread
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(SettingsUiState())
@@ -68,45 +69,52 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun importLocationDataFromCsv(uri: Uri) {
-        _uiState.update { it.copy(importGeoDataState = ImportStarted.Loading) }
-        viewModelScope.launch {
-            contentResolver.openInputStream(uri)?.use { inputStream ->
-                val isImportSuccessful = csvHelper.readCityLocationsCsvFile(inputStream)
-                _uiState.update {
-                    it.copy(
-                        importGeoDataState = if (isImportSuccessful) ImportStarted.Success else ImportStarted.Error
-                    )
+        if (_uiState.value.importGeoDataState == Ready) {
+            _uiState.update { it.copy(importGeoDataState = ImportStarted.Loading) }
+            thread(start = true) {
+                contentResolver.openInputStream(uri)?.use { inputStream ->
+                    val isImportSuccessful = csvHelper.readCityLocationsCsvFile(inputStream)
+                    _uiState.update {
+                        it.copy(
+                            importGeoDataState = if (isImportSuccessful) ImportStarted.Success else ImportStarted.Error
+                        )
+                    }
                 }
             }
+
         }
     }
 
     fun importTripDataFromCsv(uri: Uri) {
-        _uiState.update { it.copy(importTripState = ImportStarted.Loading) }
-        viewModelScope.launch {
-            contentResolver.openInputStream(uri)?.use { inputStream ->
-                val isImportSuccessful = csvHelper.readTripsCsvFile(inputStream)
-                _uiState.update {
-                    it.copy(
-                        importTripState = if (isImportSuccessful) ImportStarted.Success else ImportStarted.Error
-                    )
+        if (_uiState.value.importTripState == Ready) {
+            _uiState.update { it.copy(importTripState = ImportStarted.Loading) }
+            thread(start = true) {
+                contentResolver.openInputStream(uri)?.use { inputStream ->
+                    val isImportSuccessful = csvHelper.readTripsCsvFile(inputStream)
+                    _uiState.update {
+                        it.copy(
+                            importTripState = if (isImportSuccessful) ImportStarted.Success else ImportStarted.Error
+                        )
+                    }
                 }
             }
+
         }
     }
 
     fun exportAllData() {
-        _uiState.update { it.copy(exportDataState = ImportStarted.Loading) }
-        viewModelScope.launch {
-            try {
-                csvHelper.writeTripsToCsv()
-                csvHelper.writeCityLocationsToCsv()
-                _uiState.update { it.copy(exportDataState = ImportStarted.Success) }
-            } catch (e: Exception) {
-                Log.e("Export data error", e.stackTraceToString())
-                _uiState.update { it.copy(exportDataState = ImportStarted.Error) }
+        if (_uiState.value.exportDataState == Ready) {
+            _uiState.update { it.copy(exportDataState = ImportStarted.Loading) }
+            thread(start = true) {
+                try {
+                    csvHelper.writeTripsToCsv()
+                    csvHelper.writeCityLocationsToCsv()
+                    _uiState.update { it.copy(exportDataState = ImportStarted.Success) }
+                } catch (e: Exception) {
+                    Log.e("Export data error", e.stackTraceToString())
+                    _uiState.update { it.copy(exportDataState = ImportStarted.Error) }
+                }
             }
-
         }
 
     }
