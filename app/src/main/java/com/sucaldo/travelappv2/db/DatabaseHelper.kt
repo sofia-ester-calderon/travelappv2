@@ -32,10 +32,6 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
                     " " + COL_CITY_LOC_COUNTRY + " TEXT, " + COL_CITY_LOC_CITY + " TEXT, " + COL_CITY_LOC_LAT + " FLOAT, " +
                     " " + COL_CITY_LOC_LONG + " FLOAT)"
         db.execSQL(createTableCityLoc)
-//        val createTableCountries = ("CREATE TABLE " + TABLE_COUNTRIES + " (" + COL_COUNTRIES_ID +
-//                " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_COUNTRIES_CONTINENT + " TEXT, " + COL_COUNTRIES_COUNTRY
-//                + " TEXT) ")
-//        db.execSQL(createTableCountries)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -98,26 +94,6 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
                 closeCursor(data)
             }
         }
-
-//    fun getAllTripsOfMultiStopSortedByDate(groupId: Int): List<Trip> {
-//        val db = this.writableDatabase
-//        val data = db.rawQuery(
-//            "SELECT * FROM " + TABLE_TRIPS + " WHERE " + COL_TRIPS_GRP_ID +
-//                    " = " + groupId, null
-//        )
-//        val numRows = data.count
-//        if (numRows == 0) {
-//            // empty list will be returned
-//            return ArrayList<Trip>()
-//        } else {
-//            val trips: MutableList<Trip> = ArrayList<Trip>()
-//            while (data.moveToNext()) {
-//                trips.add(Trip(data))
-//            }
-//            Collections.sort(trips)
-//            return trips
-//        }
-//    }
 
     val lastTripId: Int
         get() {
@@ -747,13 +723,5 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
         private val COL_CITY_LOC_CITY = "CITY"
         private val COL_CITY_LOC_LAT = "LATITUDE"
         private val COL_CITY_LOC_LONG = "LONGITUDE"
-//        private val TABLE_COUNTRIES = "countries"
-//        private val COL_COUNTRIES_ID = "ID"
-//        private val COL_COUNTRIES_CONTINENT = "CONTINENT"
-//        private val COL_COUNTRIES_COUNTRY = "COUNTRY"
-//        val CONTINENTS = Arrays.asList(
-//            "North America", "Middle East", "South America", "Africa", "Asia",
-//            "Central America & Caribbean", "Oceania", "Europe"
-//        )
     }
 }

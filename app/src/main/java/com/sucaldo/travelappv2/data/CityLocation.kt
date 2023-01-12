@@ -17,7 +17,8 @@ class CityLocation {
         id = data.getInt(4)
     }
 
-    constructor(country: String, city: String, latitude: Float, longitude: Float) {
+    constructor(id: Int? = null, country: String, city: String, latitude: Float, longitude: Float) {
+        this.id = id
         this.country = country
         this.city = city
         this.latitude = latitude

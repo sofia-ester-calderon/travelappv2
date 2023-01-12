@@ -9,4 +9,5 @@ data class CityCoordinatesUiState(
     val countryErrorType: FieldErrorType = FieldErrorType.NONE,
     val cityErrorType: FieldErrorType = FieldErrorType.NONE,
     val cityCoordinates: List<CityLocation> = listOf(),
+    val selectedCityCoordinate: CityLocation? = null,
 )

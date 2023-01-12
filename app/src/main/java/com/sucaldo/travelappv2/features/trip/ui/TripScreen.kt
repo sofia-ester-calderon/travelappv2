@@ -128,7 +128,7 @@ fun TripContent(
         Spacer(modifier = Modifier.height(8.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             Button(onClick = { tripViewModel.saveTrip(navController) }) {
-                Text(text = stringResource(id = R.string.trip_button_save))
+                Text(text = stringResource(id = R.string.common_save))
             }
         }
     }
