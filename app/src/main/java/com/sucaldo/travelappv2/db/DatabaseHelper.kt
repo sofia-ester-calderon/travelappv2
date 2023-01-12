@@ -376,78 +376,6 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
         }
 
     /*
-       ********* TABLE COUNTRIES **********************
-       */
-//    fun addCountryContinentItem(continent: String?, country: String?) {
-//        val db = this.writableDatabase
-//        val contentValues = ContentValues()
-//        contentValues.put(COL_COUNTRIES_CONTINENT, continent)
-//        contentValues.put(COL_COUNTRIES_COUNTRY, country)
-//        db.insert(TABLE_COUNTRIES, null, contentValues)
-//    }
-//
-//    fun getContinentOfCountry(country: String): String? {
-//        val db = this.writableDatabase
-//        val data = db.rawQuery(
-//            ("SELECT " + COL_COUNTRIES_CONTINENT + " FROM " + TABLE_COUNTRIES +
-//                    " WHERE " + COL_COUNTRIES_COUNTRY + " = '" + country + "'"), null
-//        )
-//        try {
-//            return if (data.moveToNext()) {
-//                data.getString(0)
-//            } else null
-//        } finally {
-//            closeCursor(data)
-//        }
-//    }
-//
-//    val isCountriesTableEmpty: Boolean
-//        get() = isTableEmpty(TABLE_COUNTRIES)
-//
-//    // empty list will be returned
-//    val countries: List<String>
-//        get() {
-//            val db = this.writableDatabase
-//            val data = db.rawQuery(
-//                "SELECT DISTINCT " + COL_COUNTRIES_COUNTRY + " FROM " + TABLE_COUNTRIES,
-//                null
-//            )
-//            val numRows = data.count
-//            try {
-//                if (numRows == 0) {
-//                    // empty list will be returned
-//                    return ArrayList()
-//                } else {
-//                    val countries: MutableList<String> = ArrayList()
-//                    while (data.moveToNext()) {
-//                        countries.add(data.getString(0))
-//                    }
-//                    Collections.sort(countries)
-//                    return countries
-//                }
-//            } finally {
-//                closeCursor(data)
-//            }
-//        }
-//
-//    val allCountriesContinents: List<Any>
-//        get() {
-//            val db = this.writableDatabase
-//            val data = db.rawQuery("SELECT * FROM " + TABLE_COUNTRIES, null)
-//            val numRows = data.count
-//            if (numRows == 0) {
-//                return ArrayList()
-//            } else {
-//                val countriesContinents: MutableList<CountriesContinents> =
-//                    ArrayList<CountriesContinents>()
-//                while (data.moveToNext()) {
-//                    countriesContinents.add(CountriesContinents(data))
-//                }
-//                return countriesContinents
-//            }
-//        }
-
-    /*
        ********* STATISTICS / CHARTS **********************
        */
     fun getTop10VisitedPlaces(years: List<String> = listOf()): List<DataEntry> {
@@ -580,6 +508,32 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
                 closeCursor(data)
             }
         }
+
+    val numberOfTrips: Int
+        get() {
+            val db = this.writableDatabase
+            val data = db.rawQuery(
+                ("SELECT COUNT(DISTINCT(" + COL_TRIPS_GRP_ID + "))" +
+                        " FROM " + TABLE_TRIPS), null
+            )
+            try {
+                return if (data.moveToNext()) {
+                    data.getInt(0)
+                } else -1
+            } finally {
+                closeCursor(data)
+            }
+        }
+
+    fun getRandomTrip(): Trip? {
+        val db = this.writableDatabase
+        val data = db.rawQuery(
+            ("SELECT * FROM " + TABLE_TRIPS + " ORDER BY RANDOM() LIMIT 1"), null)
+        return if (data.moveToNext()) {
+            Trip(data)
+        } else null
+    }
+
     val visitedPlaces: List<DataEntry>
         get() {
             val db = this.writableDatabase

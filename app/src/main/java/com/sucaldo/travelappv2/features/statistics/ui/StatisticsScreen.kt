@@ -26,6 +26,7 @@ fun StatisticsScreen(
     var direction by remember { mutableStateOf(SwipeDirection.NONE) }
 
     val title = when(statisticsUiState.statisticsType) {
+        StatisticsType.OVERVIEW -> stringResource(id = R.string.title_statistics_overview)
         StatisticsType.TOP_PLACES -> stringResource(id = R.string.title_statistics_top_places)
         StatisticsType.PLACES_CLOUD -> stringResource(id = R.string.title_statistics_place_cloud)
         StatisticsType.DISTANCE_CONTINENT -> stringResource(id = R.string.title_statistics_distance)
@@ -65,6 +66,13 @@ fun StatisticsScreen(
             }) {
             Column {
                 when (statisticsUiState.statisticsType) {
+                    StatisticsType.OVERVIEW -> StatisticsOverview(
+                        worldTimesTravelled = statisticsUiState.worldTimesTravelled,
+                        numberOfVisitedPlaces = statisticsUiState.numberOfVisitedPlaces,
+                        numberOfVisitedCountries = statisticsUiState.numberOfVisitedCountries,
+                        numberOfTrips = statisticsUiState.numberOfTrips,
+                        randomTrip = statisticsUiState.randomTrip,
+                    )
                     StatisticsType.TOP_PLACES -> TopTenChart(
                         topPlacesType = statisticsUiState.topTenType,
                         onInitChart = { statisticsViewModel.setTopTenChart(it) },

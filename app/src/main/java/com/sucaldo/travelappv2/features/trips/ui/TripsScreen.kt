@@ -80,7 +80,7 @@ private fun TripsContent(
 
     BottomDrawer(drawerState = bottomDrawerState, gesturesEnabled = true, drawerContent = {
         if (tripDetail != null) {
-            TripDetail(navController = navController, trip = tripDetail, onDeleteTrip = onClickDeleteTrip)
+            TripListDetail(navController = navController, trip = tripDetail, onDeleteTrip = onClickDeleteTrip)
         } else {
             Text(text = "No Trip Selected")
         }

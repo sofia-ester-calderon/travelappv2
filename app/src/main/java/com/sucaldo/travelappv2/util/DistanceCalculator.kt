@@ -4,6 +4,8 @@ import kotlin.math.atan2
 import kotlin.math.sqrt
 
 object DistanceCalculator {
+    const val WORLD_CIRCUMFERENCE = 40075
+
     fun getDistanceFromLatLongInKms(lat1: Float, long1: Float, lat2: Float, long2: Float, isDoubleDistance: Boolean = false): Long {
         val radiusEarth = 6371
         val dLat = degToRadius(lat2 - lat1)
@@ -21,5 +23,9 @@ object DistanceCalculator {
 
     private fun degToRadius(deg: Float): Double {
         return deg * (Math.PI / 180)
+    }
+
+    fun getTravelledAroundTheWorldNumber(totalKms: Int): Float {
+        return totalKms.toFloat() / WORLD_CIRCUMFERENCE
     }
 }

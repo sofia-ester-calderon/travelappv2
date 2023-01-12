@@ -13,6 +13,7 @@ import com.anychart.enums.*
 import com.anychart.scales.OrdinalColor
 import com.sucaldo.travelappv2.data.CONTINENTS
 import com.sucaldo.travelappv2.data.Trip
+import com.sucaldo.travelappv2.features.statistics.PlacesCloudType
 import java.util.*
 
 class ChartHelper {
@@ -86,12 +87,12 @@ class ChartHelper {
             " <table style=\"color: #d2d2d2; font-size: 15px\">" +
             "' + this.getData('html') + '</table>';}"
 
-    fun updateTagCloud(tagCloud: TagCloud, countries: Boolean, data: List<DataEntry?>?) {
-        if (countries) {
-            tagCloud.tooltip().format(TAG_CLOUD_COUNTRIES_TOOLTIP)
-        } else {
-            tagCloud.tooltip().format("Trips: {%value}")
+    fun updateTagCloud(tagCloud: TagCloud, type: PlacesCloudType, data: List<DataEntry?>?) {
+        val tooltipFormat = when (type) {
+            PlacesCloudType.COUNTRIES -> TAG_CLOUD_COUNTRIES_TOOLTIP
+            PlacesCloudType.PLACES -> "Trips: {%value}"
         }
+        tagCloud.tooltip().format(tooltipFormat)
         tagCloud.data(data)
     }
 
@@ -141,13 +142,13 @@ class ChartHelper {
                 .stroke("1.5 #fff")
             series.markers().zIndex(100.0)
         }
-            areaChart.legend().enabled(true)
-            areaChart.legend().fontSize(13.0)
-            areaChart.legend().padding(0.0, 0.0, 20.0, 0.0)
-            areaChart.interactivity().hoverMode(HoverMode.BY_X)
-            areaChart.xAxis(0).labels().fontSize(FONT_SIZE)
-            areaChart.yAxis(0).title().fontSize(FONT_SIZE)
-            areaChart.yAxis(0).labels().fontSize(FONT_SIZE)
+        areaChart.legend().enabled(true)
+        areaChart.legend().fontSize(13.0)
+        areaChart.legend().padding(0.0, 0.0, 20.0, 0.0)
+        areaChart.interactivity().hoverMode(HoverMode.BY_X)
+        areaChart.xAxis(0).labels().fontSize(FONT_SIZE)
+        areaChart.yAxis(0).title().fontSize(FONT_SIZE)
+        areaChart.yAxis(0).labels().fontSize(FONT_SIZE)
         areaChart.tooltip()
             .valuePostfix("kms")
             .fontSize(15)
@@ -188,11 +189,11 @@ class ChartHelper {
         bubble.yGrid(true)
         bubble.bubble(data).name("Details").selected().fill("#31eb97", 0.5)
         bubble.padding(20.0, 20.0, 10.0, 20.0)
-            bubble.minBubbleSize(10.0)
-                .maxBubbleSize(30.0)
-            bubble.yAxis(0).labels().fontSize(FONT_SIZE)
-            bubble.yAxis(0).title().fontSize(FONT_SIZE)
-            bubble.xAxis(0).labels().fontSize(FONT_SIZE)
+        bubble.minBubbleSize(10.0)
+            .maxBubbleSize(30.0)
+        bubble.yAxis(0).labels().fontSize(FONT_SIZE)
+        bubble.yAxis(0).title().fontSize(FONT_SIZE)
+        bubble.xAxis(0).labels().fontSize(FONT_SIZE)
         bubble.tooltip()
             .useHtml(true)
             .fontColor("#fff")

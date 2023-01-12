@@ -10,6 +10,7 @@
     <string name="title_city_coordinates">City Coordinates</string>
     <string name="title_trips">All Trips</string>
     <string name="title_statistics">Statistics</string>
+    <string name="title_statistics_overview">Overview</string>
     <string name="title_statistics_top_places">Top Places Visited</string>
     <string name="title_statistics_place_cloud">Visited Places</string>
     <string name="title_statistics_distance">Distance Travelled per Year</string>
