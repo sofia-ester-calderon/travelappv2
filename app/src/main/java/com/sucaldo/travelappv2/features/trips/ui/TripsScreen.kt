@@ -78,7 +78,7 @@ private fun TripsContent(
     }
     BottomDrawerLaunchedEffect(state = bottomDrawerState, isBottomDrawerOpen = tripDetail != null)
 
-    BottomDrawer(drawerState = bottomDrawerState, gesturesEnabled = true, drawerContent = {
+    BottomDrawer(drawerState = bottomDrawerState, gesturesEnabled = bottomDrawerState.isOpen, drawerContent = {
         if (tripDetail != null) {
             TripListDetail(navController = navController, trip = tripDetail, onDeleteTrip = onClickDeleteTrip)
         } else {

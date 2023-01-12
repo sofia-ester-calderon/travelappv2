@@ -283,7 +283,7 @@ class TripViewModel(
             id = tripId?.toInt(),
             groupId = groupId,
             fromCountry = _uiState.value.fromCountry,
-            fromCity = _uiState.value.toCity,
+            fromCity = _uiState.value.fromCity,
             toCountry = _uiState.value.toCountry,
             toCity = _uiState.value.toCity,
             description = _uiState.value.description,
@@ -341,7 +341,7 @@ class TripViewModel(
     }
 
     private fun navigateToMyTrips(navController: NavController) {
-        navController.navigate(Routes.HOME) //TODO: change to my trips
+        navController.navigate(Routes.TRIPS)
     }
 
     private fun isTripValid(): Boolean {
