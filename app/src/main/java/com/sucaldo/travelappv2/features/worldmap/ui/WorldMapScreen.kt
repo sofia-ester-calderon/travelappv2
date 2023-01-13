@@ -2,6 +2,7 @@ package com.sucaldo.travelappv2.features.worldmap.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -41,7 +42,7 @@ fun WorldMapScreen(
     ) { paddingValues ->
         Box(
             modifier = Modifier.padding(paddingValues),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             WorldMapContent(
                 circleLocations = worldMapUiState.locationCircles,
@@ -59,19 +60,21 @@ private fun WorldMapContent(
     Image(
         painterResource(id = R.drawable.world_map),
         contentDescription = "World Map",
-        modifier = Modifier.onGloballyPositioned { coordinates ->
-            onPositioned(
-                WorldMapSize(
-                    height = coordinates.size.height.toFloat(),
-                    width = coordinates.size.width.toFloat(),
+        modifier = Modifier
+            .background(Color.LightGray)
+            .onGloballyPositioned { coordinates ->
+                onPositioned(
+                    WorldMapSize(
+                        height = coordinates.size.height.toFloat(),
+                        width = coordinates.size.width.toFloat(),
+                    )
                 )
-            )
-        })
+            })
     Canvas(modifier = Modifier
         .fillMaxSize(), onDraw = {
         circleLocations.forEach {
             drawCircle(
-                Color.Red,
+                Color.Cyan,
                 radius = 5f,
                 center = Offset(center.x + it.offsetX, center.y - it.offsetY)
             )
