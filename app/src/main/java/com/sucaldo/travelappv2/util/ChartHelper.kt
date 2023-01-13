@@ -155,7 +155,6 @@ class ChartHelper {
             .displayMode(TooltipDisplayMode.UNION)
         areaChart.xAxis(0).title(false)
         areaChart.xAxis(0).ticks(false)
-        areaChart.yAxis(0).title("kms")
         areaChart.yScale().ticks().interval(10000)
         anyChartView.setChart(areaChart)
     }

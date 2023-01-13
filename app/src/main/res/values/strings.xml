@@ -13,7 +13,7 @@
     <string name="title_statistics_overview">Overview</string>
     <string name="title_statistics_top_places">Top Places Visited</string>
     <string name="title_statistics_place_cloud">Visited Places</string>
-    <string name="title_statistics_distance">Distance Travelled per Year</string>
+    <string name="title_statistics_distance">Kms Travelled per Year</string>
     <string name="title_statistics_bubble">Trips Made per Year</string>
     <string name="title_world_map">World Map</string>
 
