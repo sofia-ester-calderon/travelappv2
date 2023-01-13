@@ -5,12 +5,12 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.anychart.chart.common.dataentry.CategoryValueDataEntry
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.sucaldo.travelappv2.data.CONTINENTS
 import com.sucaldo.travelappv2.data.CityLocation
 import com.sucaldo.travelappv2.data.Trip
+import com.sucaldo.travelappv2.data.getContinent
 import com.sucaldo.travelappv2.util.ChartHelper
 import com.sucaldo.travelappv2.util.DateFormat
 import java.text.ParseException
@@ -440,7 +440,9 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
                     while (data.moveToNext()) {
                         visitedCountries.add(
                             ChartHelper.CustomCategoryValueDataEntry(
-                                data.getString(0), data.getString(1), data.getInt(2)
+                                country = data.getString(0),
+                                continent = getContinent(data.getString(1)).second,
+                                count = data.getInt(2)
                             )
                         )
                     }
@@ -532,8 +534,10 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
                     val visitedPlaces: MutableList<DataEntry> = ArrayList()
                     while (data.moveToNext()) {
                         visitedPlaces.add(
-                            CategoryValueDataEntry(
-                                data.getString(0), data.getString(1), data.getInt(2)
+                            ChartHelper.CustomCategoryValueDataEntry(
+                                country = data.getString(0),
+                                continent = getContinent(data.getString(1)).second,
+                                count = data.getInt(2),
                             )
                         )
                     }
@@ -579,9 +583,9 @@ class DatabaseHelper(context: Context?) : SQLiteOpenHelper(context, DATABASE_NAM
 
     private fun getKmsPerContinentList(continentsAndKmsMap: Map<String, Int>): List<Int?> {
         val kmsPerContinentList: MutableList<Int?> = ArrayList()
-        for (continent: String in CONTINENTS) {
-            if (continentsAndKmsMap.containsKey(continent)) {
-                kmsPerContinentList.add(continentsAndKmsMap[continent])
+        for (continent: Pair<String, String> in CONTINENTS) {
+            if (continentsAndKmsMap.containsKey(continent.first)) {
+                kmsPerContinentList.add(continentsAndKmsMap[continent.first])
             } else {
                 kmsPerContinentList.add(0)
             }

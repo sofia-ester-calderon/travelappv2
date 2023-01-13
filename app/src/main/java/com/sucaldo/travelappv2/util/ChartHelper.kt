@@ -74,7 +74,8 @@ class ChartHelper {
         tagCloud.colorScale(ordinalColor)
         tagCloud.angles(arrayOf(-90.0, 0.0, 90.0))
         tagCloud.colorRange().enabled(true)
-        tagCloud.colorRange().colorLineSize(5.0)
+        tagCloud.colorRange().colorLineSize(10.0)
+        tagCloud.colorRange().length(1000)
         tagCloud.tooltip().useHtml(true)
         tagCloud.tooltip().format(TAG_CLOUD_COUNTRIES_TOOLTIP)
         tagCloud.data(data)
@@ -96,8 +97,8 @@ class ChartHelper {
         tagCloud.data(data)
     }
 
-    class CustomCategoryValueDataEntry(x: String?, category: String?, value: Int?) :
-        CategoryValueDataEntry(x, category, value) {
+    class CustomCategoryValueDataEntry(country: String?, continent: String?, count: Int?) :
+        CategoryValueDataEntry(country, continent, count) {
         fun setTripsInfo(trips: List<Trip>) {
             val html = StringBuilder()
             // A max of 15 trips can fit nicely into tooltip based on current Tablet size
@@ -106,9 +107,9 @@ class ChartHelper {
                 html.append("<tr> <td>")
                     .append(formatDate(trip.startDate))
                     .append("</td>")
-                    .append("<td> <b>")
+                    .append("<td>")
                     .append(trip.toCity)
-                    .append("</b> </td> </tr>")
+                    .append("</td> </tr>")
             }
             setValue("html", html.toString())
         }
@@ -128,11 +129,11 @@ class ChartHelper {
         areaChart.yScale().stackMode(ScaleStackMode.VALUE)
         val set = com.anychart.data.Set.instantiate()
         set.data(data)
-        for (i in 0 until CONTINENTS.size) {
+        for (i in CONTINENTS.indices) {
             val valuePostfix = i + 1
             val seriesDataMap = set.mapAs("{ x: 'x', value: 'value$valuePostfix' }")
             val series = areaChart.area(seriesDataMap)
-            series.name(CONTINENTS[i])
+            series.name(CONTINENTS[i].second)
             series.stroke("3 #fff")
             series.hovered().stroke("3 #fff")
             series.hovered().markers().enabled(true)
