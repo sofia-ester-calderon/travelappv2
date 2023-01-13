@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TravelAppV2</string>
+    <string name="app_name">Travel App</string>
 
     <string name="menu">Menu</string>
     <string name="title_new_trip">New Trip</string>
@@ -10,7 +10,7 @@
     <string name="title_city_coordinates">City Coordinates</string>
     <string name="title_trips">All Trips</string>
     <string name="title_statistics">Statistics</string>
-    <string name="title_statistics_overview">Overview</string>
+    <string name="title_statistics_overview">Your Trips</string>
     <string name="title_statistics_top_places">Top Places Visited</string>
     <string name="title_statistics_place_cloud">Visited Places</string>
     <string name="title_statistics_distance">Kms Travelled per Year</string>
