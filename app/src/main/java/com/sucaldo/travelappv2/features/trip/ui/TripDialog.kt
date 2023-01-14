@@ -1,19 +1,20 @@
 package com.sucaldo.travelappv2.features.trip.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.R
+import com.sucaldo.travelappv2.features.common.ui.TravelAppDialog
 import com.sucaldo.travelappv2.features.common.ui.TravelAppToast
 import com.sucaldo.travelappv2.features.trip.TripDialogState
 
@@ -55,27 +56,21 @@ private fun TripDialogContent(
     onSelectOption1: () -> Unit,
     onSelectOption2: () -> Unit,
 ) {
-    Dialog(onDismissRequest = {}) {
-        Column(
-            Modifier
-                .background(Color.White)
-                .padding(16.dp)
-        ) {
-            Text(
-                text = title,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = stringResource(id = R.string.trip_dialog_saved_content))
-            Spacer(modifier = Modifier.height(8.dp))
-            Row {
-                Button(onClick = onSelectOption1) {
-                    Text(text = option1Text)
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(onClick = onSelectOption2) {
-                    Text(text = option2Text)
-                }
+    TravelAppDialog(onDismissDialog = { }) {
+        Text(
+            text = title,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = stringResource(id = R.string.trip_dialog_saved_content))
+        Spacer(modifier = Modifier.height(8.dp))
+        Row {
+            Button(onClick = onSelectOption1) {
+                Text(text = option1Text)
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(onClick = onSelectOption2) {
+                Text(text = option2Text)
             }
         }
     }

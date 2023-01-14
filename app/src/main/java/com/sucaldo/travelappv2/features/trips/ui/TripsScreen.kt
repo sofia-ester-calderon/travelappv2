@@ -1,19 +1,17 @@
 package com.sucaldo.travelappv2.features.trips.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.sucaldo.travelappv2.R
 import com.sucaldo.travelappv2.data.Trip
 import com.sucaldo.travelappv2.features.common.ui.TopBar
+import com.sucaldo.travelappv2.features.common.ui.TravelAppDialog
 import com.sucaldo.travelappv2.features.trips.TripYear
 import com.sucaldo.travelappv2.features.trips.TripsViewModel
 
@@ -106,23 +104,17 @@ private fun BottomDrawerLaunchedEffect(
 
 @Composable
 private fun TripDeleteDialog(onHideDialog: () -> Unit, onDeleteTrip: () -> Unit) {
-    Dialog(onDismissRequest = onHideDialog) {
-        Column(
-            Modifier
-                .background(Color.White)
-                .padding(16.dp)
-        ) {
-            Text(text = stringResource(id = R.string.trips_delete_confirm))
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Button(onClick = {
-                    onDeleteTrip()
-                }) {
-                    Text(text = stringResource(id = R.string.common_yes))
-                }
-                Button(onClick = onHideDialog) {
-                    Text(text = stringResource(id = R.string.common_no))
-                }
+    TravelAppDialog(onDismissDialog = onHideDialog) {
+        Text(text = stringResource(id = R.string.trips_delete_confirm))
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Button(onClick = {
+                onDeleteTrip()
+            }) {
+                Text(text = stringResource(id = R.string.common_yes))
+            }
+            Button(onClick = onHideDialog) {
+                Text(text = stringResource(id = R.string.common_no))
             }
         }
     }
