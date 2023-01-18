@@ -206,10 +206,6 @@ class TripViewModel(
             tripUiType = TripUiType.NEW,
             tripDialogState = TripDialogState.NONE,
             tripType = TripType.RETURN,
-            fromCity = "",
-            fromCountry = "",
-            fromLatitudeText = "",
-            fromLongitudeText = "",
             toCountry = "",
             toCity = "",
             toLatitudeText = "",
@@ -228,11 +224,11 @@ class TripViewModel(
             tripUiType = TripUiType.NEW_STOP,
             tripDialogState = TripDialogState.NONE,
             tripType = TripType.MULTI_STOP,
-            fromCity = previousTrip!!.fromCity,
-            fromCountry = previousTrip!!.fromCountry,
+            fromCity = previousTrip!!.toCity,
+            fromCountry = previousTrip!!.toCountry,
             fromLatitudeText = "",
             fromLongitudeText = "",
-            toCountry = "",
+            toCountry = previousTrip!!.toCountry,
             toCity = "",
             toLatitudeText = "",
             toLongitudeText = "",
@@ -435,7 +431,8 @@ class TripViewModel(
         }
         if (_uiState.value.tripType == TripType.MULTI_STOP) {
             val endDatePreviousStop: Date? = previousTrip?.endDate
-            if (endDatePreviousStop == null || endDatePreviousStop.after(startDate)) {
+            if (endDatePreviousStop == null) return true
+            if (endDatePreviousStop.after(startDate)) {
                 _uiState.value =
                     _uiState.value.copy(startDateErrorType = FieldErrorType.INVALID_START_DATE)
                 return false
